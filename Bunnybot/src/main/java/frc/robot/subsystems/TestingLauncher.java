@@ -1,16 +1,17 @@
 package frc.robot.subsystems;
 
-import au.grapplerobotics.LaserCan;
-import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
+//import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CAN;
-import frc.robot.Constants.INTAKE;
+import frc.robot.Constants.*;
 import frc.robot.helpers.motor.NewtonMotor;
+import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
 
 
-public class TestingLauncher extends SubsystemBase {
+public class TestingLauncher {
     // Declaring motors used for launcher
     private NewtonMotor launcherMotor1; 
     private NewtonMotor launcherMotor2; 
@@ -36,24 +37,4 @@ public class TestingLauncher extends SubsystemBase {
     public void stop(){
         setLauncherPercentOutput(0);
     }
-    /**
-     * Accepts the desired power of the motor and sets the motor to that power.
-     * @param percent Desired percentage of the motor.
-     * @return Returns a command to set motor power to given percentage.
-     */
-    public Command setLauncherCommand(double percent){
-        return this.run(()->{setLauncherPercentOutput(percent);
-        });
-    }
-
-    /**
-     * Stops the intake motor by setting the percent output to 0.
-     * @return Returns a command to stop the intake motor.
-     */
-    public Command stopLauncherCommand(){
-        return this.runOnce(()->{
-            setLauncherPercentOutput(0);
-        });
-    }
-
 }
