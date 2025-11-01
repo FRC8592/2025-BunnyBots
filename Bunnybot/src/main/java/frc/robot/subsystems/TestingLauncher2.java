@@ -7,18 +7,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
 import frc.robot.Constants.INTAKE;
 import frc.robot.helpers.motor.NewtonMotor;
+import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
 
 
-public class TestingLauncher extends SubsystemBase {
+public class TestingLauncher2 extends SubsystemBase {
     // Declaring motors used for launcher
-    private NewtonMotor launcherMotor1; 
-    private NewtonMotor launcherMotor2; 
+    private NewtonMotor launcher2Motor1; 
+    private NewtonMotor launcher2Motor2; 
+    private LaserCan launcherSensor; 
 
-    public TestingLauncher() {
-        launcherMotor1 = new KrakenX60Motor(CAN.LAUNCHER_MOTOR_CAN_ID_1, false);
-        launcherMotor2 = new KrakenX60Motor(CAN.LAUNCHER_MOTOR_CAN_ID_2, false);
+    public TestingLauncher2() {
+        launcher2Motor1 = new KrakenX60Motor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
+        launcher2Motor2 = new KrakenX60Motor(CAN.LAUNCHER2_MOTOR_CAN_ID_2, false);
 
+        launcherSensor = new LaserCan(CAN.LAUNCHER2_BEAM_BREAK_CAN_ID);
+
+        launcher2Motor1.setIdleMode(IdleMode.kBrake);
+        launcher2Motor2.setIdleMode(IdleMode.kBrake);
     }
 
     /** 
@@ -26,8 +32,8 @@ public class TestingLauncher extends SubsystemBase {
      * @param percent Desired speed as a percentage.
     */
     public void setLauncherPercentOutput(double percent){
-        launcherMotor1.setPercentOutput(percent);
-        launcherMotor2.setPercentOutput(percent);
+        launcher2Motor1.setPercentOutput(percent);
+        launcher2Motor2.setPercentOutput(percent);
     }
 
     /**
@@ -54,6 +60,10 @@ public class TestingLauncher extends SubsystemBase {
         return this.runOnce(()->{
             setLauncherPercentOutput(0);
         });
+    }
+    public void periodic(){
+       //Logs for tracking the motor speed 
+       //Logger.recordOutput(LAUNCHER.LOG_PATH+"Launcher2|Motor1Speed", launcher2Motor1.getVelocityRPM());
     }
 
 }

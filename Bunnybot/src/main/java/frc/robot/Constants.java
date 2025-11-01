@@ -23,7 +23,7 @@ public final class Constants {
     public final class CONTROLLERS {
         public static final int DRIVER_PORT = 0;
         public static final int OPERATOR_PORT = 1;
-        public static final int CORAL_SELECTOR_PORT = 2;
+        //public static final int CORAL_SELECTOR_PORT = 2;
     }
 
     public final class CAN {
@@ -37,8 +37,10 @@ public final class Constants {
         public static final int CLOCK_ARM_CAN_ID = 41;
         public static final int WRIST_CAN_ID = 40;
         public static final int INTAKE_BEAM_BREAK_CAN_ID = 60;
-        public static final int LAUNCHER_MOTOR_CAN_ID_1 = 0; 
-        public static final int LAUNCHER_MOTOR_CAN_ID_2 = 0; 
+        
+        public static final int LAUNCHER2_MOTOR_CAN_ID_1 = 0; 
+        public static final int LAUNCHER2_MOTOR_CAN_ID_2 = 0; 
+        public static final int LAUNCHER2_BEAM_BREAK_CAN_ID = 0;
     }
 
     public final class CORAL_ALIGN {
@@ -85,6 +87,10 @@ public final class Constants {
         public static final int INTAKE_BEAM_BREAK_THRESHOLD_MM = 20;
     }
 
+    public final class LAUNCHER {
+        public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Launcher/";
+        public static final int LAUNCHER2_BEAM_BREAK_THRESHOLD_MM=0; 
+    }
     public final class SCORING {
 
         public static final double SAFE_ELEVATOR_HEIGHT = 14d;
