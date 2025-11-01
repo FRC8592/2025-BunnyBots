@@ -1,17 +1,17 @@
 package frc.robot.subsystems;
 
-import au.grapplerobotics.LaserCan;
-import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
+//import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CAN;
-import frc.robot.Constants.INTAKE;
+import frc.robot.Constants.*;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
 
 
-public class TestingLauncher2 extends SubsystemBase {
+public class TestingLauncher extends SubsystemBase {
     // Declaring motors used for launcher
     private NewtonMotor launcher2Motor1; 
     private NewtonMotor launcher2Motor2; 
@@ -60,10 +60,6 @@ public class TestingLauncher2 extends SubsystemBase {
         return this.runOnce(()->{
             setLauncherPercentOutput(0);
         });
-    }
-    public void periodic(){
-       //Logs for tracking the motor speed 
-       //Logger.recordOutput(LAUNCHER.LOG_PATH+"Launcher2|Motor1Speed", launcher2Motor1.getVelocityRPM());
     }
 
 }
