@@ -13,8 +13,8 @@ public class TestingLauncher1 extends SubsystemBase {
     
     public TestingLauncher1()
     {
-        launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER_MOTOR_CAN_ID_1, false);
-        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER_MOTOR_CAN_ID_2, false);
+        launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
+        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
     }
 
     /** 
