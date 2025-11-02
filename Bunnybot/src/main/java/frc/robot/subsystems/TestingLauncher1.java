@@ -16,7 +16,7 @@ public class TestingLauncher1 extends SubsystemBase {
     
     public TestingLauncher1()
     {
-        PIDProfile = new PIDProfile();
+        //PIDProfile = new PIDProfile();
         // motors for the two 'launching' wheels
         launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
         launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
@@ -49,9 +49,9 @@ public class TestingLauncher1 extends SubsystemBase {
         targetAngleDegrees = degrees;
     }
 
-    public double getDegrees() {
-        return motorRotationsToDegrees(launcher1anglemotor1.getRotations());
-    }
+    // public double getDegrees() {
+    //     return motorRotationsToDegrees(launcher1anglemotor1.getRotations());
+    // }
     /**
      * stops the launcher motor by setting output percentage to 0
      */
