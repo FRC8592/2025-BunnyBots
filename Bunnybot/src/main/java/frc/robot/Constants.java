@@ -41,8 +41,10 @@ public final class Constants {
         public static final int LAUNCHER2_MOTOR_CAN_ID_1 = 0; 
         public static final int LAUNCHER2_MOTOR_CAN_ID_2 = 0; 
         public static final int LAUNCHER2_BEAM_BREAK_CAN_ID = 0;
+        public static final int LAUNCHER2_ANGLE_MOTOR_CAN_ID_1 = 0;
         public static final int LAUNCHER1_MOTOR_CAN_ID_1 = 0; 
         public static final int LAUNCHER1_MOTOR_CAN_ID_2 = 0; 
+        public static final int LAUNCHER1_ANGLE_MOTOR_CAN_ID_1 = 0;
     }
 
     public final class CORAL_ALIGN {
@@ -174,35 +176,6 @@ public final class Constants {
 
     public class SUPPLIERS{
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Suppliers/";
-    }
-
-    public class ELEVATOR{
-        public static final String EXTENSION_LOG_PATH = SHARED.LOG_FOLDER+"/Extension/";
-
-        public static final double EXTENSION_GEAR_RATIO = 0.25;
-        public static final double EXTENSION_DRUM_DIAMTER_INCHES = 1;
-
-        public static final double EXTENSION_INCHES_MAX =  19.6; //this is in inches
-        public static final double EXTENSION_INCHES_MIN =  0.5;
-
-        public static final double EXTENSION_POSITION_TOLERANCE = 0.1;
-
-        public static final int ELEVATOR_CURRENT_LIMIT = 40;//amps
-
-        public static final double ELEVATOR_MAX_ACCELERATION = 250;
-        public static final double ELEVATOR_MAX_VELOCITY = 100; //formerly 100
-
-        public static final double ELEVATOR_POSITION_P = 3.5;
-        public static final double ELEVATOR_POSITION_I = 0;
-        public static final double ELEVATOR_POSITION_D = 0;
-        public static final double ELEVATOR_POSITION_S = 0;
-        public static final double ELEVATOR_POSITION_V = 0;
-        public static final double ELEVATOR_POSITION_A = 0;
-
-        public static final double ELEVATOR_VELOCITY_P = 0.001;
-        public static final double ELEVATOR_VELOCITY_I = 0;
-        public static final double ELEVATOR_VELOCITY_D = 0;
-        public static final double ELEVATOR_VELOCITY_S = 0.1;
     }
 
     public class ARM{

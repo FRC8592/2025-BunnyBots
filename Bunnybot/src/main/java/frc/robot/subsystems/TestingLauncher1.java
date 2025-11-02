@@ -3,18 +3,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
+import frc.robot.helpers.PIDProfile;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
+import frc.robot.helpers.PIDProfile;
+import frc.robot.helpers.Utils;
+import frc.robot.helpers.motor.NewtonMotor.IdleMode;
+import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
+
+
 public class TestingLauncher1 extends SubsystemBase {
     //declaring motors used for launcher1
     private NewtonMotor launcher1motor1;
     private NewtonMotor launcher1motor2;
+    private NewtonMotor launcher1anglemotor1;
+    private double targetAngleDegrees = 0.0;
     
     public TestingLauncher1()
     {
+        PIDProfile = new PIDProfile();
+        // motors for the two 'launching' wheels
         launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
         launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
+
+        // motor for angle manipulation
+        launcher1anglemotor1 = new KrakenX60Motor(CAN.LAUNCHER1_ANGLE_MOTOR_CAN_ID_1, false);
+        
     }
 
     /** 
@@ -26,8 +41,23 @@ public class TestingLauncher1 extends SubsystemBase {
     {
         launcher1motor1.setPercentOutput(percent);
         launcher1motor2.setPercentOutput(percent);
+
+        SmartDashboard.putNumber("Launch Motor 1 Percent Power", percent);
+        SmartDashboard.putNumber("Launch Motor 2 Percent Power", percent);
     }
 
+
+    /**
+     * accepts desired angle motor degrees and sets the target degrees for the angle to the desired degrees
+     * @param degrees the degrees desired by the user
+     */    
+    public void setDegrees( double degrees) {
+        targetAngleDegrees = degrees;
+    }
+
+    public double getDegrees() {
+        return motorRotationsToDegrees(launcher1anglemotor1.getRotations());
+    }
     /**
      * stops the launcher motor by setting output percentage to 0
      */
