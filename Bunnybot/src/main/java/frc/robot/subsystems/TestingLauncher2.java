@@ -10,18 +10,22 @@ import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
 
+import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
+import au.grapplerobotics.ConfigurationFailedException;
+
 
 public class TestingLauncher2 extends SubsystemBase {
     // Declaring motors used for launcher
     private NewtonMotor launcher2Motor1; 
     private NewtonMotor launcher2Motor2; 
-    //private LaserCan launcherSensor; 
+    private LaserCan launcherSensor; 
 
     public TestingLauncher2() {
         launcher2Motor1 = new KrakenX60Motor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
         launcher2Motor2 = new KrakenX60Motor(CAN.LAUNCHER2_MOTOR_CAN_ID_2, false);
 
-        //launcherSensor = new LaserCan(CAN.LAUNCHER2_BEAM_BREAK_CAN_ID);
+        launcherSensor = new LaserCan(CAN.LAUNCHER2_BEAM_BREAK_CAN_ID);
 
         launcher2Motor1.setIdleMode(IdleMode.kBrake);
         launcher2Motor2.setIdleMode(IdleMode.kBrake);

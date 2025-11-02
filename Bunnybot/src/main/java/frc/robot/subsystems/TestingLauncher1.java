@@ -6,6 +6,7 @@ import frc.robot.Constants.*;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
+
 public class TestingLauncher1 extends SubsystemBase {
     //declaring motors used for launcher1
     private NewtonMotor launcher1motor1;
