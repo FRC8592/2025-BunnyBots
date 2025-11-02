@@ -11,7 +11,8 @@ public class TestingLauncher1 extends SubsystemBase {
     //declaring motors used for launcher1
     private NewtonMotor launcher1motor1;
     private NewtonMotor launcher1motor2;
-    private NewtonMotor launcher1anglemotor1;
+    private NewtonMotor launcher1pivotmotor1;
+    private NewtonMotor launcher1pivotmotor2;
     private double targetAngleDegrees = 0.0;
     
     public TestingLauncher1()
@@ -21,8 +22,9 @@ public class TestingLauncher1 extends SubsystemBase {
         launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
         launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
 
-        // motor for angle manipulation
-        launcher1anglemotor1 = new KrakenX60Motor(CAN.LAUNCHER1_ANGLE_MOTOR_CAN_ID_1, false);
+        // motors for angle manipulation
+        launcher1pivotmotor1 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
+        launcher1pivotmotor2 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_2, false);
         
     }
 

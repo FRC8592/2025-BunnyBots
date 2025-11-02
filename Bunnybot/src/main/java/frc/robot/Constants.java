@@ -44,7 +44,8 @@ public final class Constants {
         public static final int LAUNCHER2_ANGLE_MOTOR_CAN_ID_1 = 0;
         public static final int LAUNCHER1_MOTOR_CAN_ID_1 = 0; 
         public static final int LAUNCHER1_MOTOR_CAN_ID_2 = 0; 
-        public static final int LAUNCHER1_ANGLE_MOTOR_CAN_ID_1 = 0;
+        public static final int LAUNCHER1_PIVOT_MOTOR_CAN_ID_1 = 0;
+        public static final int LAUNCHER1_PIVOT_MOTOR_CAN_ID_2 = 0;
     }
 
     public final class CORAL_ALIGN {
