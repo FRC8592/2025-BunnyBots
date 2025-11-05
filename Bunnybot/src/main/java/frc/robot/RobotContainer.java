@@ -9,18 +9,11 @@ import java.util.Set;
 // import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CONTROLLERS;
-import frc.robot.commands.NewtonCommands;
-import frc.robot.commands.autonomous.AutoCommand;
-import frc.robot.commands.autonomous.AutoManager;
-import frc.robot.commands.largecommands.LargeCommand;
-import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.TestingLauncher1;
 import frc.robot.subsystems.TestingLauncher2;
 import frc.robot.subsystems.IntakeJR;
@@ -36,7 +29,8 @@ public class RobotContainer {
   private static final CommandXboxController driverController = new CommandXboxController(
       CONTROLLERS.DRIVER_PORT
   );
-  
+
+  private final TestingLauncher1 testingLauncher1;
   // The robot's subsystems and commands are defined here...
   private final TestingLauncher1 testingLauncher1;
   private final TestingLauncher2 testingLauncher2;
@@ -97,23 +91,4 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return new InstantCommand();
   }
-
-  /**
-     * Set the default command of a subsystem (what to run if no other command requiring it is running).
-     * <p> NOTE: all subsystems also have a setDefaultCommand method; this version includes a check for
-     * default commands that cancel incoming commands that require the subsystem. Unless you're sure
-     * of what you're doing, you should use this one.
-     *
-     * @param subsystem the subsystem to apply the default command to
-     * @param command to command to set as default
-     */
-    private void setDefaultCommand(SubsystemBase subsystem, Command command){
-        if(command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf){
-            subsystem.setDefaultCommand(command);
-        }
-        else{
-            //If you want to force-allow setting a cancel-incoming default command, directly call `subsystem.setDefaultCommand()` instead
-            throw new UnsupportedOperationException("Can't set a default command that cancels incoming!");
-        }
-    }
 }
