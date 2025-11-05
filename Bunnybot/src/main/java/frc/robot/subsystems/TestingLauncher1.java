@@ -54,6 +54,15 @@ public class TestingLauncher1 extends SubsystemBase {
     // public double getDegrees() {
     //     return motorRotationsToDegrees(launcher1anglemotor1.getRotations());
     // }
+
+    /**
+     * converts degrees to rotations
+     */
+
+    public double motorDegreesToRotations(double degrees){
+        return (degrees / (LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360));
+    }
+
     /**
      * stops the launcher motor by setting output percentage to 0
      */
