@@ -30,11 +30,11 @@ public class TestingLauncher1 extends SubsystemBase {
         // launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
 
 
-        launcher1pivotmotor.setIdleMode(IdleMode.kCoast);
-        // launcher1pivotmotor.setPositionSoftLimit(degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MIN), degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MAX));
-        launcher1pivotmotor.setCurrentLimit(ARM.ARM_CURRENT_LIMIT);
+        // launcher1pivotmotor.setIdleMode(IdleMode.kCoast);
+        // // launcher1pivotmotor.setPositionSoftLimit(degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MIN), degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MAX));
+        // launcher1pivotmotor.setCurrentLimit(ARM.ARM_CURRENT_LIMIT);
 
-        launcher1pivotmotor.withGains(positionPid);
+        // launcher1pivotmotor.withGains(positionPid);
 
         // launcher1pivotmotor.configureMotionMagic(ARM.ARM_MAX_ACCELERATION, ARM.ARM_MAX_VELOCITY);
         
@@ -47,8 +47,8 @@ public class TestingLauncher1 extends SubsystemBase {
 
     public void setLauncherPercentOutput(double percent)
     {
-        launcher1motor1.setPercentOutput(percent);
-        launcher1motor2.setPercentOutput(percent);
+        // launcher1motor1.setPercentOutput(percent);
+        // launcher1motor2.setPercentOutput(percent);
 
         SmartDashboard.putNumber("Launch Motor 1 Percent Power", percent);
         SmartDashboard.putNumber("Launch Motor 2 Percent Power", percent);
@@ -64,7 +64,8 @@ public class TestingLauncher1 extends SubsystemBase {
     }
 
     public double getDegrees() {
-        return motorRotationsToDegrees(launcher1pivotmotor.getRotations());
+        // return motorRotationsToDegrees(launcher1pivotmotor.getRotations());
+        return 0;
     }
 
     /**
@@ -73,7 +74,8 @@ public class TestingLauncher1 extends SubsystemBase {
      * @return Returns converted degrees to rotations
      */
     public double degreesToMotorRotations(double degrees){
-        return (degrees / (LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360));
+        // return (degrees / (LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360));
+        return 0;
     }
 
     /**
@@ -82,7 +84,8 @@ public class TestingLauncher1 extends SubsystemBase {
      * @return Returns converted rotations to degrees
      */
     public double motorRotationsToDegrees(double rotations){
-        return (rotations * LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360);
+        // return (rotations * LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360);
+        return 0;
     }
 
 
@@ -91,7 +94,8 @@ public class TestingLauncher1 extends SubsystemBase {
      * @return Returns if the pivot motor is in the desired position as a boolean
      */
     public boolean atPosition() {
-        return Utils.isWithin(getDegrees(), targetAngleDegrees, LAUNCHER.PIVOT_MOTOR_POSITION_TOLERANCE);
+        // return Utils.isWithin(getDegrees(), targetAngleDegrees, LAUNCHER.PIVOT_MOTOR_POSITION_TOLERANCE);
+        return true;
     }
 
     /**
@@ -100,7 +104,7 @@ public class TestingLauncher1 extends SubsystemBase {
      */
 
     public void setTransportPercentOutput(double percent){
-        launcher1transportmotor.setPercentOutput(percent);
+        // launcher1transportmotor.setPercentOutput(percent);
 
         SmartDashboard.putNumber("Transport Motor Percent Power", percent);
     }
@@ -117,7 +121,8 @@ public class TestingLauncher1 extends SubsystemBase {
      * stops the launcher motor by setting output percentage to 0
      */
 
-    public void stopLauncher(){
+    
+     public void stopLauncher(){
         setLauncherPercentOutput(0);
     }
 

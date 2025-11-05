@@ -13,7 +13,7 @@ public class Indexer extends SubsystemBase {
     
     public Indexer() {
         // indexerMotor = new KrakenX60Motor(CAN.INDEXER_MOTOR_CAN_ID, false);
-        indexerMotor.setIdleMode(IdleMode.kBrake);
+        // indexerMotor.setIdleMode(IdleMode.kBrake);
     }
 
     /**
@@ -21,14 +21,14 @@ public class Indexer extends SubsystemBase {
      * @param percent
      */
     public void setIndexerPercentOutput(double percent) {
-        indexerMotor.setPercentOutput(percent);
+        // indexerMotor.setPercentOutput(percent);
     }
 
     /** 
      * Stops the indexer motor
     */
     public void stop() {
-        indexerMotor.setPercentOutput(0);
+        // inde/erMotor.setPercentOutput(0);
     }
 
     /**
