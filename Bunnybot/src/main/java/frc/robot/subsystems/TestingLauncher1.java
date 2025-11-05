@@ -11,8 +11,8 @@ public class TestingLauncher1 extends SubsystemBase {
     //declaring motors used for launcher1
     private NewtonMotor launcher1motor1;
     private NewtonMotor launcher1motor2;
-    private NewtonMotor launcher1pivotmotor1;
-    private NewtonMotor launcher1pivotmotor2;
+    private NewtonMotor launcher1pivotmotor;
+    private NewtonMotor launcher1transportmotor;
     private double targetAngleDegrees = 0.0;
     
     public TestingLauncher1()
@@ -22,9 +22,11 @@ public class TestingLauncher1 extends SubsystemBase {
         launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
         launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
 
-        // motors for angle manipulation
-        launcher1pivotmotor1 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
-        launcher1pivotmotor2 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_2, false);
+        // motor for angle manipulation
+        launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
+
+        //motor for transporting ball to the 'launching' wheels
+        launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
         
     }
 
@@ -64,36 +66,56 @@ public class TestingLauncher1 extends SubsystemBase {
     }
 
     /**
+     * accepts desired speed as a percentage and sets motor to that speed
+     * @param percent desired speed as a percentage
+     */
+
+    public void setTransportPercentOutput(double percent){
+        launcher1transportmotor.setPercentOutput(percent);
+
+        SmartDashboard.putNumber("Transport Motor Percent Power", percent);
+    }
+
+    /**
+     * stops transport motor by setting output percentage to 0
+     */
+
+     public void stopTransport(){
+        setTransportPercentOutput(0);
+     }
+
+    /**
      * stops the launcher motor by setting output percentage to 0
      */
 
-    public void stop()
-    {
+    public void stopLauncher(){
         setLauncherPercentOutput(0);
     }
 
     /**
      * accepts the desired power of the motor and sets the motor to that power
-     * @param percent desired percentage of the motor
-     * @return returns a command to set moter power to given percentage
+     * @param percent desired percentage of the launcher and transport motors
+     * @return returns a command to set launcher and transport motor power to given percentage
      */
     public Command setLauncherCommand(double percent)
     {
         return this.run(()->
         {
+            setTransportPercentOutput(percent);
             setLauncherPercentOutput(percent);
         });
     }
 
     /**
-     * stops the intake motor by setting percent output to 0
-     * @return retruns a command to stop the intake motor
+     * stops the transport and launcher motors by setting percent output to 0
+     * @return retruns a command to stop the transport and launcher motors
      */
     public Command stopLauncherCommand()
     {
         return this.runOnce(()->
         {
             setLauncherPercentOutput(0);
+            setTransportPercentOutput(0);
         });
     }
 }
