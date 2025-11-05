@@ -12,7 +12,7 @@ public class Indexer extends SubsystemBase {
     private NewtonMotor indexerMotor;
     
     public Indexer() {
-        indexerMotor = new KrakenX60Motor(CAN.INDEXER_MOTOR_CAN_ID, false);
+        // indexerMotor = new KrakenX60Motor(CAN.INDEXER_MOTOR_CAN_ID, false);
         indexerMotor.setIdleMode(IdleMode.kBrake);
     }
 

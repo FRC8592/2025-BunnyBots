@@ -19,12 +19,12 @@ public class TestingLauncher1 extends SubsystemBase {
     {
         //PIDProfile = new PIDProfile();
         // motors for the two 'launching' wheels
-        launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
-        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
+        // launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
+        // launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
 
-        // motors for angle manipulation
-        launcher1pivotmotor1 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
-        launcher1pivotmotor2 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_2, false);
+        // // motors for angle manipulation
+        // launcher1pivotmotor1 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
+        // launcher1pivotmotor2 = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_2, false);
         
     }
 
