@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.helpers.PIDProfile;
+import frc.robot.helpers.Utils;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
@@ -17,16 +18,25 @@ public class TestingLauncher1 extends SubsystemBase {
     
     public TestingLauncher1()
     {
-        //PIDProfile = new PIDProfile();
+        PIDProfile positionPid = new PIDProfile();
         // motors for the two 'launching' wheels
         launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
         launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
 
+        //motor for transporting ball to the 'launching' wheels
+        launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
+
         // motor for angle manipulation
         launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
 
-        //motor for transporting ball to the 'launching' wheels
-        launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
+
+        launcher1pivotmotor.setIdleMode(IdleMode.kCoast);
+        // launcher1pivotmotor.setPositionSoftLimit(degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MIN), degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MAX));
+        launcher1pivotmotor.setCurrentLimit(ARM.ARM_CURRENT_LIMIT);
+
+        launcher1pivotmotor.withGains(positionPid);
+
+        // launcher1pivotmotor.configureMotionMagic(ARM.ARM_MAX_ACCELERATION, ARM.ARM_MAX_VELOCITY);
         
     }
 
@@ -53,16 +63,35 @@ public class TestingLauncher1 extends SubsystemBase {
         targetAngleDegrees = degrees;
     }
 
-    // public double getDegrees() {
-    //     return motorRotationsToDegrees(launcher1anglemotor1.getRotations());
-    // }
+    public double getDegrees() {
+        return motorRotationsToDegrees(launcher1pivotmotor.getRotations());
+    }
 
     /**
-     * converts degrees to rotations
+     * accepts degrees and converts it to rotations
+     * @param degrees degrees of pivot motor
+     * @return Returns converted degrees to rotations
      */
-
-    public double motorDegreesToRotations(double degrees){
+    public double degreesToMotorRotations(double degrees){
         return (degrees / (LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360));
+    }
+
+    /**
+     * accepts rotations and converts it to degrees
+     * @param rotations rotations of pivot motor
+     * @return Returns converted rotations to degrees
+     */
+    public double motorRotationsToDegrees(double rotations){
+        return (rotations * LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360);
+    }
+
+
+    /**
+     * outputs whether the launcher is at its desired position
+     * @return Returns if the pivot motor is in the desired position as a boolean
+     */
+    public boolean atPosition() {
+        return Utils.isWithin(getDegrees(), targetAngleDegrees, LAUNCHER.PIVOT_MOTOR_POSITION_TOLERANCE);
     }
 
     /**

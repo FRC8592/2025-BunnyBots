@@ -97,6 +97,11 @@ public final class Constants {
     public final class LAUNCHER {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Launcher/";
         public static final int LAUNCHER2_BEAM_BREAK_THRESHOLD_MM=0; 
+
+        public static final double LAUNCHER1_PIVOT_GEAR_RATIO = 1/180.0; // temporary value, must be changed
+        public static final double PIVOT_MOTOR_POSITION_TOLERANCE = 2.0; // temporary value, must be changed
+        public static final double LAUNCHER_ANGLE_DEGREES_MAX = 0.0; // temporary value, must be changed
+        public static final double LAUNCHER_ANGLE_DEGREES_MIN = 0.0; // temporary value, must be changed
     }
     public final class SCORING {
 
