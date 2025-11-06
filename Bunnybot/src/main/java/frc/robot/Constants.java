@@ -19,6 +19,10 @@ public final class Constants {
         public static final double FIELD_LENGTH_METERS = 17.548;
         public static final double FIELD_WIDTH_METERS = 8.052;
     }
+    public final class CONVERSIONS {
+        public static final double METERS_TO_FEET = 3.28084;
+        public static final double FEET_TO_METERS = 0.3048;
+    }
 
     public final class CONTROLLERS {
         public static final int DRIVER_PORT = 0;

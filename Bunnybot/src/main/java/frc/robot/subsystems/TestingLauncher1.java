@@ -88,7 +88,16 @@ public class TestingLauncher1 extends SubsystemBase {
         return 0;
     }
 
-
+    /**
+     * sets the angle for the pivot motor according to the range table
+     * @param distanceToCosmicConverter the x-distance of the launcher to the cosmic converter in meters
+     */
+    // public void setAngleRangeTable(double distanceToCosmicConverter) {
+    //     int index = (int) (distanceToCosmicConverter * CONVERSIONS.METERS_TO_FEET);
+    //     double vals[] = LAUNCHER.RANGE_TABLE[index];
+    //     double angle = vals[0];
+    //     setDegrees(angle);
+    // }
     /**
      * outputs whether the launcher is at its desired position
      * @return Returns if the pivot motor is in the desired position as a boolean
