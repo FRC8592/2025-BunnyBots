@@ -15,5 +15,21 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+
+  }
+
+  public static class INTAKE{
+    //DEFAULT VALUES, NEED TO CHANGE THESE LATER
+    public static final int INTAKE_POSITION_P = 0;
+    public static final int INTAKE_POSITION_I = 0;
+    public static final int INTAKE_POSITION_D = 0;
+    
+    public static final int INTAKE_MOTOR_ROTATIONS_TO_DEGREES = 0;
+
+  }
+
+  public static class CAN{
+    public static final int INTAKE_MOTOR_CAN_ID = 0;
+    public static final int PIVOT_INTAKE_MOTOR_CAN_ID = 0;
   }
 }
