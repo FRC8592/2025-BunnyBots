@@ -4,60 +4,83 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.*;
+
+import frc.robot.commands.autonomous.*;
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
+
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+    private static final CommandXboxController driverController = new CommandXboxController(
+        CONTROLLERS.DRIVER_PORT
+    );
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+    // The robot's subsystems
+    
+    //TODO: Add all controls here
+    
+    // TODO: Add instantiatable helpers here
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
-  }
+    /**
+     * Create the robot container. This creates and configures subsystems, sets
+     * up button bindings, and prepares for autonomous.
+     */
+    public RobotContainer() {        
+        passSubsystems();
+        configureBindings();
+        configureDefaults();
+        
+        AutoManager.prepare();
+    }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    /**
+     * Pass subsystems everywhere they're needed
+     */
+    private void passSubsystems(){
+       
+    }
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-  }
+    /**
+     * Configure default commands for the subsystems
+     */
+    private void configureDefaults(){
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+    }
+
+    /**
+     * Configure all button bindings
+     */
+    private void configureBindings() {
+
+    };
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return AutoManager.getAutonomousCommand();
+    }
+
+    /**
+     * Set the default command of a subsystem (what to run if no other command requiring it is running).
+     * <p> NOTE: all subsystems also have a setDefaultCommand method; this version includes a check for
+     * default commands that cancel incoming commands that require the subsystem. Unless you're sure
+     * of what you're doing, you should use this one.
+     *
+     * @param subsystem the subsystem to apply the default command to
+     * @param command to command to set as default
+     */
+    private void setDefaultCommand(SubsystemBase subsystem, Command command){
+        if(command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf){
+            subsystem.setDefaultCommand(command);
+        }
+        else{
+            //If you want to force-allow setting a cancel-incoming default command, directly call `subsystem.setDefaultCommand()` instead
+            throw new UnsupportedOperationException("Can't set a default command that cancels incoming!");
+        }
+    }
 }
