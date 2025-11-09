@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -20,7 +19,6 @@ import org.littletonrobotics.junction.Logger;
 
 import frc.robot.*;
 import frc.robot.helpers.*;
-import frc.robot.subsystems.swerve.Swerve.DriveModes;
 import frc.robot.Constants.*;
 
 public class Swerve extends SubsystemBase {
