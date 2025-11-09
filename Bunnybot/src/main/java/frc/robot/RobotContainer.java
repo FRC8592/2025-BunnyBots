@@ -4,13 +4,21 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import java.util.Set;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import frc.robot.commands.ExampleCommand;
+// import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.CONTROLLERS;
+import frc.robot.subsystems.TestingLauncher2;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,15 +27,21 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private static final CommandXboxController driverController = new CommandXboxController(
+      CONTROLLERS.DRIVER_PORT
+  );
 
+  //private final TestingLauncher1 testingLauncher1;
+  // The robot's subsystems and commands are defined here...
+  private final TestingLauncher2 testingLauncher2;
+  private final Trigger LAUNCH = driverController.rightTrigger();
+  private double percentDashboard1;
+  private double percentDashboard2;
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    testingLauncher2 = new TestingLauncher2();
     // Configure the trigger bindings
     configureBindings();
   }
@@ -42,13 +56,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    //These two variables are not deriving new variables entered into dashboard.
+    //Assuming we are entering them wrong, and that a slider like "slow mode" for swerve will work better.
+    double percentDerived1 = SmartDashboard.getNumber("launch_motor1",percentDashboard1);
+    double percentDerived2 = SmartDashboard.getNumber("launch_motor2",percentDashboard2);
+    //Try and print the values
+    System.out.println("PercentDerived1 " + percentDerived1);
+    System.out.println("PercentDerived2 " + percentDerived2);
+    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher2.setLauncherCommand(percentDerived1,percentDerived2), Set.of(testingLauncher2))).onFalse(testingLauncher2.stopLauncherCommand());
+  
   }
 
   /**
@@ -58,6 +74,25 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return new InstantCommand();
   }
+
+  /**
+     * Set the default command of a subsystem (what to run if no other command requiring it is running).
+     * <p> NOTE: all subsystems also have a setDefaultCommand method; this version includes a check for
+     * default commands that cancel incoming commands that require the subsystem. Unless you're sure
+     * of what you're doing, you should use this one.
+     *
+     * @param subsystem the subsystem to apply the default command to
+     * @param command to command to set as default
+     */
+    private void setDefaultCommand(SubsystemBase subsystem, Command command){
+        if(command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf){
+            subsystem.setDefaultCommand(command);
+        }
+        else{
+            //If you want to force-allow setting a cancel-incoming default command, directly call `subsystem.setDefaultCommand()` instead
+            throw new UnsupportedOperationException("Can't set a default command that cancels incoming!");
+        }
+    }
 }

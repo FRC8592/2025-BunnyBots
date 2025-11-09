@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.LAUNCHER;
+import frc.robot.subsystems.TestingLauncher2;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -17,6 +19,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+  private TestingLauncher2 testingLauncher2; 
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -28,6 +31,10 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
   }
 
+
+  public void robotInit() {
+    
+  }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -79,7 +86,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void testInit() {
@@ -89,7 +98,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
