@@ -20,21 +20,21 @@ public class TestingLauncher1 extends SubsystemBase {
     {
         PIDProfile positionPid = new PIDProfile();
         // motors for the two 'launching' wheels
-        // launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
-        // launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
+        launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
+        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
 
-        //motor for transporting ball to the 'launching' wheels
-        // launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
+        // motor for transporting ball to the 'launching' wheels
+        launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
 
         // motor for angle manipulation
-        // launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
+        launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
 
 
-        // launcher1pivotmotor.setIdleMode(IdleMode.kCoast);
-        // // launcher1pivotmotor.setPositionSoftLimit(degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MIN), degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MAX));
-        // launcher1pivotmotor.setCurrentLimit(ARM.ARM_CURRENT_LIMIT);
+        launcher1pivotmotor.setIdleMode(IdleMode.kCoast);
+        // launcher1pivotmotor.setPositionSoftLimit(degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MIN), degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MAX));
+        launcher1pivotmotor.setCurrentLimit(ARM.ARM_CURRENT_LIMIT);
 
-        // launcher1pivotmotor.withGains(positionPid);
+        launcher1pivotmotor.withGains(positionPid);
 
         // launcher1pivotmotor.configureMotionMagic(ARM.ARM_MAX_ACCELERATION, ARM.ARM_MAX_VELOCITY);
         
