@@ -18,7 +18,7 @@ public class TestingLauncher1 extends SubsystemBase {
     
     public TestingLauncher1()
     {
-        PIDProfile positionPid = new PIDProfile();
+        // PIDProfile positionPid = new PIDProfile();
         // motors for the two 'launching' wheels
         launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
         launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
@@ -26,16 +26,18 @@ public class TestingLauncher1 extends SubsystemBase {
         // motor for transporting ball to the 'launching' wheels
         launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
 
+        launcher1motor1.setIdleMode(IdleMode.kBrake);
+        launcher1motor2.setIdleMode(IdleMode.kBrake);
+        launcher1transportmotor.setIdleMode(IdleMode.kBrake);
+
         // motor for angle manipulation
-        launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
+        // launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
 
 
-        launcher1pivotmotor.setIdleMode(IdleMode.kCoast);
+        // launcher1pivotmotor.setIdleMode(IdleMode.kCoast);
         // launcher1pivotmotor.setPositionSoftLimit(degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MIN), degreesToMotorRotations(LAUNCHER.LAUNCHER_ANGLE_DEGREES_MAX));
-        launcher1pivotmotor.setCurrentLimit(ARM.ARM_CURRENT_LIMIT);
-
-        launcher1pivotmotor.withGains(positionPid);
-
+        // launcher1pivotmotor.setCurrentLimit(ARM.ARM_CURRENT_LIMIT);
+        // launcher1pivotmotor.withGains(positionPid);
         // launcher1pivotmotor.configureMotionMagic(ARM.ARM_MAX_ACCELERATION, ARM.ARM_MAX_VELOCITY);
         
     }
@@ -47,8 +49,8 @@ public class TestingLauncher1 extends SubsystemBase {
 
     public void setLauncherPercentOutput(double percent)
     {
-        // launcher1motor1.setPercentOutput(percent);
-        // launcher1motor2.setPercentOutput(percent);
+        launcher1motor1.setPercentOutput(percent);
+        launcher1motor2.setPercentOutput(percent);
 
         SmartDashboard.putNumber("Launch Motor 1 Percent Power", percent);
         SmartDashboard.putNumber("Launch Motor 2 Percent Power", percent);
@@ -64,8 +66,8 @@ public class TestingLauncher1 extends SubsystemBase {
     }
 
     public double getDegrees() {
-        // return motorRotationsToDegrees(launcher1pivotmotor.getRotations());
-        return 0;
+        return motorRotationsToDegrees(launcher1pivotmotor.getRotations());
+       
     }
 
     /**
@@ -74,8 +76,8 @@ public class TestingLauncher1 extends SubsystemBase {
      * @return Returns converted degrees to rotations
      */
     public double degreesToMotorRotations(double degrees){
-        // return (degrees / (LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360));
-        return 0;
+        return (degrees / (LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360));
+        
     }
 
     /**
@@ -84,8 +86,8 @@ public class TestingLauncher1 extends SubsystemBase {
      * @return Returns converted rotations to degrees
      */
     public double motorRotationsToDegrees(double rotations){
-        // return (rotations * LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360);
-        return 0;
+        return (rotations * LAUNCHER.LAUNCHER1_PIVOT_GEAR_RATIO * 360);
+
     }
 
     /**
@@ -103,8 +105,7 @@ public class TestingLauncher1 extends SubsystemBase {
      * @return Returns if the pivot motor is in the desired position as a boolean
      */
     public boolean atPosition() {
-        // return Utils.isWithin(getDegrees(), targetAngleDegrees, LAUNCHER.PIVOT_MOTOR_POSITION_TOLERANCE);
-        return true;
+        return Utils.isWithin(getDegrees(), targetAngleDegrees, LAUNCHER.PIVOT_MOTOR_POSITION_TOLERANCE);
     }
 
     /**
@@ -113,7 +114,7 @@ public class TestingLauncher1 extends SubsystemBase {
      */
 
     public void setTransportPercentOutput(double percent){
-        // launcher1transportmotor.setPercentOutput(percent);
+        launcher1transportmotor.setPercentOutput(percent);
 
         SmartDashboard.putNumber("Transport Motor Percent Power", percent);
     }
