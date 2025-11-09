@@ -13,14 +13,15 @@ public class IntakeJR extends SubsystemBase{
 
     private NewtonMotor intake2Motor1; 
     private NewtonMotor intake2Motor2; 
-    //private LaserCan intakeSensor;
+    //private LaserCan intake2Sensor;
 
     public IntakeJR() {
         //Instantiating motors
+        //The 'true' on intake2Motor2 makes it inverted
         intake2Motor1 = new KrakenX60Motor(CAN.INTAKE2_MOTOR_CAN_ID_1, false);
         intake2Motor2 = new KrakenX60Motor(CAN.INTAKE2_MOTOR_CAN_ID_2, true);
 
-        //intakeSensor = new LaserCan(CAN.INTAKE2_BEAM_BREAK_CAN_ID);
+        //intake2Sensor = new LaserCan(CAN.INTAKE2_BEAM_BREAK_CAN_ID);
     }
 
     /**
