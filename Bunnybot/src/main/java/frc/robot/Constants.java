@@ -31,7 +31,7 @@ public final class Constants {
     }
 
     public final class CAN {
-        public static final int INTAKE_MOTOR_CAN_ID = 45;
+        public static final int INTAKE_MOTOR_CAN_ID = 0;
         public static final int PDH_CAN_ID = 1;
         public static final int DEEP_CLIMB_MOTOR_CAN_ID = 51;
         public static final int DEEP_CLIMB_INTAKE_MOTOR_CAN_ID = 29;
@@ -52,6 +52,7 @@ public final class Constants {
         public static final int LAUNCHER1_MOTOR_CAN_ID_2 = 0; 
         public static final int LAUNCHER1_PIVOT_MOTOR_CAN_ID_1 = 0;
         public static final int LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1 = 0;
+        public static final int PIVOT_INTAKE_MOTOR_CAN_ID = 0;
     }
 
     public final class CORAL_ALIGN {
@@ -96,6 +97,18 @@ public final class Constants {
     public final class INTAKE {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Intake/";
         public static final int INTAKE_BEAM_BREAK_THRESHOLD_MM = 20;
+        //These might be needed for the Pivot Intake Motor, with just PID here(might need an s?)
+        public static final double INTAKE_POSITION_P = 0;
+        public static final double INTAKE_POSITION_I = 0;
+        public static final double INTAKE_POSITION_D = 0;
+        //Just in case these are needed, but velocity might not needed PID
+        public static final double INTAKE_VELOCITY_P = 0;
+        public static final double INTAKE_VELOCITY_I = 0;
+        public static final double INTAKE_VELOCITY_D = 0;
+        //NEEDS to be changed based on gearbox ratio
+        public static final double INTAKE_MOTOR_ROTATIONS_TO_DEGREES = 0;
+        
+        
     }
 
     public final class LAUNCHER {
@@ -116,6 +129,7 @@ public final class Constants {
 
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Scoring/";
     }
+
 
     
     public final class SWERVE {
