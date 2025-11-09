@@ -6,22 +6,12 @@ package frc.robot;
 
 import frc.robot.Constants.*;
 
-import java.util.Set;
-
-import org.littletonrobotics.junction.Logger;
-
-import frc.robot.commands.NewtonCommands;
 import frc.robot.commands.autonomous.*;
-import frc.robot.commands.largecommands.LargeCommand;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.Swerve.DriveModes;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 
 public class RobotContainer {
@@ -31,17 +21,12 @@ public class RobotContainer {
     private static final CommandXboxController operatorController = new CommandXboxController(
         CONTROLLERS.OPERATOR_PORT
     );
-    public static final CommandGenericHID coralController = new CommandGenericHID(
-        CONTROLLERS.CORAL_SELECTOR_PORT
-    );
 
     // The robot's subsystems
     private final Swerve swerve;
     
     //TODO: Add all controls here
-    //Driver controls
     
-    // Helpers
     // TODO: Add instantiatable helpers here
 
     /**

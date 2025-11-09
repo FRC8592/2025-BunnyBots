@@ -123,8 +123,8 @@ public class BBConstants {
 
     // Front Left
     //VERIFY THIS!
-    private static final int kFrontLeftDriveMotorId = 0; //NEEDS TO BE IDENTIFIED!!
-    private static final int kFrontLeftSteerMotorId = 0; //NEEDS TO BE IDENTIFIED!!
+    private static final int kFrontLeftDriveMotorId = 17; //NEEDS TO BE IDENTIFIED!!
+    private static final int kFrontLeftSteerMotorId = 9; //NEEDS TO BE IDENTIFIED!!
     private static final int kFrontLeftEncoderId = 0; //NEEDS TO BE IDENTIFIED!!
     private static final Angle kFrontLeftEncoderOffset = Rotations.of(0.15576171875);
     private static final boolean kFrontLeftSteerMotorInverted = true;
@@ -134,8 +134,8 @@ public class BBConstants {
 
     // Front Right
     //VERIFY THIS!
-    private static final int kFrontRightDriveMotorId = 0; //NEEDS TO BE IDENTIFIED!!
-    private static final int kFrontRightSteerMotorId = 0; //NEEDS TO BE IDENTIFIED!!
+    private static final int kFrontRightDriveMotorId = 7; //NEEDS TO BE IDENTIFIED!!
+    private static final int kFrontRightSteerMotorId = 8; //NEEDS TO BE IDENTIFIED!!
     private static final int kFrontRightEncoderId = 0; //NEEDS TO BE IDENTIFIED!!
     private static final Angle kFrontRightEncoderOffset = Rotations.of(0.44921875);
     private static final boolean kFrontRightSteerMotorInverted = true;
@@ -145,8 +145,8 @@ public class BBConstants {
 
     // Back Left
     //VERIFY THIS!
-    private static final int kBackLeftDriveMotorId = 0; //NEEDS TO BE IDENTIFIED!!
-    private static final int kBackLeftSteerMotorId = 0; //NEEDS TO BE IDENTIFIED!!
+    private static final int kBackLeftDriveMotorId = 5; //NEEDS TO BE IDENTIFIED!!
+    private static final int kBackLeftSteerMotorId = 6; //NEEDS TO BE IDENTIFIED!!
     private static final int kBackLeftEncoderId = 0; //NEEDS TO BE IDENTIFIED!!
     private static final Angle kBackLeftEncoderOffset = Rotations.of(0.227783203125);
     private static final boolean kBackLeftSteerMotorInverted = true;
@@ -156,9 +156,9 @@ public class BBConstants {
 
     // Back Right
     //VERIFY THIS!
-    private static final int kBackRightDriveMotorId = 7; //NEEDS TO BE IDENTIFIED!!
-    private static final int kBackRightSteerMotorId = 8; //NEEDS TO BE IDENTIFIED!!
-    private static final int kBackRightEncoderId = 12; //NEEDS TO BE IDENTIFIED!!
+    private static final int kBackRightDriveMotorId = 18; //NEEDS TO BE IDENTIFIED!!
+    private static final int kBackRightSteerMotorId = 4; //NEEDS TO BE IDENTIFIED!!
+    private static final int kBackRightEncoderId = 0; //NEEDS TO BE IDENTIFIED!!
     private static final Angle kBackRightEncoderOffset = Rotations.of(0.386474609375);
     private static final boolean kBackRightSteerMotorInverted = true;
     private static final boolean kBackRightEncoderInverted = false;
