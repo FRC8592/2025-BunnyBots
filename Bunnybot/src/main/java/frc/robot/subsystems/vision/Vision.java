@@ -14,8 +14,7 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -31,6 +30,9 @@ public class Vision extends SubsystemBase{
     PhotonCamera camera;
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
     PhotonPoseEstimator estimator;
+
+    
+
 
     boolean targetVisible = false;
     double targetX = 0.0;
@@ -50,6 +52,8 @@ public class Vision extends SubsystemBase{
     VisionSystemSim visionSim;
     SimCameraProperties cameraBProperties;
     PhotonCameraSim cameraSim;
+
+    List<AprilTag> al = new ArrayList<>();
 
     public Vision(String camName, Transform3d camOffsets){
         camera = new PhotonCamera(camName);
@@ -80,6 +84,16 @@ public class Vision extends SubsystemBase{
         cameraSim.enableProcessedStream(true);
 
         cameraSim.enableDrawWireframe(true);
+
+        
+        al.add(new AprilTag(1, new Pose3d(72, 320, 14, new Rotation3d(0, 0, Math.toRadians(270)))));
+        al.add(new AprilTag(2, new Pose3d(576, 320, 14, new Rotation3d(0, 0, Math.toRadians(270)))));
+        al.add(new AprilTag(3, new Pose3d(4, 270, 14, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(4, new Pose3d(644, 270, 14, new Rotation3d(0, 0, Math.toRadians(180)))));
+        al.add(new AprilTag(5, new Pose3d(4, 196.125, 46, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(6, new Pose3d(644, 196.125, 46, new Rotation3d(0, 0, Math.toRadians(180)))));
+        al.add(new AprilTag(7, new Pose3d(4, 20.5, 46, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(8, new Pose3d(644, 20.5, 46, new Rotation3d(0, 0, 180))));
     }
 
     @Override
