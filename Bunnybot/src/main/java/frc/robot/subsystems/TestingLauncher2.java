@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 //import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,8 +19,8 @@ public class TestingLauncher2 extends SubsystemBase {
     private NewtonMotor launcher2Motor1; 
     private NewtonMotor launcher2Motor2; 
     public TestingLauncher2() {
-        //launcher2Motor1 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
-        launcher2Motor2 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
+        launcher2Motor1 = new KrakenX60Motor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
+        launcher2Motor2 = new KrakenX60Motor(CAN.LAUNCHER2_MOTOR_CAN_ID_2, false);
 
         //launcherSensor = new LaserCan(CAN.LAUNCHER2_BEAM_BREAK_CAN_ID);
 

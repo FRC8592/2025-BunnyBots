@@ -19,6 +19,10 @@ public final class Constants {
         public static final double FIELD_LENGTH_METERS = 17.548;
         public static final double FIELD_WIDTH_METERS = 8.052;
     }
+    public final class CONVERSIONS {
+        public static final double METERS_TO_FEET = 3.28084;
+        public static final double FEET_TO_METERS = 0.3048;
+    }
 
     public final class CONTROLLERS {
         public static final int DRIVER_PORT = 0;
@@ -45,7 +49,7 @@ public final class Constants {
         public static final int LAUNCHER1_MOTOR_CAN_ID_1 = 0; 
         public static final int LAUNCHER1_MOTOR_CAN_ID_2 = 0; 
         public static final int LAUNCHER1_PIVOT_MOTOR_CAN_ID_1 = 0;
-        public static final int LAUNCHER1_PIVOT_MOTOR_CAN_ID_2 = 0;
+        public static final int LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1 = 0;
     }
 
     public final class CORAL_ALIGN {
@@ -95,6 +99,11 @@ public final class Constants {
     public final class LAUNCHER {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Launcher/";
         public static final int LAUNCHER2_BEAM_BREAK_THRESHOLD_MM=0; 
+
+        public static final double LAUNCHER1_PIVOT_GEAR_RATIO = 1/180.0; // temporary value, must be changed
+        public static final double PIVOT_MOTOR_POSITION_TOLERANCE = 2.0; // temporary value, must be changed
+        public static final double LAUNCHER_ANGLE_DEGREES_MAX = 0.0; // temporary value, must be changed
+        public static final double LAUNCHER_ANGLE_DEGREES_MIN = 0.0; // temporary value, must be changed
     }
     public final class SCORING {
 
