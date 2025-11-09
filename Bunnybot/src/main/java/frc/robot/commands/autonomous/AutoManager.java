@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
-import frc.robot.commands.autonomous.autos.*;
 import frc.robot.commands.proxies.*;
 import frc.robot.subsystems.swerve.Swerve;
 
