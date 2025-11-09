@@ -78,16 +78,6 @@ public final class Constants {
         public static final int INTAKE_BEAM_BREAK_THRESHOLD_MM = 20;
     }
 
-    public final class SCORING {
-
-        public static final double SAFE_ELEVATOR_HEIGHT = 14d;
-        public static final double SAFE_ARM_POS = 55d;
-        public static final double MAX_RESTRICTED_WRIST = 30d;
-
-
-        public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Scoring/";
-    }
-
     
     public final class SWERVE {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Swerve/";

@@ -29,7 +29,7 @@ public final class AutoManager {
     //private static Scoring scoring;
     //private static LEDs leds;
     
-    public static void addSubsystems(Swerve swerve, Scoring scoring, LEDs leds){
+    public static void addSubsystems(Swerve swerve){
         //AutoManager.swerve = swerve;
         //AutoManager.scoring = scoring;
         //AutoManager.leds = leds;
