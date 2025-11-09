@@ -17,13 +17,17 @@ public class TestingLauncher2 extends SubsystemBase {
     private NewtonMotor launcher2Motor1; 
     private NewtonMotor launcher2Motor2; 
     public TestingLauncher2() {
-        //launcher2Motor1 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
-        launcher2Motor2 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
+        //Top is Motor2
+        //Bottom is Motor1
+        launcher2Motor1 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, true);
+        launcher2Motor2 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_2, false);
+        SmartDashboard.putNumber("launch_motor1", 0.1);
+        SmartDashboard.putNumber("launch_motor2", 0.6);
 
         //launcherSensor = new LaserCan(CAN.LAUNCHER2_BEAM_BREAK_CAN_ID);
 
-        launcher2Motor1.setIdleMode(IdleMode.kBrake);
-        launcher2Motor2.setIdleMode(IdleMode.kBrake);
+        launcher2Motor1.setIdleMode(IdleMode.kCoast);
+        launcher2Motor2.setIdleMode(IdleMode.kCoast);
 
     }
 
@@ -31,28 +35,27 @@ public class TestingLauncher2 extends SubsystemBase {
      * Accepts the desired speed as a percentage and sets the motor to the given speed. 
      * @param percent Desired speed as a percentage.
     */
-    public void setLauncherPercentOutput(double percent){
-        launcher2Motor1.setPercentOutput(percent);
-        launcher2Motor2.setPercentOutput(percent);
-        //System.out.println("This is running right now, or at least I should be");
+    public void setLauncherPercentOutput(double percent1, double percent2){
+        //Debugging to try and see whether the method is running, which it does
+        //System.out.println("This method is running");
+        launcher2Motor1.setPercentOutput(percent1);
+        launcher2Motor2.setPercentOutput(percent2);
 
-        SmartDashboard.putNumber("Launch Motor 1 Percent Power", percent);
-        SmartDashboard.putNumber("Launch Motor 2 Percent Power", percent);
     }
 
     /**
      * Stops the launcher motor by setting by setting the percent output to 0
      */
     public void stop(){
-        setLauncherPercentOutput(0);
+        setLauncherPercentOutput(0,0);
     }
     /**
      * Accepts the desired power of the motor and sets the motor to that power.
      * @param percent Desired percentage of the motor.
      * @return Returns a command to set motor power to given percentage.
      */
-    public Command setLauncherCommand(double percent){
-        return this.run(()->{setLauncherPercentOutput(percent);
+    public Command setLauncherCommand(double percent1, double percent2){
+        return this.run(()->{setLauncherPercentOutput(percent1, percent2);
         });
     }
 
@@ -62,7 +65,7 @@ public class TestingLauncher2 extends SubsystemBase {
      */
     public Command stopLauncherCommand(){
         return this.runOnce(()->{
-            setLauncherPercentOutput(0);
+            setLauncherPercentOutput(0,0);
         });
     }
 

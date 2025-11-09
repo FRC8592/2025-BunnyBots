@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.Set;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import frc.robot.commands.ExampleCommand;
 // import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,6 +35,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final TestingLauncher2 testingLauncher2;
   private final Trigger LAUNCH = driverController.rightTrigger();
+  private double percentDashboard1;
+  private double percentDashboard2;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -53,7 +56,14 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher2.setLauncherCommand(0.6), Set.of(testingLauncher2))).onFalse(testingLauncher2.stopLauncherCommand());
+    //These two variables are not deriving new variables entered into dashboard.
+    //Assuming we are entering them wrong, and that a slider like "slow mode" for swerve will work better.
+    double percentDerived1 = SmartDashboard.getNumber("launch_motor1",percentDashboard1);
+    double percentDerived2 = SmartDashboard.getNumber("launch_motor2",percentDashboard2);
+    //Try and print the values
+    System.out.println("PercentDerived1 " + percentDerived1);
+    System.out.println("PercentDerived2 " + percentDerived2);
+    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher2.setLauncherCommand(percentDerived1,percentDerived2), Set.of(testingLauncher2))).onFalse(testingLauncher2.stopLauncherCommand());
   
   }
 
