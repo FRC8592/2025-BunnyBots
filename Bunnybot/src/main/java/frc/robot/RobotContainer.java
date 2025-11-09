@@ -16,10 +16,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CONTROLLERS;
-import frc.robot.subsystems.TestingLauncher1;
-import frc.robot.subsystems.TestingLauncher2;
 import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.IntakeJR;
+
 
 
 /**
@@ -35,16 +33,12 @@ public class RobotContainer {
 
   // private final TestingLauncher1 testingLauncher1;
   // The robot's subsystems and commands are defined here...
-  private final TestingLauncher1 testingLauncher1;
-  private final TestingLauncher2 testingLauncher2;
   private final Indexer indexer;
   private final Trigger LAUNCH = driverController.rightTrigger();
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    testingLauncher1 = new TestingLauncher1();
-    testingLauncher2 = new TestingLauncher2();
     indexer = new Indexer();
    
     
@@ -66,8 +60,6 @@ public class RobotContainer {
      */
     private void configureDefaults(){
       setDefaultCommand(indexer, indexer.stopIndexerCommand());
-      setDefaultCommand(testingLauncher1, testingLauncher1.stopLauncherCommand());
-      setDefaultCommand(testingLauncher2, testingLauncher2.stopLauncherCommand());
     }
 
   /**
@@ -81,7 +73,6 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher1.setLauncherCommand(0.8), Set.of(testingLauncher1))).onFalse(testingLauncher1.stopLauncherCommand());
-    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher2.setLauncherCommand(0.8), Set.of(testingLauncher2))).onFalse(testingLauncher2.stopLauncherCommand());
   
   }
 
