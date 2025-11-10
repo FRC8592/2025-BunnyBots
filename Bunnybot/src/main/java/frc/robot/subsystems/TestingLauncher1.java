@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.helpers.PIDProfile;
-import org.littletonrobotics.junction.Logger;
+// import org.littletonrobotics.junction.Logger;
 import frc.robot.helpers.Utils;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
@@ -13,8 +13,8 @@ public class TestingLauncher1 extends SubsystemBase {
     //declaring motors used for launcher1
     private NewtonMotor launcher1motor1;
     private NewtonMotor launcher1motor2;
-    private NewtonMotor launcher1pivotmotor;
-    private NewtonMotor launcher1transportmotor;
+    //private NewtonMotor launcher1pivotmotor;
+    //private NewtonMotor launcher1transportmotor;
 
     private double targetAngleDegrees = 0.0;
     private double launcherMotorCurrentPercent = 0.0;
@@ -24,8 +24,8 @@ public class TestingLauncher1 extends SubsystemBase {
     {
         // PIDProfile positionPid = new PIDProfile();
         // motors for the two 'launching' wheels
-        launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, false);
-        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
+        launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, true);
+        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, true);
 
         // motor for transporting ball to the 'launching' wheels
         // launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
@@ -53,6 +53,7 @@ public class TestingLauncher1 extends SubsystemBase {
 
     public void setLauncherPercentOutput(double percent)
     {
+        //System.out.println("Percent within setLauncherPercentOutput: " + percent);
         launcher1motor1.setPercentOutput(percent);
         launcher1motor2.setPercentOutput(percent);
 
@@ -68,10 +69,10 @@ public class TestingLauncher1 extends SubsystemBase {
         targetAngleDegrees = degrees;
     }
 
-    public double getDegrees() {
-        return motorRotationsToDegrees(launcher1pivotmotor.getRotations());
+    // public double getDegrees() {
+    //     //return motorRotationsToDegrees(launcher1pivotmotor.getRotations());
        
-    }
+    // }
 
     /**
      * accepts degrees and converts it to rotations
@@ -107,27 +108,27 @@ public class TestingLauncher1 extends SubsystemBase {
      * outputs whether the launcher is at its desired position
      * @return Returns if the pivot motor is in the desired position as a boolean
      */
-    public boolean atPosition() {
-        return Utils.isWithin(getDegrees(), targetAngleDegrees, LAUNCHER.PIVOT_MOTOR_POSITION_TOLERANCE);
-    }
+    // public boolean atPosition() {
+    //     return Utils.isWithin(getDegrees(), targetAngleDegrees, LAUNCHER.PIVOT_MOTOR_POSITION_TOLERANCE);
+    // }
 
     /**
      * accepts desired speed as a percentage and sets motor to that speed
      * @param percent desired speed as a percentage
      */
 
-    public void setTransportPercentOutput(double percent){
-        launcher1transportmotor.setPercentOutput(percent);
+    // public void setLauncherPercentOutput(double percent){
+    //     //launcher1transportmotor.setPercentOutput(percent);
 
-        SmartDashboard.putNumber("Transport Motor Percent Power", percent);
-    }
+    //     SmartDashboard.putNumber("Transport Motor Percent Power", percent);
+    // }
 
     /**
      * stops transport motor by setting output percentage to 0
      */
 
      public void stopTransport(){
-        setTransportPercentOutput(0);
+        setLauncherPercentOutput(0);
      }
 
     /**
@@ -146,11 +147,12 @@ public class TestingLauncher1 extends SubsystemBase {
      */
     public Command setLauncherCommand(double percent)
     {
+        //System.out.println("Percent within setLauncherCommand: "+ percent);
         launcherMotorCurrentPercent = percent;
         transportMotorCurrentPercent = percent;
         return this.run(()->
         {
-            setTransportPercentOutput(percent);
+            setLauncherPercentOutput(percent);
             setLauncherPercentOutput(percent);
         });
     }
@@ -166,12 +168,12 @@ public class TestingLauncher1 extends SubsystemBase {
         return this.runOnce(()->
         {
             setLauncherPercentOutput(0);
-            setTransportPercentOutput(0);
+            setLauncherPercentOutput(0);
         });
     }
 
     public void periodic() {
-        Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentLauncherPercentOutput", launcherMotorCurrentPercent);
+        //Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentLauncherPercentOutput", launcherMotorCurrentPercent);
         // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentTransportPercentOutput", transportMotorCurrentPercent);
         // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentPivotDegrees", getDegrees());
         // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|")
