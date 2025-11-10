@@ -28,11 +28,11 @@ public class TestingLauncher1 extends SubsystemBase {
         launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
 
         // motor for transporting ball to the 'launching' wheels
-        launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
+        // launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);
 
         launcher1motor1.setIdleMode(IdleMode.kBrake);
         launcher1motor2.setIdleMode(IdleMode.kBrake);
-        launcher1transportmotor.setIdleMode(IdleMode.kBrake);
+        // launcher1transportmotor.setIdleMode(IdleMode.kBrake);
 
         // motor for angle manipulation
         // launcher1pivotmotor = new KrakenX60Motor(CAN.LAUNCHER1_PIVOT_MOTOR_CAN_ID_1, false);
@@ -172,7 +172,7 @@ public class TestingLauncher1 extends SubsystemBase {
 
     public void periodic() {
         Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentLauncherPercentOutput", launcherMotorCurrentPercent);
-        Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentTransportPercentOutput", transportMotorCurrentPercent);
+        // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentTransportPercentOutput", transportMotorCurrentPercent);
         // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentPivotDegrees", getDegrees());
         // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|")
     }

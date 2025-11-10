@@ -72,7 +72,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher1.setLauncherCommand(0.8), Set.of(testingLauncher1))).onFalse(testingLauncher1.stopLauncherCommand());
+    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher1.setLauncherCommand(0.5), Set.of(testingLauncher1))).onFalse(testingLauncher1.stopLauncherCommand());
   
   }
 
