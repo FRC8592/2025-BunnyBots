@@ -185,7 +185,9 @@ public final class Constants {
     public final class ROBOT {
         public static final String LOG_PATH = SHARED.LOG_FOLDER + "/Robot/";
     }
-
+    public final class RANGE_TABLE {
+        public static final double OFFSET_ANGLE = 0.0; // TODO: CHANGE THIS LATER, TEMPORARY VALUE
+    }
     public class SUPPLIERS{
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Suppliers/";
     }
