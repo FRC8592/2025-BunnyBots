@@ -21,7 +21,8 @@ import frc.robot.helpers.PIDProfile;
 
 public class TestingIntake1 extends SubsystemBase{
    private NewtonMotor IntakeMotor;
-   private NewtonMotor PivotIntakeMotor;
+   //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
+   private KrakenX60Motor PivotIntakeMotor;
    //If neos are used, this is necessary for PID Control
    //private SparkClosedLoopController PivotIntakeControl;
    //private SparkFlexConfig MotorConfig;
@@ -44,6 +45,10 @@ public class TestingIntake1 extends SubsystemBase{
        //Setting the idle(normal/resting) state
        IntakeMotor.setIdleMode(IdleMode.kBrake);
        PivotIntakeMotor.setIdleMode(IdleMode.kBrake);
+        //Setting current limits on the motors to prevent burn out and overheating
+
+        IntakeMotor.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
+        PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
        /*
         * Alternate option (if using neos) based on REVLib Website:
 
@@ -63,6 +68,8 @@ public class TestingIntake1 extends SubsystemBase{
 
 
        PivotIntakeMotor.withGains(PositionPID);
+
+       PivotIntakeMotor.configureMotionMagic(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY);
 
 
    }

@@ -2,20 +2,26 @@ package frc.robot.helpers.motor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
+//Neither of these are needed within NewtonMotors as the class does not use the type currently
+//import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+//import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import frc.robot.helpers.PIDProfile;
 import frc.robot.helpers.motor.talonfx.TalonFXMotor;
 
 public abstract class NewtonMotor {
+    //Allows for other motor files that extend NewtonMotor to utilize the variables 
     protected List<PIDProfile> motorPIDGains = new ArrayList<>();
     protected int deviceID = 0;
     protected boolean inverted = false;
     protected MotorConstants motorConstants = null;
     protected double desiredVelocityRPM = 0d;
-    protected EncoderSim simEncoder; 
-    protected DCMotorSim simMotor;
+    /*
+     * Utilized for simulating testing, when hardware is not available
+     * Not currently used in code, so they are commented out
+     */
+    //Utilized for simulated testing, when hardware is not available
+    //protected EncoderSim simEncoder; 
+    //protected DCMotorSim simMotor;
 
     protected NewtonMotor(int id, boolean inverted, MotorConstants constants) {
         this.deviceID = id;

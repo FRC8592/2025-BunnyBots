@@ -26,6 +26,13 @@ public final class Constants {
     
     public static final int INTAKE_MOTOR_ROTATIONS_TO_DEGREES = 0;
 
+    public static final int INTAKE_CURRENT_LIMIT = 0;
+    public static final int PIVOT_INTAKE_CURRENT_LIMIT = 0;
+
+    public static final int PIVOT_INTAKE_MAX_VELOCITY = 0;
+    public static final int PIVOT_INTAKE_MAX_ACCELERATION = 0;
+    
+
   }
 
   public static class CAN{
