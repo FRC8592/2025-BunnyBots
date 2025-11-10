@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.helpers.PIDProfile;
+import org.littletonrobotics.junction.Logger;
 import frc.robot.helpers.Utils;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
@@ -14,7 +15,10 @@ public class TestingLauncher1 extends SubsystemBase {
     private NewtonMotor launcher1motor2;
     private NewtonMotor launcher1pivotmotor;
     private NewtonMotor launcher1transportmotor;
+
     private double targetAngleDegrees = 0.0;
+    private double launcherMotorCurrentPercent = 0.0;
+    private double transportMotorCurrentPercent = 0.0;
     
     public TestingLauncher1()
     {
@@ -52,8 +56,7 @@ public class TestingLauncher1 extends SubsystemBase {
         launcher1motor1.setPercentOutput(percent);
         launcher1motor2.setPercentOutput(percent);
 
-        SmartDashboard.putNumber("Launch Motor 1 Percent Power", percent);
-        SmartDashboard.putNumber("Launch Motor 2 Percent Power", percent);
+
     }
 
 
@@ -143,6 +146,8 @@ public class TestingLauncher1 extends SubsystemBase {
      */
     public Command setLauncherCommand(double percent)
     {
+        launcherMotorCurrentPercent = percent;
+        transportMotorCurrentPercent = percent;
         return this.run(()->
         {
             setTransportPercentOutput(percent);
@@ -156,10 +161,19 @@ public class TestingLauncher1 extends SubsystemBase {
      */
     public Command stopLauncherCommand()
     {
+        launcherMotorCurrentPercent = 0d;
+        transportMotorCurrentPercent = 0d;
         return this.runOnce(()->
         {
             setLauncherPercentOutput(0);
             setTransportPercentOutput(0);
         });
+    }
+
+    public void periodic() {
+        Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentLauncherPercentOutput", launcherMotorCurrentPercent);
+        Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentTransportPercentOutput", transportMotorCurrentPercent);
+        // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|CurrentPivotDegrees", getDegrees());
+        // Logger.recordOutput(LAUNCHER.LOG_PATH + "LAUNCHER|")
     }
 }
