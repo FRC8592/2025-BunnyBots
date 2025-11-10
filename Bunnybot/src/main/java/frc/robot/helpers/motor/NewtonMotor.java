@@ -74,24 +74,6 @@ public abstract class NewtonMotor {
 
     public abstract void resetEncoderPosition(double rotations);
 
-    // public static <M extends NewtonMotor> DCMotor getDCMotor(M motor, int numMotors) {
-    //     DCMotor dcMotor = null;
-    //     if (motor.getClass().equals(SparkFlexMotor.class)) { // Vortex Motor
-    //         dcMotor = DCMotor.getNeoVortex(numMotors);
-    //     } else if (motor.getClass().equals(SparkMaxMotor.class)) { // Neo Motor
-    //         dcMotor = DCMotor.getNEO(numMotors);
-    //     } else if (motor.getClass().equals(Falcon500Motor.class)) {
-    //         dcMotor = DCMotor.getFalcon500(numMotors);
-    //     } else if (motor.getClass().equals(Falcon500FOCMotor.class)) {
-    //         dcMotor = DCMotor.getFalcon500Foc(numMotors);
-    //     } else if (motor.getClass().equals(KrakenX60Motor.class)) {
-    //         dcMotor = DCMotor.getKrakenX60(numMotors);
-    //     } else if (motor.getClass().equals(KrakenX60FOCMotor.class)) {
-    //         dcMotor = DCMotor.getKrakenX60Foc(numMotors);
-    //     }
-    //     return dcMotor;
-    // }
-
     public boolean isInverted() {
         return this.inverted;
     }
