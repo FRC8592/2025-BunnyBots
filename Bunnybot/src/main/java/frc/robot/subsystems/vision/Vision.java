@@ -23,12 +23,16 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CORAL_ALIGN;
-// import frc.robot.subsystems.LEDs;
 import frc.robot.Robot;
+import edu.wpi.first.units.*;
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+
+
 
 public class Vision extends SubsystemBase{
     PhotonCamera camera;
-    AprilTagFieldLayout aprilTagFieldLayout;
+    //AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
     PhotonPoseEstimator estimator;
 
     boolean targetVisible = false;
@@ -50,9 +54,22 @@ public class Vision extends SubsystemBase{
     SimCameraProperties cameraBProperties;
     PhotonCameraSim cameraSim;
 
+    private static final double INCHES_TO_METERS = 0.0254;
+
     List<AprilTag> al = new ArrayList<>();
 
     public Vision(String camName, Transform3d camOffsets){
+
+        al.add(new AprilTag(1, new Pose3d(72 * INCHES_TO_METERS, 320 * INCHES_TO_METERS, 14 * INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(270)))));
+        al.add(new AprilTag(2, new Pose3d(576 * INCHES_TO_METERS, 320 * INCHES_TO_METERS, 14 * INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(270)))));
+        al.add(new AprilTag(3, new Pose3d(4 * INCHES_TO_METERS, 270 * INCHES_TO_METERS, 14 * INCHES_TO_METERS, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(4, new Pose3d(644 * INCHES_TO_METERS, 270 * INCHES_TO_METERS, 14 * INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(180)))));
+        al.add(new AprilTag(5, new Pose3d(4 * INCHES_TO_METERS, 196.125 * INCHES_TO_METERS, 46 * INCHES_TO_METERS, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(6, new Pose3d(644 * INCHES_TO_METERS, 196.125 * INCHES_TO_METERS, 46 * INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(180)))));
+        al.add(new AprilTag(7, new Pose3d(4 * INCHES_TO_METERS, 20.5 * INCHES_TO_METERS, 46 * INCHES_TO_METERS, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(8, new Pose3d(644 * INCHES_TO_METERS, 20.5 * INCHES_TO_METERS, 46 * INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(180)))));
+        AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout(al, 54, 27); //check units
+
         camera = new PhotonCamera(camName);
         estimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camOffsets);
         visionSim = new VisionSystemSim("photonvision");
@@ -81,16 +98,10 @@ public class Vision extends SubsystemBase{
         cameraSim.enableProcessedStream(true);
 
         cameraSim.enableDrawWireframe(true);
+
+
+
         
-        al.add(new AprilTag(1, new Pose3d(72, 320, 14, new Rotation3d(0, 0, Math.toRadians(270)))));
-        al.add(new AprilTag(2, new Pose3d(576, 320, 14, new Rotation3d(0, 0, Math.toRadians(270)))));
-        al.add(new AprilTag(3, new Pose3d(4, 270, 14, new Rotation3d(0, 0, 0))));
-        al.add(new AprilTag(4, new Pose3d(644, 270, 14, new Rotation3d(0, 0, Math.toRadians(180)))));
-        al.add(new AprilTag(5, new Pose3d(4, 196.125, 46, new Rotation3d(0, 0, 0))));
-        al.add(new AprilTag(6, new Pose3d(644, 196.125, 46, new Rotation3d(0, 0, Math.toRadians(180)))));
-        al.add(new AprilTag(7, new Pose3d(4, 20.5, 46, new Rotation3d(0, 0, 0))));
-        al.add(new AprilTag(8, new Pose3d(644, 20.5, 46, new Rotation3d(0, 0, Math.toRadians(180)))));
-        aprilTagFieldLayout = new AprilTagFieldLayout(al, 25, 52); //check units
     }
 
     @Override
@@ -111,13 +122,7 @@ public class Vision extends SubsystemBase{
              // Camera processed a new frame since last
              // Get the last one in the list.
              var result = results.get(results.size() - 1);
-            if(camera.isConnected()){
-                // LEDs.setHasTags(result.getTargets().size());
-            }
 
-            else{
-                // LEDs.setHasTags(-1);
-            }
              targetVisible = result.hasTargets();
              if (targetVisible) {
                 // At least one AprilTag was seen by the camera
@@ -160,9 +165,7 @@ public class Vision extends SubsystemBase{
         SmartDashboard.putBoolean("Has two tags", getTargets().size() > 1);
     }
 
-    public void simulationPeriodic() {
-        // visionSim.update(Robot.FIELD.getRobotPose());
-    }
+
 
     /**
      * Gets the target X of the camera.
