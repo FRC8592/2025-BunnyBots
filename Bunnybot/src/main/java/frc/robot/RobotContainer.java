@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CONTROLLERS;
+import frc.robot.Constants.LAUNCHER;
 import frc.robot.subsystems.TestingLauncher1;
 
 
@@ -72,7 +73,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher1.setLauncherCommand(0.5), Set.of(testingLauncher1))).onFalse(testingLauncher1.stopLauncherCommand());
+    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher1.setLauncherCommand(LAUNCHER.LAUNCHER_OUTPUT_SPEED), Set.of(testingLauncher1))).onFalse(testingLauncher1.stopLauncherCommand());
   
   }
 

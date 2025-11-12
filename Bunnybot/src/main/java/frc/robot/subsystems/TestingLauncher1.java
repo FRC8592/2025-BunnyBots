@@ -25,7 +25,7 @@ public class TestingLauncher1 extends SubsystemBase {
         // PIDProfile positionPid = new PIDProfile();
         // motors for the two 'launching' wheels
         launcher1motor1 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_1, true);
-        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, true);
+        launcher1motor2 = new KrakenX60Motor(CAN.LAUNCHER1_MOTOR_CAN_ID_2, false);
 
         // motor for transporting ball to the 'launching' wheels
         // launcher1transportmotor = new KrakenX60Motor(CAN.LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1, false);

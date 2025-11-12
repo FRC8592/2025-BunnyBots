@@ -106,6 +106,7 @@ public final class Constants {
         public static final double PIVOT_MOTOR_POSITION_TOLERANCE = 2.0; // temporary value, must be changed
         public static final double LAUNCHER_ANGLE_DEGREES_MAX = 0.0; // temporary value, must be changed
         public static final double LAUNCHER_ANGLE_DEGREES_MIN = 0.0; // temporary value, must be changed
+        public static final double LAUNCHER_OUTPUT_SPEED = 0.5;
     }
     public final class SCORING {
 
