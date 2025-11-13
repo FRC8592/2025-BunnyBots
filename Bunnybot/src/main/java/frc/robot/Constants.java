@@ -24,7 +24,7 @@ public final class Constants {
     public static final int INTAKE_POSITION_I = 0;
     public static final int INTAKE_POSITION_D = 0;
     
-    public static final int INTAKE_MOTOR_ROTATIONS_TO_DEGREES = 0;
+    public static final int INTAKE_DEGREES_TO_MOTOR_ROTATIONS = 0;
 
     public static final int INTAKE_CURRENT_LIMIT = 0;
     public static final int PIVOT_INTAKE_CURRENT_LIMIT = 0;

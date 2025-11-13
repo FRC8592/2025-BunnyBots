@@ -74,8 +74,8 @@ public class TestingIntake1 extends SubsystemBase{
 
    }
 
-   public void setPercentOut(NewtonMotor motor, double percent){
-       motor.setPercentOutput(percent);
+   public void setPercentOut(NewtonMotor motor,double percent){
+    motor.setPercentOutput(percent);
    }
 
 
@@ -84,17 +84,36 @@ public class TestingIntake1 extends SubsystemBase{
    }
 
 
-   public Command setIntakeCommand(NewtonMotor motor, double percent){
-           return this.run(()->{setPercentOut(motor, percent);});
+   public Command setIntakeCommand(NewtonMotor motor,double percent){
+           return this.run(()->{setPercentOut(motor,percent);});
    } 
   
-   public Command stopIntakeCommand(){
-       return this.runOnce(()->{stop(PivotIntakeMotor);});
+   public Command stopIntakeCommand(NewtonMotor motor){
+       return this.runOnce(()->{stop(motor);});
    }
 
    public double RotationstoDegrees(double motorRotations){
-    return motorRotations * INTAKE.INTAKE_MOTOR_ROTATIONS_TO_DEGREES;
+    return motorRotations * 1/(INTAKE.INTAKE_DEGREES_TO_MOTOR_ROTATIONS);
    }
+
+   public double DegreestoRotations(double degrees){
+    return degrees * INTAKE.INTAKE_DEGREES_TO_MOTOR_ROTATIONS;
+   }
+
+   public NewtonMotor accessIntakeMotor(){
+    return IntakeMotor;
+   }
+
+   public KrakenX60Motor accessPivotIntakeMotor(){
+    return PivotIntakeMotor;
+   }
+
+
+
+   public boolean TestMotorRotations(){
+    return IntakeMotor.getRotations() == 1000.0;
+   }
+
 
 
 }
