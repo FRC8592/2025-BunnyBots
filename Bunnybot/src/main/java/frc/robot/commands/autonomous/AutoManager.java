@@ -7,7 +7,6 @@ package frc.robot.commands.autonomous;
 import java.util.ArrayList;
 import java.util.Set;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
-import frc.robot.Suppliers;
 import frc.robot.commands.proxies.*;
 import frc.robot.commands.autonomous.autos.*;
 
@@ -40,14 +38,9 @@ public final class AutoManager {
      * this function will have relatively long delays due to loading paths.
      */
     public static void prepare(){
-        
-
-
         autoCommands = new ArrayList<>();
         autoCommands.add(new MoveOutRedAuto());
         autoCommands.add(new MoveOutBlueAuto());
-
-        // TODO: Add autos here
 
         autoChooser = new SendableChooser<>();
         

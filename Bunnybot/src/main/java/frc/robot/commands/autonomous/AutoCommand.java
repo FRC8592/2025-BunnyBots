@@ -11,7 +11,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj2.command.*;
 
-
 /**
  * Class to provide subsystems, convenient methods, and a constructor to autonomous commands
  */
@@ -87,7 +86,6 @@ public class AutoCommand extends WrapperCommand{
                 else{
                    wpilibTrajectory = fromChoreoPath((choreo.trajectory.Trajectory<SwerveSample>) Choreo.loadTrajectory(name).get().getSplit(splitIndex).get());
                 }
-            //    Trajectory wpilibTrajectory = new Trajectory();
 
                 cachedChoreoTrajectories.put(name, wpilibTrajectory);
                 return wpilibTrajectory;
@@ -95,7 +93,6 @@ public class AutoCommand extends WrapperCommand{
             catch(Exception e){
                 throw new RuntimeException(e);
             }
-            // return new Trajectory();
         }
     }
 
