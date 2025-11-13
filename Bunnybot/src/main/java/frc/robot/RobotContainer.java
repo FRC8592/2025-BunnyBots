@@ -5,9 +5,6 @@
 package frc.robot;
 
 import java.util.Set;
-
-// import frc.robot.commands.ExampleCommand;
-// import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
@@ -17,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CONTROLLERS;
 import frc.robot.subsystems.Indexer;
-
 
 
 /**
@@ -34,32 +30,27 @@ public class RobotContainer {
   // private final TestingLauncher1 testingLauncher1;
   // The robot's subsystems and commands are defined here...
   private final Indexer indexer;
-  private final Trigger LAUNCH = driverController.rightTrigger();
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+
+  private final Trigger INDEXER_INTAKE = driverController.leftBumper();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    indexer = new Indexer();
-   
+    indexer = new Indexer();   
     
     passSubsystems();
-    configureBindings(); // Configure the trigger bindings
+    configureBindings();
     configureDefaults();
   }
 
   private void passSubsystems(){
-        // AutoManager.addSubsystems(swerve, scoring, leds);
-        // AutoCommand.addSubsystems(swerve, scoring, intake, leds, scoreCoral);
-        // LargeCommand.addSubsystems(swerve, scoring, leds, scoreCoral);
-        // NewtonCommands.addSubsystems(swerve, scoring, leds);
-        // Suppliers.addSubsystems(swerve, scoring, leds);
-    }
+
+  }
 
   /**
      * Configure default commands for the subsystems
      */
     private void configureDefaults(){
-      setDefaultCommand(indexer, indexer.stopIndexerCommand());
+      
     }
 
   /**
@@ -72,8 +63,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher1.setLauncherCommand(0.8), Set.of(testingLauncher1))).onFalse(testingLauncher1.stopLauncherCommand());
-  
+    INDEXER_INTAKE.whileTrue(
+      
+    );
   }
 
   /**

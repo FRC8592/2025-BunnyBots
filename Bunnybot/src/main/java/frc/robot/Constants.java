@@ -6,13 +6,10 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.util.Color;
-// import frc.robot.Robot.CurrentRobot;
 
 public final class Constants {
     public final class SHARED {
         public static final String LOG_FOLDER = "CustomLogs";
-        // public static final CurrentRobot CURRENT_ROBOT = CurrentRobot.PERRY;
-        // public static final boolean IS_RIPTIDE = CURRENT_ROBOT == CurrentRobot.RIPTIDE;
     }
 
     public final class MEASUREMENTS {
@@ -27,32 +24,15 @@ public final class Constants {
     public final class CONTROLLERS {
         public static final int DRIVER_PORT = 0;
         public static final int OPERATOR_PORT = 1;
-        //public static final int CORAL_SELECTOR_PORT = 2;
     }
 
     public final class CAN {
-        public static final int INTAKE_MOTOR_CAN_ID = 45;
-        public static final int PDH_CAN_ID = 1;
-        public static final int DEEP_CLIMB_MOTOR_CAN_ID = 51;
-        public static final int DEEP_CLIMB_INTAKE_MOTOR_CAN_ID = 29;
-
-        public static final int BACK_EXTENSION_MOTOR_CAN_ID = 44;
-        public static final int FORWARD_EXTENSION_MOTOR_CAN_ID = 43;
-        public static final int CLOCK_ARM_CAN_ID = 41;
-        public static final int WRIST_CAN_ID = 40;
-        public static final int INTAKE_BEAM_BREAK_CAN_ID = 60;
-        
-        public static final int INTAKE2_MOTOR_CAN_ID_1 = 0;
-        public static final int INTAKE2_MOTOR_CAN_ID_2 = 0;
-        public static final int LAUNCHER2_MOTOR_CAN_ID_1 = 36; 
-        public static final int LAUNCHER2_MOTOR_CAN_ID_2 = 38; 
-        public static final int LAUNCHER2_BEAM_BREAK_CAN_ID = 0;
-        public static final int LAUNCHER2_ANGLE_MOTOR_CAN_ID_1 = 0;
-        public static final int LAUNCHER1_MOTOR_CAN_ID_1 = 0; 
-        public static final int LAUNCHER1_MOTOR_CAN_ID_2 = 0; 
-        public static final int LAUNCHER1_PIVOT_MOTOR_CAN_ID_1 = 0;
-        public static final int LAUNCHER1_TRANSPORT_MOTOR_CAN_ID_1 = 0;
-        public static final int INDEXER_MOTOR_CAN_ID = 0;
+        public static final int INDEXER_MOTOR1_CAN_ID = 0;
+        public static final int INDEXER_MOTOR2_CAN_ID = 0;
+        public static final int INDEXER_TOP_MOTOR_CAN_ID = 0;
+        public static final int INDEXER_BEAM_BREAK_FRONT_CAN_ID = 0;
+        public static final int INDEXER_BEAM_BREAK_MIDDLE_CAN_ID = 0;
+        public static final int INDEXER_BEAM_BREAK_BACK_CAN_ID = 0;
     }
 
     public final class CORAL_ALIGN {
@@ -67,9 +47,7 @@ public final class Constants {
         public static final int MAX_LOCK_LOSS_TICKS = 20;
 
         public static final Transform3d CAMERA_OFFSETS = (
-            // SHARED.IS_RIPTIDE
-           // ? /* RIPRIDE: */ new Transform3d(new Translation3d(0.21, 0.215, 0.17), new Rotation3d(0, Math.toRadians(-12), 0))
-             /* PERRY: */   new Transform3d(new Translation3d(0.17145, 0.20955, 0.2286), new Rotation3d(0, Math.toRadians(-13), Math.toRadians(-3)))
+            new Transform3d(new Translation3d(0.17145, 0.20955, 0.2286), new Rotation3d(0, Math.toRadians(-13), Math.toRadians(-3)))
         );
 
 
@@ -89,35 +67,10 @@ public final class Constants {
         public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1d;
 
     }
+
     public final class NAVIGATION {
         public static final double MAX_ACCEPTABLE_AMBIGUITY = 0.1;
     }
-   
-    
-    public final class INTAKE {
-        public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Intake/";
-        public static final int INTAKE_BEAM_BREAK_THRESHOLD_MM = 20;
-    }
-
-    public final class LAUNCHER {
-        public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Launcher/";
-        public static final int LAUNCHER2_BEAM_BREAK_THRESHOLD_MM=0; 
-
-        public static final double LAUNCHER1_PIVOT_GEAR_RATIO = 1/180.0; // temporary value, must be changed
-        public static final double PIVOT_MOTOR_POSITION_TOLERANCE = 2.0; // temporary value, must be changed
-        public static final double LAUNCHER_ANGLE_DEGREES_MAX = 0.0; // temporary value, must be changed
-        public static final double LAUNCHER_ANGLE_DEGREES_MIN = 0.0; // temporary value, must be changed
-    }
-    public final class SCORING {
-
-        public static final double SAFE_ELEVATOR_HEIGHT = 14d;
-        public static final double SAFE_ARM_POS = 55d;
-        public static final double MAX_RESTRICTED_WRIST = 30d;
-
-
-        public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Scoring/";
-    }
-
     
     public final class SWERVE {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Swerve/";
@@ -154,16 +107,6 @@ public final class Constants {
         public static final Rotation2d BLUE_PERSPECTIVE_ROTATION = Rotation2d.fromDegrees(0);
         public static final Rotation2d RED_PERSPECTIVE_ROTATION = Rotation2d.fromDegrees(180);
 
-        //TODO: Double check that these still work
-        // public static final double PATH_FOLLOW_TRANSLATE_kP = 8d; // Was 8 in the last test
-        // public static final double PATH_FOLLOW_TRANSLATE_kI = 0d;
-        // public static final double PATH_FOLLOW_TRANSLATE_kD = 0.2d;
-
-        // //TODO: Double check that these still work
-        // public static final double PATH_FOLLOW_ROTATE_kP = 8;
-        // public static final double PATH_FOLLOW_ROTATE_kI = 0d;
-        // public static final double PATH_FOLLOW_ROTATE_kD = 0.1;
-
         public static final double PATH_FOLLOW_TRANSLATE_kP = 8d; // Was 8 in the last test
         public static final double PATH_FOLLOW_TRANSLATE_kI = 0d;
         public static final double PATH_FOLLOW_TRANSLATE_kD = 0d;
@@ -191,73 +134,7 @@ public final class Constants {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Suppliers/";
     }
 
-    public class ARM{
-        public static final String CLOCK_ARM_LOG_PATH = SHARED.LOG_FOLDER+"/Clock Arm/";
-        
-        public static final double CLOCK_ARM_GEAR_RATIO = 1/180.0;
-
-        // public static final double ARM_ANGLE_DEGREES_MIN = SHARED.IS_RIPTIDE? -2 : -2;
-        // public static final double ARM_ANGLE_DEGREES_MAX = SHARED.IS_RIPTIDE? 180 : 180;
-
-        // public static final double SAFE_ARM_TO_ROTATE_WRIST = SHARED.IS_RIPTIDE ? 75 : 40;
-
-        public static final double CLOCK_ARM_POSITION_TOLERANCE = 2.0;
-
-        public static final int ARM_CURRENT_LIMIT = 40;//amps
-
-        public static final double ARM_MAX_ACCELERATION = 250;
-        public static final double ARM_MAX_VELOCITY = 100; //previously 100
-
-        public static final double ARM_P =  3;
-        public static final double ARM_I =  0;
-        public static final double ARM_D = 0;
-        public static final double ARM_S = 0;
-        public static final double ARM_V = 0;
-        public static final double ARM_A = 0;
-    }
-
-    public class WRIST{
-        public static final String WRIST_LOG_PATH = SHARED.LOG_FOLDER+"/Wrist/";
-
-        public static final double WRIST_GEAR_RATIO = 1/75.0;
-
-        // public static final double WRIST_ANGLE_DEGREES_MIN = SHARED.IS_RIPTIDE? -225d : -225d;
-        // public static final double WRIST_ANGLE_DEGREES_MAX = SHARED.IS_RIPTIDE? 213 : 213;
-
-        public static final double WRIST_POSITION_TOLERANCE = 5.0;
-
-        public static final int WRIST_CURRENT_LIMIT = 60;//amps
-
-        public static final double WRIST_MAX_ACCELERATION = 400;
-        public static final double WRIST_MAX_VELOCITY = 100; //used to be 100
-
-        public static final double WRIST_P = 3;
-        public static final double WRIST_I = 0;
-        public static final double WRIST_D = 0;
-        public static final double WRIST_S = 0;
-        public static final double WRIST_V = 0;
-        public static final double WRIST_A = 0;
-    }
-
-    public final class LEDS{
-        public static final Color TEAL = new Color(0, 64, 192);
-        public static final Color ORANGE = new Color(192, 64, 0);
-        public static final Color WHITE = new Color(255, 255, 255);
-        public static final Color GREEN = new Color(0,255,0);
-        public static final Color RED = new Color(255, 0, 0);
-        public static final Color OFF = new Color(0, 0, 0);
-        public static final Color YELLOW = new Color(255,255,0);
-        public static final Color PURPLE = new Color(255,0,255);
-        public static final int LED_STRIP_LENGTH = 52;
-        public static final int LED_CANDLE_COUNT= 8; 
-        public static final int FULL_LED_COUNT = LED_STRIP_LENGTH+LED_CANDLE_COUNT;
-    }
-
-    public final class DEEP_CLIMB{
-        public static final double DEEP_CLIMB_GRAB_POSITION = -227;
-        public static final double DEEP_CLIMB_MAX_POSITION = -25;
-        public static final double DEEP_CLIMB_START_POSITION = 0;
-        public static final double DEEP_CLIMB_HOLD_P = 0.1;
-        public static final double DEEP_CLIMB_POSITION_TOLERANCE = 10;
+    public final class INDEXER {
+        public static final int INDEXER_BEAM_BREAK_THRESHOLD_MM = 20; //subject to change
     }
 }

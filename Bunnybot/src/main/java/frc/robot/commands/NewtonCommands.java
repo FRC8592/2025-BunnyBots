@@ -6,21 +6,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.subsystems.LEDs;
-// import frc.robot.subsystems.scoring.*;
 // import frc.robot.subsystems.swerve.Swerve;
 // import frc.robot.subsystems.swerve.Swerve.DriveModes;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public final class NewtonCommands {
     // private static Swerve swerve;
-    // private static Scoring scoring;
-    // private static LEDs leds;
     
     public static void addSubsystems(){
         // NewtonCommands.swerve = swerve;
-        // NewtonCommands.scoring = scoring;
-        // NewtonCommands.leds = leds;
     }
 
     /**
