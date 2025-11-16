@@ -42,8 +42,8 @@ public final class Constants {
         public static final int WRIST_CAN_ID = 40;
         public static final int INTAKE_BEAM_BREAK_CAN_ID = 60;
         
-        public static final int LAUNCHER2_MOTOR_CAN_ID_1 = 36; 
-        public static final int LAUNCHER2_MOTOR_CAN_ID_2 = 38; 
+        public static final int BOTTOM_LAUNCHER_MOTOR = 36; 
+        public static final int TOP_LAUNCHER_MOTOR = 38; 
         public static final int LAUNCHER2_BEAM_BREAK_CAN_ID = 0;
         public static final int LAUNCHER2_ANGLE_MOTOR_CAN_ID_1 = 0;
         public static final int LAUNCHER1_MOTOR_CAN_ID_1 = 0; 

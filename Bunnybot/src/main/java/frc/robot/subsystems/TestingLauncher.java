@@ -10,24 +10,24 @@ import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.spark.*;
 
+//TODO: Change the variables names based on the location of the motor. Top Motor = Motor 2 and Bottom Motor = Motor 1 
 
-
-public class TestingLauncher2 extends SubsystemBase {
+public class TestingLauncher extends SubsystemBase {
     // Declaring motors used for launcher
-    private NewtonMotor launcher2Motor1; 
-    private NewtonMotor launcher2Motor2; 
-    public TestingLauncher2() {
+    private NewtonMotor bottomLauncherMotor; 
+    private NewtonMotor topLauncherMotor; 
+    public TestingLauncher() {
         //Top is Motor2
         //Bottom is Motor1
-        launcher2Motor1 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
-        launcher2Motor2 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_2, true);
-        SmartDashboard.putNumber("launch_motor1", 0.4); // High: 0.4 Low: 0.23
-        SmartDashboard.putNumber("launch_motor2", 0.4); // High: 0.4 Low: 0.23
+        bottomLauncherMotor = new SparkFlexMotor(CAN.BOTTOM_LAUNCHER_MOTOR, false);
+        topLauncherMotor = new SparkFlexMotor(CAN.TOP_LAUNCHER_MOTOR, true);
+        SmartDashboard.putNumber("bottom_launcher_motor", 0.44); // High: 0.4 Low: 0.23  Close shot: 0.44
+        SmartDashboard.putNumber("top_launcher_motor", 0.3); // High: 0.4 Low: 0.23   Close shot: 0.3
 
         //launcherSensor = new LaserCan(CAN.LAUNCHER2_BEAM_BREAK_CAN_ID);
 
-        launcher2Motor1.setIdleMode(IdleMode.kCoast);
-        launcher2Motor2.setIdleMode(IdleMode.kCoast);
+        bottomLauncherMotor.setIdleMode(IdleMode.kCoast);
+        topLauncherMotor.setIdleMode(IdleMode.kCoast);
 
     }
 
@@ -38,8 +38,8 @@ public class TestingLauncher2 extends SubsystemBase {
     public void setLauncherPercentOutput(double percent1, double percent2){
         //Debugging to try and see whether the method is running, which it does
         //System.out.println("This method is running");
-        launcher2Motor1.setPercentOutput(percent1);
-        launcher2Motor2.setPercentOutput(percent2);
+        bottomLauncherMotor.setPercentOutput(percent1);
+        topLauncherMotor.setPercentOutput(percent2);
 
     }
 
