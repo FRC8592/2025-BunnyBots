@@ -23,13 +23,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
-import frc.robot.subsystems.swerve.BBConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.swerve.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
  */
-public class BBDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
@@ -118,7 +118,7 @@ public class BBDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
      * @param drivetrainConstants   Drivetrain-wide constants for the swerve drive
      * @param modules               Constants for each specific module
      */
-    public BBDrivetrain(
+    public CommandSwerveDrivetrain(
         SwerveDrivetrainConstants drivetrainConstants,
         SwerveModuleConstants<?, ?, ?>... modules
     ) {
@@ -141,7 +141,7 @@ public class BBDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
      *                                CAN FD, and 100 Hz on CAN 2.0.
      * @param modules                 Constants for each specific module
      */
-    public BBDrivetrain(
+    public CommandSwerveDrivetrain(
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         SwerveModuleConstants<?, ?, ?>... modules
@@ -171,7 +171,7 @@ public class BBDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
      *                                  and radians
      * @param modules                   Constants for each specific module
      */
-    public BBDrivetrain(
+    public CommandSwerveDrivetrain(
         SwerveDrivetrainConstants drivetrainConstants,
         double odometryUpdateFrequency,
         Matrix<N3, N1> odometryStandardDeviation,
