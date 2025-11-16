@@ -64,7 +64,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     INDEXER_INTAKE.whileTrue(
-      
+      new DeferredCommand(() -> , indexer)
     );
   }
 

@@ -62,7 +62,7 @@ public class Indexer extends SubsystemBase {
     }
 
     /**
-     * Sets the percentage for the indexer motor
+     * Sets the speed for the indexer motors on a scale of -1 to 1
      * @param percent
      */
     public void setIndexerPercentOutput(double percent) {
@@ -71,7 +71,7 @@ public class Indexer extends SubsystemBase {
     }
 
     /** 
-     * Stops the indexer motor
+     * Stops the indexer motors
     */
     public void stop() {
          indexerMotor1.setPercentOutput(0);
@@ -90,16 +90,16 @@ public class Indexer extends SubsystemBase {
     }
 
     /**
-     * 
+     * Runs the motors at given output on a scale of -1 to 1
      * @param percent
-     * @return
+     * @return command to run the motor at given speed
      */
-    public Command intakeCommand(double percent) {
+    public Command indexerCommand(double percent) {
         return this.run(() -> setIndexerPercentOutput(percent));
     }
 
     /**
-     * Stops the motor from running
+     * Stops the motors from running
      * @return the command to stop the motor
      */
     public Command stopIndexerCommand() {
