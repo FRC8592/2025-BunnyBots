@@ -63,7 +63,7 @@ public class RobotContainer {
     //Try and print the values
     System.out.println("PercentDashboard1 " + percentDashboard1);
     System.out.println("PercentDashboard2 " + percentDashboard2);
-    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher2.setLauncherCommand(percentDerived1,percentDerived2), Set.of(testingLauncher2))).onFalse(testingLauncher2.stopLauncherCommand());
+    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher2.setLauncherCommand(SmartDashboard.getNumber("launch_motor1", 0.4), SmartDashboard.getNumber("launch_motor2", 0.4)), Set.of(testingLauncher2))).onFalse(testingLauncher2.stopLauncherCommand());
   
   }
 

@@ -19,10 +19,10 @@ public class TestingLauncher2 extends SubsystemBase {
     public TestingLauncher2() {
         //Top is Motor2
         //Bottom is Motor1
-        launcher2Motor1 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, true);
-        launcher2Motor2 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_2, false);
-        SmartDashboard.putNumber("launch_motor1", 0.4);
-        SmartDashboard.putNumber("launch_motor2", 0.4);
+        launcher2Motor1 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_1, false);
+        launcher2Motor2 = new SparkFlexMotor(CAN.LAUNCHER2_MOTOR_CAN_ID_2, true);
+        SmartDashboard.putNumber("launch_motor1", 0.4); // High: 0.4 Low: 0.23
+        SmartDashboard.putNumber("launch_motor2", 0.4); // High: 0.4 Low: 0.23
 
         //launcherSensor = new LaserCan(CAN.LAUNCHER2_BEAM_BREAK_CAN_ID);
 
