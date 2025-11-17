@@ -152,10 +152,10 @@ public class FollowPathCommand extends LargeCommand{
         timer.start();
         if(!Robot.isReal()){
             if(flip.getAsBoolean()){
-                swerve.resetPose(flip(trajectory.sample(0)).poseMeters);
+                swerve.setKnownOdometryPose(flip(trajectory.sample(0)).poseMeters);
             }
             else{
-                swerve.resetPose(trajectory.sample(0).poseMeters);
+                swerve.setKnownOdometryPose(trajectory.sample(0).poseMeters);
             }
         }
     }
@@ -170,14 +170,14 @@ public class FollowPathCommand extends LargeCommand{
         }
 
         Logger.recordOutput(SWERVE.LOG_PATH+"TargetPose", desiredState.poseMeters);
-        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceX", desiredState.poseMeters.getX()-swerve.getCurrentPosition().getX());
-        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceY", desiredState.poseMeters.getY()-swerve.getCurrentPosition().getY());
-        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceRot", desiredState.poseMeters.getRotation().minus(swerve.getCurrentPosition().getRotation()).getDegrees());
+        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceX", desiredState.poseMeters.getX()-swerve.getCurrentOdometryPosition().getX());
+        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceY", desiredState.poseMeters.getY()-swerve.getCurrentOdometryPosition().getY());
+        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceRot", desiredState.poseMeters.getRotation().minus(swerve.getCurrentOdometryPosition().getRotation()).getDegrees());
         // double velocity = desiredState.
         // Logger.recordOutput(SWERVE.LOG_PATH+"TargetVelocity", )
 
         ChassisSpeeds driveSpeeds = drivePID.calculate(
-            swerve.getCurrentPosition(),
+            swerve.getCurrentOdometryPosition(),
             desiredState,
             desiredState.poseMeters.getRotation()
         );

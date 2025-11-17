@@ -5,14 +5,15 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
-
 import frc.robot.commands.autonomous.*;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.subsystems.swerve.Swerve.DriveModes;
+import frc.robot.subsystems.swerve.Telemetry;
+import frc.robot.subsystems.swerve.TunerConstants;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
@@ -21,6 +22,10 @@ public class RobotContainer {
     private static final CommandXboxController operatorController = new CommandXboxController(
         CONTROLLERS.OPERATOR_PORT
     );
+    private final Trigger RESET_HEADING = driverController.back();
+    private final Trigger SLOW_MODE = driverController.rightBumper();
+    private final Telemetry logger = new Telemetry(SWERVE.MAX_SPEED);
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     // The robot's subsystems
     private final Swerve swerve;
@@ -34,7 +39,7 @@ public class RobotContainer {
      * up button bindings, and prepares for autonomous.
      */
     public RobotContainer() {
-        swerve = new Swerve();
+        swerve = new Swerve(drivetrain);
         
         passSubsystems();
         configureBindings();
@@ -64,9 +69,8 @@ public class RobotContainer {
                 -driverController.getLeftX(),
                 -driverController.getLeftY(),
                 -driverController.getRightX()
-            ), DriveModes.AUTOMATIC);
+            ));
         }).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-
     }
 
     //Any commands that are reused a lot but can't go in a separate class go here
@@ -75,10 +79,11 @@ public class RobotContainer {
      * Configure all button bindings
      */
     private void configureBindings() {
+        SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
+                 .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
 
+        RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
     };
-
-
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

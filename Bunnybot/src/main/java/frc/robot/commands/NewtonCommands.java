@@ -7,7 +7,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.subsystems.swerve.Swerve.DriveModes;
 
 public final class NewtonCommands {
     private static Swerve swerve;
@@ -37,7 +36,7 @@ public final class NewtonCommands {
                 0
             );
             processed.omegaRadiansPerSecond = swerve.snapToAngle(angle);
-            swerve.drive(processed, DriveModes.AUTOMATIC);
+            swerve.drive(processed);
         });
     }
 }
