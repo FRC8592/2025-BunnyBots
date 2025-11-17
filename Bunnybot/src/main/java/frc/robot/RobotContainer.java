@@ -44,7 +44,8 @@ public class RobotContainer {
   private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   
-  private final Trigger TESTINGBUTTON = driverController.rightTrigger();
+  private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
+  private final Trigger TESTINGPIVOTINTAKEBUTTON = driverController.leftTrigger();
   private TestingIntake1 testingIntake;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -66,7 +67,8 @@ public class RobotContainer {
   private void configureBindings() {
     
 
-    TESTINGBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(testingIntake.accessIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessIntakeMotor()));
+    TESTINGINTAKEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(testingIntake.accessIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessIntakeMotor()));
+    TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
   
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //new Trigger(m_exampleSubsystem::exampleCondition)

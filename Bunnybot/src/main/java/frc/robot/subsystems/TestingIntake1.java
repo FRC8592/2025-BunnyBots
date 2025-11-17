@@ -107,13 +107,10 @@ public class TestingIntake1 extends SubsystemBase{
    public KrakenX60Motor accessPivotIntakeMotor(){
     return PivotIntakeMotor;
    }
+ 
 
-
-
-   public boolean TestMotorRotations(){
-    return IntakeMotor.getRotations() == 1000.0;
-   }
-
+   //example code to put in scoring
+   
 
 
 }

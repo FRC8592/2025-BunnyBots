@@ -31,6 +31,8 @@ public final class Constants {
 
     public static final int PIVOT_INTAKE_MAX_VELOCITY = 0;
     public static final int PIVOT_INTAKE_MAX_ACCELERATION = 0;
+
+    public static final int PIVOT_INTAKE_MOTOR_ROTATIONS = 0;
     
 
   }
