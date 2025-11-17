@@ -41,7 +41,6 @@ public class RobotContainer {
     public RobotContainer() {
         swerve = new Swerve(drivetrain);
         
-        passSubsystems();
         configureBindings();
         configureDefaults();
         
@@ -49,20 +48,10 @@ public class RobotContainer {
     }
 
     /**
-     * Pass subsystems everywhere they're needed
-     */
-    private void passSubsystems(){
-        // AutoManager.addSubsystems(swerve, scoring, leds);
-        // AutoCommand.addSubsystems(swerve, scoring, leds);
-        // LargeCommand.addSubsystems(swerve, scoring, leds);
-        // NewtonCommands.addSubsystems(swerve, scoring, leds);
-        // Suppliers.addSubsystems(swerve, scoring, leds);
-    }
-
-    /**
      * Configure default commands for the subsystems
      */
     private void configureDefaults(){
+        System.out.println("Are we even configuring defaults?");
         // Set the swerve's default command to drive with joystickss
         setDefaultCommand(swerve, swerve.run(() -> {
             swerve.drive(swerve.processJoystickInputs(
@@ -106,6 +95,7 @@ public class RobotContainer {
     private void setDefaultCommand(SubsystemBase subsystem, Command command){
         if(command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf){
             subsystem.setDefaultCommand(command);
+            System.out.println("Is this default command running?");
         }
         else{
             //If you want to force-allow setting a cancel-incoming default command, directly call `subsystem.setDefaultCommand()` instead

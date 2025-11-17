@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -41,12 +42,14 @@ public class Swerve extends SubsystemBase {
 
         // TODO: Any initialization code needed for the new swerve stuff
         swerve = drivetrain;
+        System.out.println("Instantiated swerve");
     }
 
     @Override
     public void periodic() {
         // TODO: Periodic logging
         Logger.recordOutput(SWERVE.LOG_PATH+"Current Pose", getCurrentOdometryPosition());
+        // System.out.println("swerve heartbeat");
         swerve.periodic();
     }
 
@@ -72,7 +75,10 @@ public class Swerve extends SubsystemBase {
      * @param speeds the speeds to run the drivetrain at
      */
     public void drive(ChassisSpeeds speeds) {
+        System.out.println("Is this even running?");
         Logger.recordOutput(SWERVE.LOG_PATH+"TargetSpeeds", ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getYaw()));
+        
+        System.out.println("Drive method called >:)");
 
         swerve.applyRequest( () -> 
             drive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
@@ -171,6 +177,7 @@ public class Swerve extends SubsystemBase {
      * @return a ChassisSpeeds ready to be sent to the swerve.
      */
     public ChassisSpeeds processJoystickInputs(double rawX, double rawY, double rawRot){
+        System.out.println("Is process joystick inputs running?");
         double driveTranslateY = (
             rawY >= 0
             ? (Math.pow(Math.abs(rawY), SWERVE.JOYSTICK_EXPONENT))

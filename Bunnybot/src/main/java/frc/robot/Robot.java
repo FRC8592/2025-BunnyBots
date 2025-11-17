@@ -48,10 +48,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotInit() {
         CanBridge.runTCP();
-        Logger.recordMetadata("Game", "ReefScape");
-        Logger.recordMetadata("Year", "2025");
-        Logger.recordMetadata("Team", "8592");
-
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         if (isReal()) { // If running on a real robot
             String time = DateTimeFormatter.ofPattern("yy-MM-dd_HH-mm-ss").format(LocalDateTime.now());
@@ -78,6 +74,7 @@ public class Robot extends LoggedRobot {
         }
         Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         Logger.start();
+        
         robotContainer = new RobotContainer();
     }
 
