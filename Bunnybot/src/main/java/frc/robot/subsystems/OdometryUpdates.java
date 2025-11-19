@@ -18,7 +18,7 @@ import frc.robot.Constants.*;
 
 public class OdometryUpdates extends SubsystemBase {
 
-    // private Swerve swerve;
+    private Swerve swerve;
     private Vision vision1;
     private Pose2d initialPose;
     private static boolean useVision;
@@ -60,9 +60,9 @@ public class OdometryUpdates extends SubsystemBase {
                         { 
                             if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
                                 initialPose = robotPosition;
-                                // swerve.resetPose(initialPose);
+                                swerve.resetPose(initialPose);
                             } else {
-                                // swerve.addVisionMeasurement(robotPosition, timeStamp);
+                                swerve.addVisionMeasurement(robotPosition, timeStamp);
                             }
                         }
     

@@ -59,8 +59,8 @@ public class Vision extends SubsystemBase{
 
         //TODO: redo calibration and reset values for sim
         // A 1280 x 800 camera with a 100 degree diagonal FOV.
-        cameraProperties.setCalibration(640, 480, Rotation2d.fromDegrees(100));
-        cameraProperties.setCalibError(0.25, 0.08);
+        cameraProperties.setCalibration(640, 480, Rotation2d.fromDegrees(72.56));
+        cameraProperties.setCalibError(0.39, 0.08);
         cameraProperties.setFPS(100);
         cameraProperties.setAvgLatencyMs(22);
         cameraProperties.setLatencyStdDevMs(2);
