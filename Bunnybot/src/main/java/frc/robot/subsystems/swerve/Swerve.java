@@ -11,6 +11,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import frc.robot.Constants.*;
@@ -26,7 +30,7 @@ public class Swerve extends SubsystemBase {
     private SmoothingFilter smoothingFilter;
     
     private CommandSwerveDrivetrain swerve;
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    private final SwerveRequest.FieldCentric fieldCentric = new SwerveRequest.FieldCentric()
             .withDeadband(SWERVE.MAX_SPEED * 0.1).withRotationalDeadband(SWERVE.MAX_ANGULAR_RATE * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
     public static ChassisSpeeds speedZero = new ChassisSpeeds();
@@ -42,14 +46,12 @@ public class Swerve extends SubsystemBase {
 
         // TODO: Any initialization code needed for the new swerve stuff
         swerve = drivetrain;
-        System.out.println("Instantiated swerve");
     }
 
     @Override
     public void periodic() {
         // TODO: Periodic logging
         Logger.recordOutput(SWERVE.LOG_PATH+"Current Pose", getCurrentOdometryPosition());
-        // System.out.println("swerve heartbeat");
         swerve.periodic();
     }
 
@@ -75,22 +77,20 @@ public class Swerve extends SubsystemBase {
      * @param speeds the speeds to run the drivetrain at
      */
     public void drive(ChassisSpeeds speeds) {
-        System.out.println("Is this even running?");
-        Logger.recordOutput(SWERVE.LOG_PATH+"TargetSpeeds", ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getYaw()));
-        
-        System.out.println("Drive method called >:)");
+        Logger.recordOutput(SWERVE.LOG_PATH+"TargetSpeeds", speeds); 
 
-        swerve.applyRequest( () -> 
-            drive.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+        swerve.setControl(
+            fieldCentric.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
             .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
-            .withRotationalRate(speeds.omegaRadiansPerSecond) // Drive counterclockwise with negative X (left)
-        );
+            .withRotationalRate(speeds.omegaRadiansPerSecond));
     }
+
 
     /**
      * Define whatever direction the robot is facing as forward
      */
     public void resetHeading(){
+        System.out.println("Running reset heading");
         // TODO: implement something that allows the commented code to work
         swerve.seedFieldCentric();
     }
@@ -177,7 +177,6 @@ public class Swerve extends SubsystemBase {
      * @return a ChassisSpeeds ready to be sent to the swerve.
      */
     public ChassisSpeeds processJoystickInputs(double rawX, double rawY, double rawRot){
-        System.out.println("Is process joystick inputs running?");
         double driveTranslateY = (
             rawY >= 0
             ? (Math.pow(Math.abs(rawY), SWERVE.JOYSTICK_EXPONENT))
@@ -204,9 +203,9 @@ public class Swerve extends SubsystemBase {
 
         if (isSlowMode) {
             currentSpeeds = smoothingFilter.smooth(new ChassisSpeeds(
-                driveTranslateY * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND,
-                driveTranslateX * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND,
-                driveRotate * SWERVE.ROTATE_POWER_SLOW * SWERVE.MAX_ROTATIONAL_VELOCITY_RADIANS_PER_SECOND
+                driveTranslateY * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND * 0.5,
+                driveTranslateX * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND * 0.5,
+                driveRotate * SWERVE.ROTATE_POWER_SLOW * SWERVE.MAX_ROTATIONAL_VELOCITY_RADIANS_PER_SECOND * 0.5
             ));
         }
         else {

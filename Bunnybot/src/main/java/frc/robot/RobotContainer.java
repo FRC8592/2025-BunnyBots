@@ -10,6 +10,7 @@ import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.Telemetry;
 import frc.robot.subsystems.swerve.TunerConstants;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -18,9 +19,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
         CONTROLLERS.DRIVER_PORT
-    );
-    private static final CommandXboxController operatorController = new CommandXboxController(
-        CONTROLLERS.OPERATOR_PORT
     );
     private final Trigger RESET_HEADING = driverController.back();
     private final Trigger SLOW_MODE = driverController.rightBumper();
@@ -51,8 +49,8 @@ public class RobotContainer {
      * Configure default commands for the subsystems
      */
     private void configureDefaults(){
-        System.out.println("Are we even configuring defaults?");
-        // Set the swerve's default command to drive with joystickss
+        // Set the swerve's default command to drive with joysticks
+
         setDefaultCommand(swerve, swerve.run(() -> {
             swerve.drive(swerve.processJoystickInputs(
                 -driverController.getLeftX(),
@@ -95,7 +93,6 @@ public class RobotContainer {
     private void setDefaultCommand(SubsystemBase subsystem, Command command){
         if(command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf){
             subsystem.setDefaultCommand(command);
-            System.out.println("Is this default command running?");
         }
         else{
             //If you want to force-allow setting a cancel-incoming default command, directly call `subsystem.setDefaultCommand()` instead
