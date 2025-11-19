@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase{
     PhotonCamera camera;
-    AprilTagFieldLayout aprilTagFieldLayout;
+    //AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeAndyMark.loadAprilTagLayoutField();
     PhotonPoseEstimator estimator;
 
     boolean targetVisible = false;
@@ -32,6 +32,7 @@ public class Vision extends SubsystemBase{
     VisionSystemSim visionSim;
     SimCameraProperties cameraProperties;
     PhotonCameraSim cameraSim;
+    AprilTagFieldLayout aprilTagFieldLayout;
 
     List<AprilTag> al = new ArrayList<>();
 
@@ -97,9 +98,7 @@ public class Vision extends SubsystemBase{
         SmartDashboard.putBoolean("Has two tags", getTargets().size() > 1);
     }
 
-    public void simulationPeriodic() {
-        // visionSim.update(Robot.FIELD.getRobotPose());
-    }
+
 
     /**
      * Gets the pose ambiguity ratio.
