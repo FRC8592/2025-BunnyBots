@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.CONTROLLERS;
+
 
 
 /**
@@ -25,9 +25,6 @@ import frc.robot.Constants.CONTROLLERS;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private static final CommandXboxController driverController = new CommandXboxController(
-      CONTROLLERS.DRIVER_PORT
-  );
 
   // private final TestingLauncher1 testingLauncher1;
   // The robot's subsystems and commands are defined here...
@@ -37,20 +34,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-   
-    
-    passSubsystems();
     configureBindings(); // Configure the trigger bindings
     configureDefaults();
   }
-
-  private void passSubsystems(){
-        // AutoManager.addSubsystems(swerve, scoring, leds);
-        // AutoCommand.addSubsystems(swerve, scoring, intake, leds, scoreCoral);
-        // LargeCommand.addSubsystems(swerve, scoring, leds, scoreCoral);
-        // NewtonCommands.addSubsystems(swerve, scoring, leds);
-        // Suppliers.addSubsystems(swerve, scoring, leds);
-    }
 
   /**
      * Configure default commands for the subsystems
@@ -69,8 +55,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher1.setLauncherCommand(0.8), Set.of(testingLauncher1))).onFalse(testingLauncher1.stopLauncherCommand());
-    
   
   }
 
