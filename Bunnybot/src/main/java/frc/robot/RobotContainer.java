@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.*;
 import frc.robot.commands.autonomous.*;
+import frc.robot.subsystems.OdometryUpdates;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.Telemetry;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.vision.Vision;
 
 
 
@@ -36,7 +38,8 @@ public class RobotContainer {
 
     // The robot's subsystems
     private final Swerve swerve;
-    
+    private final OdometryUpdates odometryUpdates;
+    private final Vision vision;
     //TODO: Add all controls here
     
     // TODO: Add instantiatable helpers here
@@ -47,7 +50,8 @@ public class RobotContainer {
      */
     public RobotContainer() {
         swerve = new Swerve(drivetrain);
-        
+        vision = new Vision(VISION.CAMERA_NAME, VISION.CAMERA_OFFSETS);
+        odometryUpdates = new OdometryUpdates(vision, swerve);
         configureBindings();
         configureDefaults();
         

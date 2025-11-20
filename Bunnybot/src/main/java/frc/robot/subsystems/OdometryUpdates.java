@@ -12,6 +12,8 @@ import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
+
+import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.Constants.*;
 
@@ -23,8 +25,8 @@ public class OdometryUpdates extends SubsystemBase {
     private Pose2d initialPose;
     private static boolean useVision;
 
-    public OdometryUpdates(Vision vision1) {
-        // this.swerve = swerve;
+    public OdometryUpdates(Vision vision1, Swerve swerve) {
+        this.swerve = swerve;
         this.vision1 = vision1;
     }
 
@@ -54,13 +56,13 @@ public class OdometryUpdates extends SubsystemBase {
                 timeStamp = robotPose.get().timestampSeconds;
 
                 if ((vision.getTargets().size() > 1) || 
-                   ((Math.abs(ambiguity) < NAVIGATION.MAX_ACCEPTABLE_AMBIGUITY) && 
+                   ((Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY) && 
                     (vision.getTargets().size() > 0) && 
-                    (vision.getTargets().get(0).bestCameraToTarget.getX() < NAVIGATION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE))) 
+                    (vision.getTargets().get(0).bestCameraToTarget.getX() < VISION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE))) 
                         { 
                             if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
                                 initialPose = robotPosition;
-                                swerve.resetPose(initialPose);
+                                swerve.setKnownOdometryPose(initialPose);
                             } else {
                                 swerve.addVisionMeasurement(robotPosition, timeStamp);
                             }

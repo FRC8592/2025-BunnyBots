@@ -30,46 +30,19 @@ public final class Constants {
 
     }
 
-    public final class CORAL_ALIGN {
-        public static final String LOG_PATH = SHARED.LOG_FOLDER+"ScoreCoral";
-        public static final double OFFSET_DEPTH = 0.40; // Drivers requested for the robot to be as close to the april tag as possible
-        public static final double OFFSET_LEFT_METERS = -0.137;
-        public static final double OFFSET_RIGHT_METERS = 0.213; 
-        public static final double ROT_OFFSET = 0d;
-        public static final double SPEED_SCALE = 1.0;
-        public static final double SPEED_MAX = 0.2; // originally 0.65
-
-        public static final int MAX_LOCK_LOSS_TICKS = 20;
-
+    public final class VISION {
+        public static final String LOG_PATH = SHARED.LOG_FOLDER+"Vision";
         public static final Transform3d CAMERA_OFFSETS = (
-    
             new Transform3d(new Translation3d(0.21, 0.215, 0.17), new Rotation3d(0, Math.toRadians(-12), 0)));
-
-
         public static final String CAMERA_NAME = (
-            "Arducam_OV9782_D" 
+            "Arducam_OV9782_B" 
         );
-        public static final String CAMERA_2_NAME = (
-            "Arducam_OV9782_B"
-        );
-    
-        public static final int[] BLUE_REEF_TAGS = {17, 18, 19, 20, 21, 22};
-        public static final int[] RED_REEF_TAGS = {6, 7, 8, 9, 10, 11};
-
-        public static final int[] BLUE_HPLAYER_TAGS = {12, 13};
-        public static final int[] RED_HPLAYER_TAGS = {1, 2};
-
-        public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1d;
-
-    }
-    public final class NAVIGATION {
         public static final double MAX_ACCEPTABLE_AMBIGUITY = 0.1;
+        public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1d;
     }
-   
     
     public final class INTAKE {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Intake/";
-        public static final int INTAKE_BEAM_BREAK_THRESHOLD_MM = 20;
     }
 
     
@@ -107,16 +80,6 @@ public final class Constants {
 
         public static final Rotation2d BLUE_PERSPECTIVE_ROTATION = Rotation2d.fromDegrees(0);
         public static final Rotation2d RED_PERSPECTIVE_ROTATION = Rotation2d.fromDegrees(180);
-
-        //TODO: Double check that these still work
-        // public static final double PATH_FOLLOW_TRANSLATE_kP = 8d; // Was 8 in the last test
-        // public static final double PATH_FOLLOW_TRANSLATE_kI = 0d;
-        // public static final double PATH_FOLLOW_TRANSLATE_kD = 0.2d;
-
-        // //TODO: Double check that these still work
-        // public static final double PATH_FOLLOW_ROTATE_kP = 8;
-        // public static final double PATH_FOLLOW_ROTATE_kI = 0d;
-        // public static final double PATH_FOLLOW_ROTATE_kD = 0.1;
 
         public static final double PATH_FOLLOW_TRANSLATE_kP = 8d; // Was 8 in the last test
         public static final double PATH_FOLLOW_TRANSLATE_kI = 0d;
