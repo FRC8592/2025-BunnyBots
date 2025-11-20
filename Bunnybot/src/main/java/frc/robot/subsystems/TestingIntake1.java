@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 //import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;   
 import frc.robot.Constants.*;
@@ -26,6 +27,7 @@ public class TestingIntake1 extends SubsystemBase{
    //If neos are used, this is necessary for PID Control
    //private SparkClosedLoopController PivotIntakeControl;
    //private SparkFlexConfig MotorConfig;
+   private boolean IndexerIntake;
 
 
    public TestingIntake1(){
@@ -34,6 +36,8 @@ public class TestingIntake1 extends SubsystemBase{
             Since SparkFlex extends NewtonMotors and NewtonMotors utilizes PIDProfiles, I think it does?
             Cannot find any previous implementation of PID and Motion Magic with NEO Motors
         */
+        //NEED to change this implementation
+        IndexerIntake = false;
         PIDProfile PositionPID = new PIDProfile();
         PositionPID.setPID(INTAKE.INTAKE_POSITION_P, INTAKE.INTAKE_POSITION_I, INTAKE.INTAKE_POSITION_D);
        //Declaring both motors based on CAN ID from CanBus, and running them in the normal direction
@@ -107,10 +111,55 @@ public class TestingIntake1 extends SubsystemBase{
    public KrakenX60Motor accessPivotIntakeMotor(){
     return PivotIntakeMotor;
    }
+
+   public void runIntakeToPosition( NewtonMotor motor, double desiredPosition){
+    double currentPosition =  motor.getRotations();
+    while(Math.abs(currentPosition - motor.getRotations()) < 0.1){
+        setPercentOut(motor,-0.7);
+    }
+    stop(motor);
+   }
+
+   public Command runIntakeToPositionCommand(NewtonMotor motor, double desiredPosition){
+    return this.run(() -> runIntakeToPosition(motor, desiredPosition));
+   }
+
+   public void setToPosition(NewtonMotor motor, double position){
+    motor.setPosition(position);
+   }
+
+   public Command setToPositionCommand(NewtonMotor motor, double position){
+    return this.run(()-> setToPosition(motor, position));
+   }
  
 
    //example code to put in scoring
+
+   /*
+    * private boolean IndexerIntake;
+
+     within constructor:
+
+     IndexerIntake = INTAKE.getIndexerFull();
+
+     within Indexer: some sort of code with the three beam breaks, and that will return a boolean as to whether it is full or not
+
+     And then possibly within the intake method within scoring:
+
+     If(IndexerIntake){
+        Run the intake motor for a certain amount of time, or for a certain amount of motor rotations
+        Then run the pivot intake motor for a certain amount of motor rotations, and then hold it there and eject the thing
+        
+        So the order is as follows: Stop the intake if it is not already stopped, run the pivot motor so the intake is held up,
+        run the intake motor in the opposite direction to eject the lunite, run the pivot motor again to fully store the intake.
+        Continue with normal operation.
+     }
+
+
+
+    */
    
 
 
 }
+
