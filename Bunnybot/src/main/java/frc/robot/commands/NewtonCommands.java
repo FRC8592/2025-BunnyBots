@@ -6,21 +6,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.subsystems.LEDs;
-// import frc.robot.subsystems.scoring.*;
-// import frc.robot.subsystems.swerve.Swerve;
-// import frc.robot.subsystems.swerve.Swerve.DriveModes;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.swerve.Swerve;
 
 public final class NewtonCommands {
-    // private static Swerve swerve;
-    // private static Scoring scoring;
-    // private static LEDs leds;
+    private static Swerve swerve;
+   
     
-    public static void addSubsystems(){
-        // NewtonCommands.swerve = swerve;
-        // NewtonCommands.scoring = scoring;
-        // NewtonCommands.leds = leds;
+    public static void addSubsystems(Swerve swerve){
+        NewtonCommands.swerve = swerve;
+       
     }
 
     /**
@@ -35,17 +29,16 @@ public final class NewtonCommands {
      * @return the command
      */
     public static Command swerveSnapToCommand(Rotation2d angle, DoubleSupplier driveX, DoubleSupplier driveY){
-        // return swerve.run(() -> {
-//             ChassisSpeeds processed = swerve.processJoystickInputs(
-//                 driveX.getAsDouble(),
-//                 driveY.getAsDouble(),
-//                 0
-//             );
-//             processed.omegaRadiansPerSecond = swerve.snapToAngle(angle);
-//             swerve.drive(processed, DriveModes.AUTOMATIC);
-//         });
-        return new InstantCommand();
+        return swerve.run(() -> {
+            ChassisSpeeds processed = swerve.processJoystickInputs(
+                driveX.getAsDouble(),
+                driveY.getAsDouble(),
+                0
+            );
+            processed.omegaRadiansPerSecond = swerve.snapToAngle(angle);
+            swerve.drive(processed);
+        });
     }
- }
+}
 
 

@@ -10,17 +10,20 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.subsystems.swerve.*;
+
 
 /**
  * Class to provide subsystems, convenient methods, and a constructor to autonomous commands
  */
 public class AutoCommand extends WrapperCommand{
-   
+    protected static Swerve swerve;
+    
 
     private String autoName;
     
-    public static void addSubsystems(){
-       
+    public static void addSubsystems(Swerve swerve){
+        AutoCommand.swerve = swerve;
     }
 
     /**
