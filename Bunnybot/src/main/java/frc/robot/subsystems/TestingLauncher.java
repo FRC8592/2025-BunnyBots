@@ -38,7 +38,7 @@ public class TestingLauncher extends SubsystemBase {
     */
     public void setLauncherPercentOutput(double percent1, double percent2){
         //Debugging to try and see whether the method is running, which it does
-        //System.out.println("This method is running");
+        System.out.println("Set Launch % Output called: " + percent1 + " " + percent2);
         bottomLauncherMotor.setPercentOutput(percent1);
         topLauncherMotor.setPercentOutput(percent2);
 
