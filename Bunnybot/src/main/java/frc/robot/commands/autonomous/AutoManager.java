@@ -7,16 +7,15 @@ package frc.robot.commands.autonomous;
 import java.util.ArrayList;
 import java.util.Set;
 
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
+import frc.robot.commands.autonomous.autos.MoveOut;
 import frc.robot.commands.proxies.*;
 import frc.robot.subsystems.swerve.Swerve;
 
@@ -26,14 +25,6 @@ import frc.robot.subsystems.swerve.Swerve;
  */
 public final class AutoManager {
     private static Swerve swerve;
-    //private static Scoring scoring;
-    //private static LEDs leds;
-    
-    public static void addSubsystems(Swerve swerve){
-        //AutoManager.swerve = swerve;
-        //AutoManager.scoring = scoring;
-        //AutoManager.leds = leds;
-    }
     private static SendableChooser<AutoCommand> autoChooser;
     private static ArrayList<AutoCommand> autoCommands = new ArrayList<>();
 
@@ -48,8 +39,10 @@ public final class AutoManager {
     public static void prepare(){
         SmartDashboard.putNumber("Auto Delay", 0);
         autoCommands = new ArrayList<>();
-
-        // autoCommands.add(new ExampleAuto());
+        autoCommands.add(new MoveOut("" + 
+        
+        
+        dsDriverStation.getAlliance()));
         // TODO: Add autos here
 
         autoChooser = new SendableChooser<>();
