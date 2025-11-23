@@ -60,10 +60,12 @@ public class OdometryUpdates extends SubsystemBase {
                     (vision.getTargets().size() > 0) && 
                     (vision.getTargets().get(0).bestCameraToTarget.getX() < VISION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE))) 
                         { 
+                            System.out.println("This is running");
                             if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
                                 initialPose = robotPosition;
                                 swerve.setKnownOdometryPose(initialPose);
                             } else {
+                                System.out.println("else is running");
                                 swerve.addVisionMeasurement(robotPosition, timeStamp);
                             }
                         }
@@ -75,6 +77,7 @@ public class OdometryUpdates extends SubsystemBase {
             // Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/OdometryPose", swerve.getCurrentPosition());
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/AmbiguityRatio1", ambiguity);
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/InitialPose", initialPose);
+            Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/DistanceMeters", vision.getTargets().get(0).bestCameraToTarget.getX());
         }
     }
     

@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.MEASUREMENTS;
 
 public class Vision extends SubsystemBase{
     PhotonCamera camera;
@@ -38,16 +39,16 @@ public class Vision extends SubsystemBase{
 
     public Vision(String camName, Transform3d camOffsets){
         //creating new april tags for the bunny bots vision system
-        al.add(new AprilTag(1, new Pose3d(72, 320, 14, new Rotation3d(0, 0, Math.toRadians(270)))));
-        al.add(new AprilTag(2, new Pose3d(576, 320, 14, new Rotation3d(0, 0, Math.toRadians(270)))));
-        al.add(new AprilTag(3, new Pose3d(4, 270, 14, new Rotation3d(0, 0, 0))));
-        al.add(new AprilTag(4, new Pose3d(644, 270, 14, new Rotation3d(0, 0, Math.toRadians(180)))));
-        al.add(new AprilTag(5, new Pose3d(4, 196.125, 46, new Rotation3d(0, 0, 0))));
-        al.add(new AprilTag(6, new Pose3d(644, 196.125, 46, new Rotation3d(0, 0, Math.toRadians(180)))));
-        al.add(new AprilTag(7, new Pose3d(4, 20.5, 46, new Rotation3d(0, 0, 0))));
-        al.add(new AprilTag(8, new Pose3d(644, 20.5, 46, new Rotation3d(0, 0, 180))));
+        al.add(new AprilTag(1, new Pose3d(72 * MEASUREMENTS.INCHES_TO_METERS, 320 * MEASUREMENTS.INCHES_TO_METERS, 14 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(270)))));
+        al.add(new AprilTag(2, new Pose3d(576 * MEASUREMENTS.INCHES_TO_METERS, 320 * MEASUREMENTS.INCHES_TO_METERS, 14 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(270)))));
+        al.add(new AprilTag(3, new Pose3d(4 * MEASUREMENTS.INCHES_TO_METERS, 270 * MEASUREMENTS.INCHES_TO_METERS, 14 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(4, new Pose3d(644 * MEASUREMENTS.INCHES_TO_METERS, 270 * MEASUREMENTS.INCHES_TO_METERS, 14 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(180)))));
+        al.add(new AprilTag(5, new Pose3d(4 * MEASUREMENTS.INCHES_TO_METERS, 196.125 * MEASUREMENTS.INCHES_TO_METERS, 46 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(6, new Pose3d(644 * MEASUREMENTS.INCHES_TO_METERS, 196.125 * MEASUREMENTS.INCHES_TO_METERS, 46 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(180)))));
+        al.add(new AprilTag(7, new Pose3d(4 * MEASUREMENTS.INCHES_TO_METERS, 20.5 * MEASUREMENTS.INCHES_TO_METERS, 46 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, 0))));
+        al.add(new AprilTag(8, new Pose3d(644 * MEASUREMENTS.INCHES_TO_METERS, 20.5 * MEASUREMENTS.INCHES_TO_METERS, 46 * MEASUREMENTS.INCHES_TO_METERS, new Rotation3d(0, 0, Math.toRadians(180)))));
 
-        aprilTagFieldLayout = new AprilTagFieldLayout(al, 25, 52);
+        aprilTagFieldLayout = new AprilTagFieldLayout(al, MEASUREMENTS.FIELD_LENGTH_METERS, MEASUREMENTS.FIELD_WIDTH_METERS);
 
         camera = new PhotonCamera(camName);
         estimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camOffsets);

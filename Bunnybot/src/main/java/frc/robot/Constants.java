@@ -15,8 +15,10 @@ public final class Constants {
     }
 
     public final class MEASUREMENTS {
-        public static final double FIELD_LENGTH_METERS = 17.548;
-        public static final double FIELD_WIDTH_METERS = 8.052;
+        public static final double FIELD_LENGTH_METERS = 27 * MEASUREMENTS.FEET_TO_METERS;
+        public static final double FIELD_WIDTH_METERS = 54 * MEASUREMENTS.FEET_TO_METERS;
+        public static final double INCHES_TO_METERS = 0.0254;
+        public static final double FEET_TO_METERS = 0.30478512648;
     }
 
     public final class CONTROLLERS {
