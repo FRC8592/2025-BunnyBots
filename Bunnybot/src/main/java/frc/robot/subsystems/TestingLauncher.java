@@ -9,6 +9,7 @@ import frc.robot.Constants.CAN;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.spark.*;
+import frc.robot.helpers.motor.talonfx.Falcon500Motor;
 
 //TODO: Change the variables names based on the location of the motor. Top Motor = Motor 2 and Bottom Motor = Motor 1 
 
@@ -19,8 +20,8 @@ public class TestingLauncher extends SubsystemBase {
     public TestingLauncher() {
         //Top is Motor2
         //Bottom is Motor1
-        bottomLauncherMotor = new SparkFlexMotor(CAN.BOTTOM_LAUNCHER_MOTOR, false);
-        topLauncherMotor = new SparkFlexMotor(CAN.TOP_LAUNCHER_MOTOR, true);
+        bottomLauncherMotor = new Falcon500Motor(CAN.BOTTOM_LAUNCHER_MOTOR, false);
+        topLauncherMotor = new Falcon500Motor(CAN.TOP_LAUNCHER_MOTOR, true);
         SmartDashboard.putNumber("bottom_launcher_motor", 0.44); // High: 0.4 Low: 0.23  Close shot: 0.44
         SmartDashboard.putNumber("top_launcher_motor", 0.3); // High: 0.4 Low: 0.23   Close shot: 0.3
 
