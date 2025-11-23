@@ -127,6 +127,7 @@ public abstract class NewtonMotor {
         return this.desiredVelocityRPM;
     }
 
+
     public TalonFXMotor getAsTalonFX() {
         return (TalonFXMotor)this;
     }

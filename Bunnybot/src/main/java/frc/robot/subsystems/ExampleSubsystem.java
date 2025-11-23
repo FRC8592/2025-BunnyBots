@@ -68,4 +68,11 @@ public class ExampleSubsystem extends SubsystemBase {
       //Continue with normal operation.
    }
   }
+ public Command EjectLunite(){
+  return new DeferredCommand(() -> testingIntake.setToPositionCommand(testingIntake.accessPivotIntakeMotor(), INTAKE.EJECT_LUNITE_POSITION), Set.of(testingIntake)).andThen(testingIntake.runIntakeToPositionCommand(testingIntake.accessIntakeMotor(), -1000)).andThen(testingIntake.setToPositionCommand(testingIntake.accessPivotIntakeMotor(), INTAKE.STOW_PIVOT_INTAKE));
+ }
+
+ public Command IntakeLunite(){
+  return new DeferredCommand();
+ }
 }

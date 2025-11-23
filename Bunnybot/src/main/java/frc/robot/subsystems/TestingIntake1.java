@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 
 
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,9 +22,9 @@ import frc.robot.helpers.PIDProfile;
 
 
 public class TestingIntake1 extends SubsystemBase{
-   private NewtonMotor IntakeMotor;
+   private SparkFlexMotor IntakeMotor;
    //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
-   private KrakenX60Motor PivotIntakeMotor;
+   private SparkFlexMotor PivotIntakeMotor;
    //If neos are used, this is necessary for PID Control
    //private SparkClosedLoopController PivotIntakeControl;
    //private SparkFlexConfig MotorConfig;
@@ -42,8 +43,8 @@ public class TestingIntake1 extends SubsystemBase{
         PositionPID.setPID(INTAKE.INTAKE_POSITION_P, INTAKE.INTAKE_POSITION_I, INTAKE.INTAKE_POSITION_D);
        //Declaring both motors based on CAN ID from CanBus, and running them in the normal direction
        //These WILL be changed to Kraken motors later, but for prototyping purposes we are utilizing neo motors
-       IntakeMotor = new KrakenX60Motor(CAN.INTAKE_MOTOR_CAN_ID,false);
-       PivotIntakeMotor = new KrakenX60Motor(CAN.PIVOT_INTAKE_MOTOR_CAN_ID,false);
+       IntakeMotor = new SparkFlexMotor(CAN.INTAKE_MOTOR_CAN_ID,false);
+       PivotIntakeMotor = new SparkFlexMotor(CAN.PIVOT_INTAKE_MOTOR_CAN_ID,false);
 
 
        //Setting the idle(normal/resting) state
@@ -53,27 +54,10 @@ public class TestingIntake1 extends SubsystemBase{
 
         IntakeMotor.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
         PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
-       /*
-        * Alternate option (if using neos) based on REVLib Website:
-
-            IntakeMotor = new SparkFlexMotor(CAN.INTAKE_MOTOR_CAN_ID,false);
-            PivotIntakeMotor = new SparkFlexMotor(CAN.PIVOT_INTAKE_MOTOR_CAN_ID,false);
-            PivotIntakeControl = PivotIntakeMotor.getClosedLoopControl();
-            PivotIntakeControl.setReference(setPoint, ControlType.kPosition);
-            MotorConfig = new SparkFlexConfig()
-            config.closedLoop
-                .p(kP)
-                .i(kI)
-                .d(kD)
-                .outputRange(kMinOutput, kMaxOutput);
-
-            
-        */
-
 
        PivotIntakeMotor.withGains(PositionPID);
-
-       PivotIntakeMotor.configureMotionMagic(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY);
+        //Does not work for
+       //PivotIntakeMotor.configureMotionMagic(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY);
 
 
    }
@@ -108,7 +92,7 @@ public class TestingIntake1 extends SubsystemBase{
     return IntakeMotor;
    }
 
-   public KrakenX60Motor accessPivotIntakeMotor(){
+   public SparkFlexMotor accessPivotIntakeMotor(){
     return PivotIntakeMotor;
    }
 
@@ -124,12 +108,9 @@ public class TestingIntake1 extends SubsystemBase{
     return this.run(() -> runIntakeToPosition(motor, desiredPosition));
    }
 
-   public void setToPosition(NewtonMotor motor, double position){
-    motor.setPosition(position);
-   }
 
    public Command setToPositionCommand(NewtonMotor motor, double position){
-    return this.run(()-> setToPosition(motor, position));
+    return this.run(()-> PivotIntakeMotor.setPosition(position));
    }
  
 
