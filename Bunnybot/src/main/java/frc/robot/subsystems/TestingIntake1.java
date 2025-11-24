@@ -72,8 +72,8 @@ public class TestingIntake1 extends SubsystemBase{
    }
 
 
-   public Command setIntakeCommand(NewtonMotor motor,double percent){
-           return this.run(()->{setPercentOut(motor,percent);});
+   public Command setIntakeCommand(double percent){
+           return this.run(()->{setPercentOut(IntakeMotor,percent);});
    } 
   
    public Command stopIntakeCommand(NewtonMotor motor){
@@ -95,21 +95,21 @@ public class TestingIntake1 extends SubsystemBase{
    public SparkFlexMotor accessPivotIntakeMotor(){
     return PivotIntakeMotor;
    }
-
-   public void runIntakeToPosition( NewtonMotor motor, double desiredPosition){
-    double currentPosition =  motor.getRotations();
-    while(Math.abs(currentPosition - motor.getRotations()) < 0.1){
-        setPercentOut(motor,-0.7);
+   //This is for the intake motor, runs the intake motor to a certain number of motor rotations
+   public void runIntakeToPosition(double desiredPosition){
+    double currentPosition =  IntakeMotor.getRotations();
+    while(Math.abs(currentPosition - IntakeMotor.getRotations()) < 0.1){
+        setPercentOut(IntakeMotor,-0.7);
     }
-    stop(motor);
+    stop(IntakeMotor);
+   }
+   //Command version of the runIntakeToPosition method
+   public Command runIntakeToPositionCommand(){
+    return this.run(() -> runIntakeToPosition(-1000));
    }
 
-   public Command runIntakeToPositionCommand(NewtonMotor motor, double desiredPosition){
-    return this.run(() -> runIntakeToPosition(motor, desiredPosition));
-   }
 
-
-   public Command setToPositionCommand(NewtonMotor motor, double position){
+   public Command setToPositionCommand(double position){
     return this.run(()-> PivotIntakeMotor.setPosition(position));
    }
  

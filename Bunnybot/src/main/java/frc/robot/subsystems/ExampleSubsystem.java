@@ -57,22 +57,35 @@ public class ExampleSubsystem extends SubsystemBase {
   }
 
   public void TestingMethod(){
-    if(IndexerIntake){
-      new DeferredCommand(() -> testingIntake.setToPositionCommand(testingIntake.accessPivotIntakeMotor(), INTAKE.EJECT_LUNITE_POSITION), Set.of(testingIntake)).andThen(testingIntake.runIntakeToPositionCommand(testingIntake.accessIntakeMotor(), -1000)).andThen(testingIntake.setToPositionCommand(testingIntake.accessPivotIntakeMotor(), INTAKE.STOW_PIVOT_INTAKE));
 
-      //Run the intake motor for a certain amount of time, or for a certain amount of motor rotations
-      //Then run the pivot intake motor for a certain amount of motor rotations, and then hold it there and eject the thing
-      
-      //So the order is as follows: Stop the intake if it is not already stopped, run the pivot motor so the intake is held up,
-      //run the intake motor in the opposite direction to eject the lunite, run the pivot motor again to fully store the intake.
-      //Continue with normal operation.
-   }
   }
  public Command EjectLunite(){
-  return new DeferredCommand(() -> testingIntake.setToPositionCommand(testingIntake.accessPivotIntakeMotor(), INTAKE.EJECT_LUNITE_POSITION), Set.of(testingIntake)).andThen(testingIntake.runIntakeToPositionCommand(testingIntake.accessIntakeMotor(), -1000)).andThen(testingIntake.setToPositionCommand(testingIntake.accessPivotIntakeMotor(), INTAKE.STOW_PIVOT_INTAKE));
+  return new DeferredCommand(() -> EjectLuniteIntake(), Set.of(testingIntake))
+  .andThen(DefaultRunIntake())
+  .andThen(StowIntake());
  }
 
  public Command IntakeLunite(){
-  return new DeferredCommand();
+  //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
+  return new DeferredCommand(() -> DeployIntake(), Set.of(testingIntake))
+  .andThen(testingIntake.setIntakeCommand(0.7))
+  .until(Indexer.hasBall());
  }
+
+ public Command StowIntake(){
+  return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.STOW_PIVOT_INTAKE));
+ }
+
+ public Command DeployIntake(){
+  return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.SET_PIVOT_INTAKE));
+ }
+
+ public Command EjectLuniteIntake(){
+  return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.EJECT_LUNITE_POSITION));
+ }
+
+ public Command DefaultRunIntake(){
+  return this.runOnce(() -> testingIntake.runIntakeToPositionCommand());
+ }
+
 }
