@@ -1,12 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.util.Color;
-
 public final class Constants {
     public final class SHARED {
         public static final String LOG_FOLDER = "CustomLogs";
@@ -16,6 +9,7 @@ public final class Constants {
         public static final double FIELD_LENGTH_METERS = 17.548;
         public static final double FIELD_WIDTH_METERS = 8.052;
     }
+
     public final class CONVERSIONS {
         public static final double METERS_TO_FEET = 3.28084;
         public static final double FEET_TO_METERS = 0.3048;
@@ -23,53 +17,17 @@ public final class Constants {
 
     public final class CONTROLLERS {
         public static final int DRIVER_PORT = 0;
-        public static final int OPERATOR_PORT = 1;
     }
 
     public final class CAN {
-        public static final int INDEXER_MOTOR1_CAN_ID = 0;
-        public static final int INDEXER_MOTOR2_CAN_ID = 0;
-        public static final int INDEXER_TOP_MOTOR_CAN_ID = 0;
-        public static final int INDEXER_BEAM_BREAK_FRONT_CAN_ID = 0;
-        public static final int INDEXER_BEAM_BREAK_MIDDLE_CAN_ID = 0;
-        public static final int INDEXER_BEAM_BREAK_BACK_CAN_ID = 0;
-    }
+        public static final int INDEXER_MOTOR1_CAN_ID = 40;
+        public static final int INDEXER_MOTOR2_CAN_ID = 41;
+        public static final int INDEXER_MOTOR3_CAN_ID = 42;
+        public static final int INDEXER_MOTOR4_CAN_ID = 43;
 
-    public final class CORAL_ALIGN {
-        public static final String LOG_PATH = SHARED.LOG_FOLDER+"ScoreCoral";
-        public static final double OFFSET_DEPTH = 0.40; // Drivers requested for the robot to be as close to the april tag as possible
-        public static final double OFFSET_LEFT_METERS = -0.137;
-        public static final double OFFSET_RIGHT_METERS = 0.213; 
-        public static final double ROT_OFFSET = 0d;
-        public static final double SPEED_SCALE = 1.0;
-        public static final double SPEED_MAX = 0.2; // originally 0.65
-
-        public static final int MAX_LOCK_LOSS_TICKS = 20;
-
-        public static final Transform3d CAMERA_OFFSETS = (
-            new Transform3d(new Translation3d(0.17145, 0.20955, 0.2286), new Rotation3d(0, Math.toRadians(-13), Math.toRadians(-3)))
-        );
-
-
-        public static final String CAMERA_NAME = (
-            "Arducam_OV9782_D" 
-        );
-        public static final String CAMERA_2_NAME = (
-            "Arducam_OV9782_B"
-        );
-    
-        public static final int[] BLUE_REEF_TAGS = {17, 18, 19, 20, 21, 22};
-        public static final int[] RED_REEF_TAGS = {6, 7, 8, 9, 10, 11};
-
-        public static final int[] BLUE_HPLAYER_TAGS = {12, 13};
-        public static final int[] RED_HPLAYER_TAGS = {1, 2};
-
-        public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1d;
-
-    }
-
-    public final class NAVIGATION {
-        public static final double MAX_ACCEPTABLE_AMBIGUITY = 0.1;
+        public static final int INDEXER_BEAM_BREAK_1_CAN_ID = 0;
+        public static final int INDEXER_BEAM_BREAK_2_CAN_ID = 0;
+        public static final int INDEXER_BEAM_BREAK_3_CAN_ID = 0;
     }
 
     public final class ROBOT {

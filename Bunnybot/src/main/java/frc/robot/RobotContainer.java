@@ -31,19 +31,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Indexer indexer;
 
-  private final Trigger INDEXER_INTAKE = driverController.leftBumper();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     indexer = new Indexer();   
     
-    passSubsystems();
     configureBindings();
     configureDefaults();
-  }
-
-  private void passSubsystems(){
-
   }
 
   /**
@@ -63,9 +57,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    INDEXER_INTAKE.whileTrue(
-      new DeferredCommand(() -> , indexer)
-    );
+   
   }
 
   /**
