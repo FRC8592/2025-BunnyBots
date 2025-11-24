@@ -40,7 +40,7 @@ public final class Constants {
             "Arducam_OV9782_B" 
         );
         public static final double MAX_ACCEPTABLE_AMBIGUITY = 0.1;
-        public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1d;
+        public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1.4d;
     }
     
     public final class INTAKE {

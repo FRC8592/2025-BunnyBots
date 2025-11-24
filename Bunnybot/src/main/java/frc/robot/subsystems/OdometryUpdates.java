@@ -24,6 +24,8 @@ public class OdometryUpdates extends SubsystemBase {
     private Vision vision1;
     private Pose2d initialPose;
     private static boolean useVision;
+    private double ambiguity;
+    private Pose2d robotPosition;
 
     public OdometryUpdates(Vision vision1, Swerve swerve) {
         this.swerve = swerve;
@@ -55,6 +57,11 @@ public class OdometryUpdates extends SubsystemBase {
                 ambiguity = vision.getPoseAmbiguityRatio();
                 timeStamp = robotPose.get().timestampSeconds;
 
+                if ((vision.getTargets().size() == 1)){
+                    Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/DistanceMeters", vision.getTargets().get(0).bestCameraToTarget.getX());
+                }
+                }
+
                 if ((vision.getTargets().size() > 1) || 
                    ((Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY) && 
                     (vision.getTargets().size() > 0) && 
@@ -77,8 +84,7 @@ public class OdometryUpdates extends SubsystemBase {
             // Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/OdometryPose", swerve.getCurrentPosition());
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/AmbiguityRatio1", ambiguity);
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/InitialPose", initialPose);
-            Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/DistanceMeters", vision.getTargets().get(0).bestCameraToTarget.getX());
-        }
+            
     }
     
 }

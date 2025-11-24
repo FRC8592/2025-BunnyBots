@@ -39,11 +39,6 @@ public final class AutoManager {
     public static void prepare(){
         SmartDashboard.putNumber("Auto Delay", 0);
         autoCommands = new ArrayList<>();
-        autoCommands.add(new MoveOut("" + 
-        
-        
-        dsDriverStation.getAlliance()));
-        // TODO: Add autos here
 
         autoChooser = new SendableChooser<>();
         
