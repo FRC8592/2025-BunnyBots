@@ -7,6 +7,6 @@ import frc.robot.commands.largecommands.*;
 
 public class MoveOut extends AutoCommand {
     public MoveOut(String color){
-        new FollowPathCommand(getChoreoTrajectory("MoveForward" + color), Suppliers.isRedAlliance, "");
+        super(new FollowPathCommand(getChoreoTrajectory("MoveForward"), Suppliers.isRedAlliance, ""));
     }
 }
