@@ -20,7 +20,7 @@ public class TestingLauncher extends SubsystemBase {
     public TestingLauncher() {
         //Top is Motor2
         //Bottom is Motor1
-        bottomLauncherMotor = new Falcon500Motor(CAN.BOTTOM_LAUNCHER_MOTOR, false);
+        bottomLauncherMotor = new Falcon500Motor(CAN.BOTTOM_LAUNCHER_MOTOR, true);
         topLauncherMotor = new Falcon500Motor(CAN.TOP_LAUNCHER_MOTOR, true);
         SmartDashboard.putNumber("bottom_launcher_motor", 0.44); // High: 0.4 Low: 0.23  Close shot: 0.44
         SmartDashboard.putNumber("top_launcher_motor", 0.3); // High: 0.4 Low: 0.23   Close shot: 0.3
