@@ -19,6 +19,9 @@ public class SixLumens extends AutoCommand {
 
 
        new FollowPathCommand(getChoreoTrajectory("RotateFirst"), Suppliers.isRedAlliance, ""),
+         /*
+         * No need to do anything here
+         */
 
 
        new FollowPathCommand(getChoreoTrajectory("CollectSecond"), Suppliers.isRedAlliance, "")
