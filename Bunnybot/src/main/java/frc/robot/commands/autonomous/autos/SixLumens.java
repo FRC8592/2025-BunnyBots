@@ -37,12 +37,18 @@ public class SixLumens extends AutoCommand {
         */
 
 
-       new FollowPathCommand(getChoreoTrajectory("ShootRest"), Suppliers.isRedAlliance, ""));
+       new FollowPathCommand(getChoreoTrajectory("ShootRest"), Suppliers.isRedAlliance, ""),
                /*
         * .andThen(Intake Stow)
         * .andThen(Launcher Shoot 3, Steep Angle Shot)
         *
         */
+        new FollowPathCommand(getChoreoTrajectory("MoveOutAfterLine"), Suppliers.isRedAlliance, ""));
+        /*
+ * Nothing really needed here
+ *
+ */
+
 
 
    }
