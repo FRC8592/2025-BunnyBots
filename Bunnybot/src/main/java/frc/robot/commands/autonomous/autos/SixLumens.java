@@ -10,32 +10,27 @@ import frc.robot.commands.largecommands.*;
 public class SixLumens extends AutoCommand {
    public SixLumens(String color){
       super(
-       new FollowPathCommand(getChoreoTrajectory("CollectFirst"), Suppliers.isRedAlliance, "")
+       new FollowPathCommand(getChoreoTrajectory("CollectFirst"), Suppliers.isRedAlliance, ""),
        /*
         * .andThen(Intake Command until Indexer detects 1 Lumen in its system))
         * .andThen(Indexer Command until their conditional is satisfied)
        */
-       ,
-
 
        new FollowPathCommand(getChoreoTrajectory("RotateFirst"), Suppliers.isRedAlliance, ""),
 
-
-       new FollowPathCommand(getChoreoTrajectory("CollectSecond"), Suppliers.isRedAlliance, "")
+       new FollowPathCommand(getChoreoTrajectory("CollectSecond"), Suppliers.isRedAlliance, ""),
        /*
         * .andThen(Intake Command until Indeder detects another Lumen in its system)
         * .andThen(Indexer Command until their conditional is satisfied)
         *
         */
-      
-       ,
-       new FollowPathCommand(getChoreoTrajectory("CollecThird"), Suppliers.isRedAlliance, ""),
+       
+       new FollowPathCommand(getChoreoTrajectory("CollectThird"), Suppliers.isRedAlliance, ""),
                /*
         * .andThen(Intake Command until Indeder detects another Lumen in its system)
         * .andThen(Indexer Command until their conditional is satisfied)
         *
         */
-
 
        new FollowPathCommand(getChoreoTrajectory("ShootRest"), Suppliers.isRedAlliance, ""));
                /*
@@ -43,8 +38,6 @@ public class SixLumens extends AutoCommand {
         * .andThen(Launcher Shoot 3, Steep Angle Shot)
         *
         */
-
-
    }
 
 
