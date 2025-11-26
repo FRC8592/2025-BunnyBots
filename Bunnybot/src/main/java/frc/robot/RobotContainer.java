@@ -30,7 +30,7 @@ public class RobotContainer {
   // private final TestingLauncher1 testingLauncher1;
   // The robot's subsystems and commands are defined here...
   private final Indexer indexer;
-
+  private Trigger RUN = driverController.rightBumper();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -57,6 +57,19 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    RUN.whileTrue(
+      new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
+    ).onFalse(indexer.stopMotorCommand());
+
+    //RUN.whileTrue(
+    //new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1, 1), Set.of(indexer))
+    //).onFalse(indexer.stopMotorCommand(1));
+
+    // RUN.onTrue(
+    //   new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
+    // ).onFalse(indexer.stopMotorCommand());
+
+
    
   }
 

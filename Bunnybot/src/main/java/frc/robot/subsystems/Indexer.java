@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
-import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.LaserCan;
-import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
@@ -12,9 +12,7 @@ import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.spark.SparkBrushedMotor;
 
 public class Indexer extends SubsystemBase {
-    
-    private NewtonMotor indexerMotor1, indexerMotor2, indexerMotor3, indexerMotor4;
-    LaserCan[] laserCan = new LaserCan[3];
+    DigitalInput[] sensors = new DigitalInput[3];
     NewtonMotor[] motors = new NewtonMotor[4];
     
     public Indexer() {
@@ -23,27 +21,19 @@ public class Indexer extends SubsystemBase {
         motors[2] = new SparkBrushedMotor(CAN.INDEXER_MOTOR3_CAN_ID, false);
         motors[3] = new SparkBrushedMotor(CAN.INDEXER_MOTOR4_CAN_ID, false);
 
-        indexerMotor1.setIdleMode(IdleMode.kBrake);
+        motors[0].setIdleMode(IdleMode.kBrake);
 
-        indexerMotor2.setIdleMode(IdleMode.kBrake);
-        indexerMotor2.setFollowerTo(indexerMotor1);
+        motors[1].setIdleMode(IdleMode.kBrake);
+        motors[1].setFollowerTo(motors[0]);
 
-        indexerMotor3.setIdleMode(IdleMode.kBrake);
-        indexerMotor4.setIdleMode(IdleMode.kBrake);
+        motors[2].setIdleMode(IdleMode.kBrake);
+        motors[3].setIdleMode(IdleMode.kBrake);
 
-        laserCan[0] = new LaserCan(CAN.INDEXER_BEAM_BREAK_1_CAN_ID);
-        laserCan[1] = new LaserCan(CAN.INDEXER_BEAM_BREAK_2_CAN_ID);
-        laserCan[2] = new LaserCan(CAN.INDEXER_BEAM_BREAK_3_CAN_ID);
+        sensors[0] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_1_PORT);
+        sensors[1] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_2_PORT);
+        sensors[2] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_3_PORT);
 
-        for(LaserCan sensor : laserCan){
-            try {
-                sensor.setRangingMode(LaserCan.RangingMode.SHORT); 
-                sensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16)); //check this value
-                sensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_20MS);
-            } catch (ConfigurationFailedException e) {
-                System.err.println("Configuration failed! " + e);
-            }
-        }
+        periodic();
         
     }
 
@@ -53,12 +43,13 @@ public class Indexer extends SubsystemBase {
      * @return whewther a football is detected at given storage point as a boolean
      */
     public boolean hasBall(int storagePoint){
-        Measurement measurement = laserCan[storagePoint - 1].getMeasurement();
-        if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-            return measurement.distance_mm < INDEXER.INDEXER_BEAM_BREAK_THRESHOLD_MM;
-        } else {
-            return false;
-        }
+        boolean bool = !sensors[storagePoint - 1].get();
+        Logger.recordOutput(INDEXER.LOG_PATH + "Sensor " + storagePoint, bool);
+
+        if(bool){
+            return true;
+        } 
+        return false;
     }
 
     /**
@@ -66,11 +57,13 @@ public class Indexer extends SubsystemBase {
      * @return if there is no football detected anywhere in the indexer
      */
     public boolean hasBall(){
-        for(int i = 0; i < laserCan.length; i++){
-            if(hasBall(i))
+        for(int i = 1; i <= sensors.length; i++){
+            if(hasBall(i)){
                 return true;
+            }
+                
         }
-        return false;
+        return false;    
         
     }
 
@@ -80,7 +73,7 @@ public class Indexer extends SubsystemBase {
      */
     public int getBallCount(){
         int count = 0;
-        for(int i = 0; i < laserCan.length; i++){
+        for(int i = 1; i <= sensors.length; i++){
             if(hasBall(i))
                 count++;
         }
@@ -88,32 +81,71 @@ public class Indexer extends SubsystemBase {
         return count;
     }
 
-    public void setMotorPercentOutput(int motorPos, double percent){
+    /**
+     * Checks if there are three balls in the indexer
+     * @return if there are three balls in the indexer
+     */
+    public boolean full(){
+        if(getBallCount() == 3)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Runs given motor at given percentage
+     * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
+     * @param percent scaled from -1 to 1
+     */
+    public void run(int motorPos, double percent){
         motors[motorPos].setPercentOutput(percent);
         
     }
 
+    /**
+     * Runs all motors at given percentage
+     * @param percent scaled from -1 to 1
+     */
+    public void runAll(double percent){
+        for(NewtonMotor m : motors)
+            m.setPercentOutput(percent);
+    }
+
+    /**
+     * Stops specified motor
+     * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
+     */
     public void stop(int motorPos){
         motors[motorPos].setPercentOutput(0);
     }
 
+    //Stops all motors from running
+    public void stopAll(){
+        for(NewtonMotor m : motors)
+            m.setPercentOutput(0);
+    }
+
     /**
-     * Sets the percentage of all indexer motors
-     * @param percent
-     * @return the command to set the indexer output
+     * Runs all motors at specified percentage
+     * @param percent scaled -1 to 1
+     * @return command to run motors at specified percentage
      */
     public Command setMotorPercentOutputCommand(double percent) {
         return this.run(()->{
-            setMotorPercentOutput(1, percent);
-            setMotorPercentOutput(2, percent);
-            setMotorPercentOutput(3, percent);
-            setMotorPercentOutput(4, percent);
+            runAll(percent);
         });
+        
     }
 
+    /**
+     * Runs specified motor at given percentage
+     * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
+     * @param percent scaled from -1 to 1
+     * @return Command to run given motor at given percentage
+     */
     public Command setMotorPercentOutputCommand(int motorPos, double percent){
         return this.run(()->{
-            setMotorPercentOutput(motorPos, percent);
+            run(motorPos, percent);
         });
     }
 
@@ -123,16 +155,53 @@ public class Indexer extends SubsystemBase {
      */
     public Command stopMotorCommand() {
         return this.runOnce(()-> {
-            stop(1);
-            stop(2);
-            stop(3);
-            stop(4);
+            stopAll();
         });
     }
 
+    /**
+     * Stops specified motor from running
+     * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
+     * @return Command to stop specified motor
+     */
     public Command stopMotorCommand(int motorPos){
         return this.runOnce(()-> {
             stop(motorPos);
         });
     }
+
+    @Override
+    public void periodic() {
+        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount());
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
+
+        int count = getBallCount();
+
+        switch(count) {
+
+            case 0:
+                run(0, 1);
+                run(2, 1); 
+                stop(3);
+                break;
+
+            case 1: //TODO: possibly split case
+                run(0, 1);
+                run(2, 1);
+                stop(3);
+                break;
+
+            case 2:
+                run(0, 1);
+                stop(2);
+                stop(3);                
+                break;
+
+            case 3:
+                stop(0);
+                stop(2);
+                break;
+        }
+    }
+
 }
