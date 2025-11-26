@@ -67,7 +67,7 @@ public class RobotContainer {
   private void configureBindings() {
     
 
-    TESTINGINTAKEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessIntakeMotor()));
+    TESTINGINTAKEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand());
     //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
   
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`

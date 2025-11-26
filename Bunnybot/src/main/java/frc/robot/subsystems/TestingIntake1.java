@@ -76,8 +76,8 @@ public class TestingIntake1 extends SubsystemBase{
            return this.run(()->{setPercentOut(IntakeMotor,percent);});
    } 
   
-   public Command stopIntakeCommand(NewtonMotor motor){
-       return this.runOnce(()->{stop(motor);});
+   public Command stopIntakeCommand(){
+       return this.runOnce(()->{stop(IntakeMotor);});
    }
 
    public double RotationstoDegrees(double motorRotations){
