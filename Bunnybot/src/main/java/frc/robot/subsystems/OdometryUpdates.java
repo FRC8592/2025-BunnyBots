@@ -54,22 +54,35 @@ public class OdometryUpdates extends SubsystemBase {
     }
 
     public Pose2d robotPoseAverager(Optional<EstimatedRobotPose> robotPose){
+        /*
+         * Derive a new Pose2d object from the robotPose
+         * We refer to this as rawRobotPosition as this is the raw unaveraged data derived from camera data
+         */
         Pose2d rawRobotPosition = robotPose.get().estimatedPose.toPose2d();
+        /*
+         *  Update each array with current data from the robot.
+         *  This overwrites the old data, and contributes to our averaging logic.
+         */
         rawXData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getX();
         rawYData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getY();
         rawThetaData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getRotation().getRadians();
+        //To ensure we are keeping track of iterations
         IteratorCounter++;
+        //These variables are initialized to derive averages from their respective arrays
         double averageX = 0.0;
         double averageY = 0.0;
         double averageTheta = 0.0;
+        //We traverse throughout out all arrays, summing up the data from them into the average variables
         for(int i = 0; i< VISION.POSE_AVERAGER_VALUE; i++){
             averageX += rawXData[i];
             averageY += rawYData[i];
             averageTheta += rawThetaData[i];
         }
+        //Divide by the length of the array in order to derive average value
         averageX /= VISION.POSE_AVERAGER_VALUE;
         averageY /= VISION.POSE_AVERAGER_VALUE;
         averageTheta /= VISION.POSE_AVERAGER_VALUE;
+        //Pose2d requires a Rotation2d object, so we create one based on the averageTheta value
         Rotation2d averageThetaRotation = new Rotation2d(averageTheta);
         return new Pose2d(averageX, averageY, averageThetaRotation);
     }
