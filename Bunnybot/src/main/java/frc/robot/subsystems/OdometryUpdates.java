@@ -5,9 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.List;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
@@ -26,6 +31,10 @@ public class OdometryUpdates extends SubsystemBase {
     private static boolean useVision;
     private double ambiguity;
     private Pose2d robotPosition;
+    private int IteratorCounter;
+    private double[] rawXData = new double[VISION.POSE_AVERAGER_VALUE];
+    private double[] rawYData = new double[VISION.POSE_AVERAGER_VALUE];
+    private double[] rawThetaData = new double[VISION.POSE_AVERAGER_VALUE];
 
     public OdometryUpdates(Vision vision1, Swerve swerve) {
         this.swerve = swerve;
@@ -44,15 +53,38 @@ public class OdometryUpdates extends SubsystemBase {
         useVision = true;
     }
 
+    public Pose2d robotPoseAverager(Optional<EstimatedRobotPose> robotPose){
+        Pose2d rawRobotPosition = robotPose.get().estimatedPose.toPose2d();
+        rawXData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getX();
+        rawYData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getY();
+        rawThetaData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getRotation().getRadians();
+        IteratorCounter++;
+        double averageX = 0.0;
+        double averageY = 0.0;
+        double averageTheta = 0.0;
+        for(int i = 0; i< VISION.POSE_AVERAGER_VALUE; i++){
+            averageX += rawXData[i];
+            averageY += rawYData[i];
+            averageTheta += rawThetaData[i];
+        }
+        averageX /= VISION.POSE_AVERAGER_VALUE;
+        averageY /= VISION.POSE_AVERAGER_VALUE;
+        averageTheta /= VISION.POSE_AVERAGER_VALUE;
+        Rotation2d averageThetaRotation = new Rotation2d(averageTheta);
+        return new Pose2d(averageX, averageY, averageThetaRotation);
+    }
+
     public void runVision(Vision vision){
         if (RobotBase.isReal()){
             Pose2d robotPosition = new Pose2d();
             double ambiguity = -1d;
             double timeStamp = 0.0;
+            IteratorCounter++;
     
             Optional<EstimatedRobotPose> robotPose = vision.getRobotPoseVision();
             
-            if (robotPose.isPresent()) {
+            if (robotPose.isPresent()){
+                Pose2d placeHolder = robotPoseAverager(robotPose);
                 robotPosition = robotPose.get().estimatedPose.toPose2d();
                 ambiguity = vision.getPoseAmbiguityRatio();
                 timeStamp = robotPose.get().timestampSeconds;
@@ -69,7 +101,7 @@ public class OdometryUpdates extends SubsystemBase {
                         { 
                             System.out.println("This is running");
                             if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
-                                initialPose = robotPosition;
+                                initialPose = robotPoseAverager(robotPose);
                                 swerve.setKnownOdometryPose(initialPose);
                             } else {
                                 System.out.println("else is running");
