@@ -34,8 +34,7 @@ public final class Constants {
 
     public final class VISION {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"Vision";
-        public static final Transform3d CAMERA_OFFSETS = (
-            new Transform3d(new Translation3d(0.304, 0.008, 0.127), new Rotation3d(0, Math.toRadians(45), 0)));
+        public static final Transform3d CAMERA_OFFSETS = new Transform3d(new Translation3d(0.275, -0.095, 0.255), (new Rotation3d(0.0, Math.toRadians(-48.0), 0.0)));
         public static final String CAMERA_NAME = (
             "Arducam_OV9782_B" 
         );
