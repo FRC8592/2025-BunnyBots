@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;   
 import frc.robot.Constants.*;
 import frc.robot.helpers.motor.NewtonMotor;
@@ -49,7 +52,7 @@ public class Intake extends SubsystemBase{
         PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
         IntakeMotorBottom.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
 
-    //    PivotIntakeMotor.withGains(PositionPID);
+         //PivotIntakeMotor.withGains(PositionPID);
         //Does not work for
        //PivotIntakeMotor.configureMotionMagic(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY);
 
@@ -62,16 +65,17 @@ public class Intake extends SubsystemBase{
 
 
    public void stop(NewtonMotor motor){
-       motor.setVelocity(0);
+       motor.setPercentOutput(0);
    }
 
 
-   public Command setIntakeCommand(double percent){
-           return this.run(()->{setPercentOut(IntakeMotorSide,percent);});
-   } 
+    public Command setIntakeCommand(double percent){
+        return new ParallelCommandGroup(this.run(() -> setPercentOut(IntakeMotorSide, percent)), this.run(() -> setPercentOut(IntakeMotorBottom, percent)));
+    } 
+
   
    public Command stopIntakeCommand(){
-       return this.runOnce(()->{stop(IntakeMotorSide);});
+    return new ParallelCommandGroup(this.runOnce(() -> stop(IntakeMotorSide)), this.runOnce(() -> stop(IntakeMotorBottom)));
    }
 
    public double RotationstoDegrees(double motorRotations){
@@ -82,13 +86,6 @@ public class Intake extends SubsystemBase{
     return degrees * INTAKE.INTAKE_DEGREES_TO_MOTOR_ROTATIONS;
    }
 
-   public NewtonMotor accessIntakeMotor(){
-    return IntakeMotorSide;
-   }
-
-   public SparkFlexMotor accessPivotIntakeMotor(){
-    return PivotIntakeMotor;
-   }
    //This is for the intake motor, runs the intake motor to a certain number of motor rotations
    public void runIntakeToPosition(double desiredPosition){
     double currentPosition =  IntakeMotorSide.getRotations();
@@ -107,32 +104,6 @@ public class Intake extends SubsystemBase{
     return this.run(()-> PivotIntakeMotor.setPosition(position));
    }
  
-
-   //example code to put in scoring
-
-   /*
-    * private boolean IndexerIntake;
-
-     within constructor:
-
-     IndexerIntake = INTAKE.getIndexerFull();
-
-     within Indexer: some sort of code with the three beam breaks, and that will return a boolean as to whether it is full or not
-
-     And then possibly within the intake method within scoring:
-
-     If(IndexerIntake){
-        Run the intake motor for a certain amount of time, or for a certain amount of motor rotations
-        Then run the pivot intake motor for a certain amount of motor rotations, and then hold it there and eject the thing
-        
-        So the order is as follows: Stop the intake if it is not already stopped, run the pivot motor so the intake is held up,
-        run the intake motor in the opposite direction to eject the lunite, run the pivot motor again to fully store the intake.
-        Continue with normal operation.
-     }
-
-
-
-    */
    
 
 
