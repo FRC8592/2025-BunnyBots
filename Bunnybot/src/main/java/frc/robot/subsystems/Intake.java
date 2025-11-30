@@ -22,7 +22,8 @@ import frc.robot.helpers.PIDProfile;
 
 
 public class Intake extends SubsystemBase{
-   private SparkFlexMotor IntakeMotor;
+   private SparkFlexMotor IntakeMotorSide;
+   private SparkFlexMotor IntakeMotorBottom;
    //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
    private SparkFlexMotor PivotIntakeMotor;
    //If neos are used, this is necessary for PID Control
@@ -43,17 +44,20 @@ public class Intake extends SubsystemBase{
         PositionPID.setPID(INTAKE.INTAKE_POSITION_P, INTAKE.INTAKE_POSITION_I, INTAKE.INTAKE_POSITION_D);
        //Declaring both motors based on CAN ID from CanBus, and running them in the normal direction
        //These WILL be changed to Kraken motors later, but for prototyping purposes we are utilizing neo motors
-       IntakeMotor = new SparkFlexMotor(CAN.INTAKE_MOTOR_CAN_ID,false);
+       IntakeMotorSide = new SparkFlexMotor(CAN.INTAKE_MOTOR_SIDE_CAN_ID,false);
        PivotIntakeMotor = new SparkFlexMotor(CAN.PIVOT_INTAKE_MOTOR_CAN_ID,false);
+       IntakeMotorBottom = new SparkFlexMotor(CAN.INTAKE_MOTOR_BOTTOM_CAN_ID,false);
 
 
        //Setting the idle(normal/resting) state
-       IntakeMotor.setIdleMode(IdleMode.kBrake);
-       PivotIntakeMotor.setIdleMode(IdleMode.kBrake);
+       IntakeMotorSide.setIdleMode(IdleMode.kBrake);
+       PivotIntakeMotor.setIdleMode(IdleMode.kCoast);
+       IntakeMotorBottom.setIdleMode(IdleMode.kBrake);
         //Setting current limits on the motors to prevent burn out and overheating
 
-        IntakeMotor.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
+        IntakeMotorSide.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
         PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
+        IntakeMotorBottom.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
 
        PivotIntakeMotor.withGains(PositionPID);
         //Does not work for
@@ -73,11 +77,11 @@ public class Intake extends SubsystemBase{
 
 
    public Command setIntakeCommand(double percent){
-           return this.run(()->{setPercentOut(IntakeMotor,percent);});
+           return this.run(()->{setPercentOut(IntakeMotorSide,percent);});
    } 
   
    public Command stopIntakeCommand(){
-       return this.runOnce(()->{stop(IntakeMotor);});
+       return this.runOnce(()->{stop(IntakeMotorSide);});
    }
 
    public double RotationstoDegrees(double motorRotations){
@@ -89,7 +93,7 @@ public class Intake extends SubsystemBase{
    }
 
    public NewtonMotor accessIntakeMotor(){
-    return IntakeMotor;
+    return IntakeMotorSide;
    }
 
    public SparkFlexMotor accessPivotIntakeMotor(){
@@ -97,11 +101,11 @@ public class Intake extends SubsystemBase{
    }
    //This is for the intake motor, runs the intake motor to a certain number of motor rotations
    public void runIntakeToPosition(double desiredPosition){
-    double currentPosition =  IntakeMotor.getRotations();
-    while(Math.abs(currentPosition - IntakeMotor.getRotations()) < 0.1){
-        setPercentOut(IntakeMotor,-0.7);
+    double currentPosition =  IntakeMotorSide.getRotations();
+    while(Math.abs(currentPosition - IntakeMotorSide.getRotations()) < 0.1){
+        setPercentOut(IntakeMotorSide,-0.7);
     }
-    stop(IntakeMotor);
+    stop(IntakeMotorSide);
    }
    //Command version of the runIntakeToPosition method
    public Command runIntakeToPositionCommand(){
