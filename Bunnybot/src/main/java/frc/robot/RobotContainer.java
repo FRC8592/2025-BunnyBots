@@ -7,12 +7,14 @@ package frc.robot;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.TestingIntake1;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.Telemetry;
+import frc.robot.subsystems.swerve.TunerConstants;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
@@ -20,15 +22,15 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.Constants.CONTROLLERS;
 import frc.robot.Constants.*;
 import frc.robot.commands.autonomous.AutoManager;
-import frc.robot.subsystems.OdometryUpdates;
-import frc.robot.subsystems.TestingLauncher;
-import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import frc.robot.subsystems.swerve.Swerve;
-import frc.robot.subsystems.swerve.Telemetry;
-import frc.robot.subsystems.swerve.TunerConstants;
-import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.*;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Robot;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -58,6 +60,10 @@ public class RobotContainer {
     private final Trigger SLOW_MODE = driverController.rightBumper();
     private final Trigger LAUNCH = driverController.rightTrigger();
     private Trigger RUN = driverController.rightBumper();
+
+    private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
+    private final Trigger TESTINGPIVOTINTAKEBUTTON = driverController.leftTrigger();
+    private TestingIntake1 testingIntake;
     
 
     /**
@@ -70,6 +76,7 @@ public class RobotContainer {
         odometryUpdates = new OdometryUpdates(vision, swerve);
         testingLauncher = new TestingLauncher();
         indexer = new Indexer();
+        testingIntake = new TestingIntake1();
 
         configureBindings();
         configureDefaults();
@@ -119,6 +126,9 @@ public class RobotContainer {
         // RUN.onTrue(
         //   new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
         // ).onFalse(indexer.stopMotorCommand());
+
+        TESTINGINTAKEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand());
+        //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
   
     }
 
@@ -149,5 +159,5 @@ public class RobotContainer {
             throw new UnsupportedOperationException("Can't set a default command that cancels incoming!");
         }
     }
-  
+
 }
