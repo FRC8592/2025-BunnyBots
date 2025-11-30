@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
-import frc.robot.helpers.motor.spark.*;
+// import frc.robot.helpers.motor.spark.*;
 import frc.robot.helpers.motor.talonfx.Falcon500Motor;
 
-//TODO: Change the variables names based on the location of the motor. Top Motor = Motor 2 and Bottom Motor = Motor 1 
+//TODO: Change the variables names based on the location of the motor. Top and Bottom motor based on the placement at the laucher. 
 
 public class TestingLauncher extends SubsystemBase {
     // Declaring motors used for launcher
