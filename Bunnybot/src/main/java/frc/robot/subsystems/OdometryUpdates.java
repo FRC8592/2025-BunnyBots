@@ -5,130 +5,86 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.List;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
-// import frc.robot.subsystems.ScoreCoral.LeftOrRight;
-// import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.vision.Vision;
-import frc.robot.Constants;
 import frc.robot.Constants.*;
 
 
 public class OdometryUpdates extends SubsystemBase {
 
-    // private Swerve swerve;
+    private Swerve swerve;
     private Vision vision1;
-    // private Vision vision2;
     private Pose2d initialPose;
     private static boolean useVision;
-    // private static LeftOrRight leftOrRight;
+    private double ambiguity;
+    private Pose2d robotPosition;
+    private int IteratorCounter;
+    private double[] rawXData = new double[VISION.POSE_AVERAGER_VALUE];
+    private double[] rawYData = new double[VISION.POSE_AVERAGER_VALUE];
+    private double[] rawThetaData = new double[VISION.POSE_AVERAGER_VALUE];
 
-    public OdometryUpdates(Vision vision1) {
-        // this.swerve = swerve;
+    public OdometryUpdates(Vision vision1, Swerve swerve) {
+        this.swerve = swerve;
         this.vision1 = vision1;
-        // this.vision2 = vision2;
     }
-
 
     public void periodic() {
-        // if (RobotBase.isReal()){
-        // Pose2d robotPosition1 = new Pose2d();
-        // double ambiguity1 = -1d;
-        // double timeStamp1 = 0.0;
-
-        // Optional<EstimatedRobotPose> robotPose1 = vision1.getRobotPoseVision();
-
-        // Pose2d robotPosition2 = new Pose2d();
-        // double ambiguity2 = -1d;
-        // double timeStamp2 = 0.0;
-
-        // Optional<EstimatedRobotPose> robotPose2 = vision1.getRobotPoseVision();
-        
-        // if (robotPose1.isPresent()) {
-        //     robotPosition1 = robotPose1.get().estimatedPose.toPose2d();
-        //     ambiguity1 = vision1.getPoseAmbiguityRatio();
-        //     timeStamp1 = robotPose1.get().timestampSeconds;
-
-        // }
-        // if (robotPose2.isPresent()) {
-        //     robotPosition2 = robotPose2.get().estimatedPose.toPose2d();
-        //     ambiguity2 = vision2.getPoseAmbiguityRatio();
-        //     timeStamp2 = robotPose2.get().timestampSeconds;
-
-        // }
-        // useVision = false;
-        // if(useVision){
-            
-        //     switch (leftOrRight) {
-        //         case Right:
-        //             if(robotPose1.isPresent() && ambiguity1 < NAVIGATION.MAX_ACCEPTABLE_AMBIGUITY){
-        //                 swerve.resetPose(robotPosition1);
-        //             }
-        //             else{
-        //                 if(robotPose2.isPresent()){
-        //                     swerve.addVisionMeasurement(robotPosition2, timeStamp2);
-        //                 }
-        //             }
-        //             break;
-            
-        //         case Left:
-        //             if(robotPose2.isPresent() && ambiguity2 < NAVIGATION.MAX_ACCEPTABLE_AMBIGUITY){
-        //                 swerve.resetPose(robotPosition2);
-        //             }
-        //             else{
-        //                 if(robotPose1.isPresent()){
-        //                     swerve.addVisionMeasurement(robotPosition1, timeStamp1);
-        //                 }
-        //             }
-        //             break;
-        //     }
-        // }
-        // else{
-        //     if(DriverStation.isDisabled()){
-        //         if(robotPose1.isPresent()){
-        //             swerve.resetPose(robotPosition1);
-        //         }
-        //     }
-        //     else{
-        //         if(robotPose1.isPresent()){
-        //             swerve.addVisionMeasurement(robotPosition1, timeStamp1);
-        //         }
-        //         if(robotPose2.isPresent()){
-        //             swerve.addVisionMeasurement(robotPosition2, timeStamp2);
-        //         }
-        //     }
-        // }
-        // if(
-        //     vision1.getTargets().size() > 1 || (
-        //         Math.abs(ambiguity1) < Constants.NAVIGATION.MAX_ACCEPTABLE_AMBIGUITY
-        //         && vision1.getTargets().get(0).bestCameraToTarget.getX() < CORAL_ALIGN.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE
-        //     )
-        // ) {
-        //     if (DriverStation.isDisabled() || (useVision && Math.abs(ambiguity1) < 0.1)){
-        //         useVision = false;
-        //         initialPose = robotPosition1;
-        //         swerve.resetPose(initialPose);
-        //     } else {
-                
-        //     }
-        // }
-        // runVision(vision2);
         runVision(vision1);
     }
-
     
     public void simulationPeriodic() {
 
     }
+
     public static void setVision(){
         useVision = true;
-        // leftOrRight = scoreCoral.getDirection();
+    }
+
+    public Pose2d robotPoseAverager(Optional<EstimatedRobotPose> robotPose){
+        /*
+         * Derive a new Pose2d object from the robotPose
+         * We refer to this as rawRobotPosition as this is the raw unaveraged data derived from camera data
+         */
+        Pose2d rawRobotPosition = robotPose.get().estimatedPose.toPose2d();
+        /*
+         *  Update each array with current data from the robot.
+         *  This overwrites the old data, and contributes to our averaging logic.
+         */
+        rawXData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getX();
+        rawYData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getY();
+        rawThetaData[IteratorCounter % VISION.POSE_AVERAGER_VALUE] = rawRobotPosition.getRotation().getRadians();
+        //To ensure we are keeping track of iterations
+        IteratorCounter++;
+        //These variables are initialized to derive averages from their respective arrays
+        double averageX = 0.0;
+        double averageY = 0.0;
+        double averageTheta = 0.0;
+        //We traverse throughout out all arrays, summing up the data from them into the average variables
+        for(int i = 0; i< VISION.POSE_AVERAGER_VALUE; i++){
+            averageX += rawXData[i];
+            averageY += rawYData[i];
+            averageTheta += rawThetaData[i];
+        }
+        //Divide by the length of the array in order to derive average value
+        averageX /= VISION.POSE_AVERAGER_VALUE;
+        averageY /= VISION.POSE_AVERAGER_VALUE;
+        averageTheta /= VISION.POSE_AVERAGER_VALUE;
+        //Pose2d requires a Rotation2d object, so we create one based on the averageTheta value
+        Rotation2d averageThetaRotation = new Rotation2d(averageTheta);
+        return new Pose2d(averageX, averageY, averageThetaRotation);
     }
 
     public void runVision(Vision vision){
@@ -136,28 +92,35 @@ public class OdometryUpdates extends SubsystemBase {
             Pose2d robotPosition = new Pose2d();
             double ambiguity = -1d;
             double timeStamp = 0.0;
+            IteratorCounter++;
     
             Optional<EstimatedRobotPose> robotPose = vision.getRobotPoseVision();
             
-            if (robotPose.isPresent()) {
+            if (robotPose.isPresent()){
+                Pose2d placeHolder = robotPoseAverager(robotPose);
                 robotPosition = robotPose.get().estimatedPose.toPose2d();
                 ambiguity = vision.getPoseAmbiguityRatio();
                 timeStamp = robotPose.get().timestampSeconds;
-    
-                //if(Math.abs(ambiguity) < 0.2 && vision.getTargets().size() > 1) {
-                if(
-                    vision.getTargets().size() > 1 || (
-                        Math.abs(ambiguity) < Constants.NAVIGATION.MAX_ACCEPTABLE_AMBIGUITY
-                        && vision.getTargets().size() > 0 && vision.getTargets().get(0).bestCameraToTarget.getX() < CORAL_ALIGN.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE
-                    )
-                ) {
-                    if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
-                        initialPose = robotPosition;
-                        // swerve.resetPose(initialPose);
-                    } else {
-                        // swerve.addVisionMeasurement(robotPosition, timeStamp);
-                    }
+
+                if ((vision.getTargets().size() == 1)){
+                    Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/DistanceMeters", vision.getTargets().get(0).bestCameraToTarget.getX());
                 }
+                }
+
+                if ((vision.getTargets().size() > 1) || 
+                   ((Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY) && 
+                    (vision.getTargets().size() > 0) && 
+                    (vision.getTargets().get(0).bestCameraToTarget.getX() < VISION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE))) 
+                        { 
+                            System.out.println("This is running");
+                            if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
+                                initialPose = robotPoseAverager(robotPose);
+                                swerve.setKnownOdometryPose(initialPose);
+                            } else {
+                                System.out.println("else is running");
+                                swerve.addVisionMeasurement(robotPosition, timeStamp);
+                            }
+                        }
     
             }
 
@@ -166,7 +129,7 @@ public class OdometryUpdates extends SubsystemBase {
             // Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/OdometryPose", swerve.getCurrentPosition());
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/AmbiguityRatio1", ambiguity);
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/InitialPose", initialPose);
-        }
+            
     }
     
 }

@@ -17,7 +17,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import frc.robot.Constants.*;
-import frc.robot.subsystems.OdometryUpdates;
+import frc.robot.subsystems.swerve.Swerve;
 
 public class FollowPathCommand extends LargeCommand{
     // Pathing variables
@@ -52,7 +52,7 @@ public class FollowPathCommand extends LargeCommand{
      * red side of the field.
      */
     public FollowPathCommand(Trajectory trajectory, BooleanSupplier flip, String commandName){
-        super(null);
+        super(swerve);
 
         this.trajectory = trajectory;
 
@@ -60,7 +60,7 @@ public class FollowPathCommand extends LargeCommand{
 
         this.xController = new PIDController(
             SWERVE.PATH_FOLLOW_TRANSLATE_kP,
-             SWERVE.PATH_FOLLOW_TRANSLATE_kI,
+            SWERVE.PATH_FOLLOW_TRANSLATE_kI,
             SWERVE.PATH_FOLLOW_TRANSLATE_kD
         );
         this.xController.setTolerance(
@@ -152,17 +152,17 @@ public class FollowPathCommand extends LargeCommand{
         timer.start();
         if(!Robot.isReal()){
             if(flip.getAsBoolean()){
-               // swerve.resetPose(flip(trajectory.sample(0)).poseMeters);
+                swerve.setKnownOdometryPose(flip(trajectory.sample(0)).poseMeters);
             }
             else{
-                // swerve.resetPose(trajectory.sample(0).poseMeters);
+                swerve.setKnownOdometryPose(trajectory.sample(0).poseMeters);
             }
         }
     }
     public void execute(){
         // Instances of State contain information about pose, velocity, accelleration, curvature, etc.
         State desiredState = trajectory.sample(timer.get());
-        // LEDs.setProgressBar(timer.get()/trajectory.getTotalTimeSeconds());
+        //LEDs.setProgressBar(timer.get()/trajectory.getTotalTimeSeconds());
 
 
         if(flip.getAsBoolean()){
@@ -170,16 +170,16 @@ public class FollowPathCommand extends LargeCommand{
         }
 
         Logger.recordOutput(SWERVE.LOG_PATH+"TargetPose", desiredState.poseMeters);
-        // Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceX", desiredState.poseMeters.getX()-swerve.getCurrentPosition().getX());
-        // Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceY", desiredState.poseMeters.getY()-swerve.getCurrentPosition().getY());
-        // Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceRot", desiredState.poseMeters.getRotation().minus(swerve.getCurrentPosition().getRotation()).getDegrees());
+        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceX", desiredState.poseMeters.getX()-swerve.getCurrentOdometryPosition().getX());
+        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceY", desiredState.poseMeters.getY()-swerve.getCurrentOdometryPosition().getY());
+        Logger.recordOutput(SWERVE.LOG_PATH+"TargetActualDifferenceRot", desiredState.poseMeters.getRotation().minus(swerve.getCurrentOdometryPosition().getRotation()).getDegrees());
         // double velocity = desiredState.
         // Logger.recordOutput(SWERVE.LOG_PATH+"TargetVelocity", )
 
-        ChassisSpeeds driveSpeeds = drivePID.calculate(null, null, null
-            // swerve.getCurrentPosition(),
-            // desiredState,
-            // desiredState.poseMeters.getRotation()
+        ChassisSpeeds driveSpeeds = drivePID.calculate(
+            swerve.getCurrentOdometryPosition(),
+            desiredState,
+            desiredState.poseMeters.getRotation()
         );
 
         // Override the rotation speed (NOT position target) if useAlternativeRotation
@@ -197,14 +197,14 @@ public class FollowPathCommand extends LargeCommand{
         //     OdometryUpdates.setVision(scoreCoral);
         // }
 
-        // swerve.drive(driveSpeeds);
+        swerve.drive(driveSpeeds);
     }
     public void end(boolean interrupted){
-        // LEDs.setProgressBar(-1);
+        //LEDs.setProgressBar(-1);
         Logger.recordOutput("CustomLogs/CurrentPathCommand/Name", "None");
 
         if(!rollAtPathEnd){
-            // swerve.drive(new ChassisSpeeds());
+            swerve.drive(new ChassisSpeeds());
         }
     }
 

@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.vision.Vision;
+
 import frc.robot.Constants.CONTROLLERS;
 import frc.robot.subsystems.TestingLauncher;
 
@@ -26,7 +28,64 @@ import frc.robot.subsystems.TestingLauncher;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
 public class RobotContainer {
+    private static final CommandXboxController driverController = new CommandXboxController(
+        CONTROLLERS.DRIVER_PORT
+    );
+    private final Trigger RESET_HEADING = driverController.back();
+    private final Trigger SLOW_MODE = driverController.rightBumper();
+    private final Telemetry logger = new Telemetry(SWERVE.MAX_SPEED);
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+
+    // The robot's subsystems
+    private final Swerve swerve;
+    private final OdometryUpdates odometryUpdates;
+    private final Vision vision;
+    //TODO: Add all controls here
+    
+    // TODO: Add instantiatable helpers here
+
+    /**
+     * Create the robot container. This creates and configures subsystems, sets
+     * up button bindings, and prepares for autonomous.
+     */
+    public RobotContainer() {
+        swerve = new Swerve(drivetrain);
+        vision = new Vision(VISION.CAMERA_NAME, VISION.CAMERA_OFFSETS);
+        odometryUpdates = new OdometryUpdates(vision, swerve);
+        configureBindings();
+        configureDefaults();
+        
+        AutoManager.prepare();
+    }
+
+    /**
+     * Configure default commands for the subsystems
+     */
+    private void configureDefaults(){
+        // Set the swerve's default command to drive with joysticks
+
+        setDefaultCommand(swerve, swerve.run(() -> {
+            swerve.drive(swerve.processJoystickInputs(
+                -driverController.getLeftX(),
+                -driverController.getLeftY(),
+                -driverController.getRightX()
+            ));
+        }).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    }
+
+    //Any commands that are reused a lot but can't go in a separate class go here
+
+    /**
+     * Configure all button bindings
+     */
+    private void configureBindings() {
+        SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
+                 .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
+
+        RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
+    };
   private static final CommandXboxController driverController = new CommandXboxController(
       CONTROLLERS.DRIVER_PORT
   );
@@ -67,17 +126,16 @@ public class RobotContainer {
   
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return new InstantCommand();
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        return AutoManager.getAutonomousCommand();
+    }
 
-  /**
+    /**
      * Set the default command of a subsystem (what to run if no other command requiring it is running).
      * <p> NOTE: all subsystems also have a setDefaultCommand method; this version includes a check for
      * default commands that cancel incoming commands that require the subsystem. Unless you're sure
