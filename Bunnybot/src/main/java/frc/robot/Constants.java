@@ -62,10 +62,6 @@ public final class Constants {
         public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1.4d;
         public static final int POSE_AVERAGER_VALUE = 10;
     }
-
-    public final class LAUNCHER {
-        public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Launcher/";
-    }
         
     public final class SWERVE {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Swerve/";

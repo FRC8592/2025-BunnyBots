@@ -34,7 +34,7 @@ import au.grapplerobotics.CanBridge;
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
 
-  private final RobotContainer robotContainer;
+    private RobotContainer robotContainer;
 
     public static Field2d FIELD = new Field2d();
 
@@ -78,10 +78,6 @@ public class Robot extends LoggedRobot {
         robotContainer = new RobotContainer();
     }
 
-
-  public void robotInit() {
-    
-  }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -97,27 +93,6 @@ public class Robot extends LoggedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
   }
-    /**
-     * This function is called every 20 ms, no matter the mode. Use this for items
-     * like diagnostics
-     * that you want ran during disabled, autonomous, teleoperated and test.
-     *
-     * <p>
-     * This runs after the mode specific periodic functions, but before LiveWindow
-     * and
-     * SmartDashboard integrated updating.
-     */
-    @Override
-    public void robotPeriodic() {
-        // Runs the Scheduler. This is responsible for polling buttons, adding
-        // newly-scheduled
-        // commands, running already-scheduled commands, removing finished or
-        // interrupted commands,
-        // and running subsystem periodic() methods. This must be called from the
-        // robot's periodic
-        // block in order for anything in the Command-based framework to work.
-        CommandScheduler.getInstance().run(); 
-    }
 
     /** This function is called once each time the robot enters Disabled mode. */
     @Override

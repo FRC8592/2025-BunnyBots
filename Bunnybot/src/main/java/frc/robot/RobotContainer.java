@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,7 +20,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
 
 import frc.robot.Constants.CONTROLLERS;
+import frc.robot.Constants.*;
+import frc.robot.commands.autonomous.AutoManager;
+import frc.robot.subsystems.OdometryUpdates;
 import frc.robot.subsystems.TestingLauncher;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.Telemetry;
+import frc.robot.subsystems.swerve.TunerConstants;
 
 
 /**
@@ -33,8 +41,7 @@ public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
         CONTROLLERS.DRIVER_PORT
     );
-    private final Trigger RESET_HEADING = driverController.back();
-    private final Trigger SLOW_MODE = driverController.rightBumper();
+    
     private final Telemetry logger = new Telemetry(SWERVE.MAX_SPEED);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -42,9 +49,15 @@ public class RobotContainer {
     private final Swerve swerve;
     private final OdometryUpdates odometryUpdates;
     private final Vision vision;
-    //TODO: Add all controls here
+
+    private final TestingLauncher testingLauncher;
+    private double percentDashboard1;
+    private double percentDashboard2;
     
-    // TODO: Add instantiatable helpers here
+    private final Trigger RESET_HEADING = driverController.back();
+    private final Trigger SLOW_MODE = driverController.rightBumper();
+    private final Trigger LAUNCH = driverController.rightTrigger();
+    
 
     /**
      * Create the robot container. This creates and configures subsystems, sets
@@ -54,6 +67,8 @@ public class RobotContainer {
         swerve = new Swerve(drivetrain);
         vision = new Vision(VISION.CAMERA_NAME, VISION.CAMERA_OFFSETS);
         odometryUpdates = new OdometryUpdates(vision, swerve);
+        testingLauncher = new TestingLauncher();
+
         configureBindings();
         configureDefaults();
         
@@ -75,8 +90,6 @@ public class RobotContainer {
         }).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
     }
 
-    //Any commands that are reused a lot but can't go in a separate class go here
-
     /**
      * Configure all button bindings
      */
@@ -85,46 +98,15 @@ public class RobotContainer {
                  .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
 
         RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
-    };
-  private static final CommandXboxController driverController = new CommandXboxController(
-      CONTROLLERS.DRIVER_PORT
-  );
 
-  //private final TestingLauncher1 testingLauncher1;
-  // The robot's subsystems and commands are defined here...
-  private final TestingLauncher testingLauncher;
-  private final Trigger LAUNCH = driverController.rightTrigger();
-  private double percentDashboard1;
-  private double percentDashboard2;
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    testingLauncher = new TestingLauncher();
-    // Configure the trigger bindings
-    configureBindings();
-  }
-
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    //These two variables are not deriving new variables entered into dashboard.
-    //Assuming we are entering them wrong, and that a slider like "slow mode" for swerve will work better.
-    double percentDerived1 = SmartDashboard.getNumber("bottom_launcher_motor",percentDashboard1);
-    double percentDerived2 = SmartDashboard.getNumber("top_launcher_motor",percentDashboard2);
-    //Try and print the values
-    System.out.println("PercentDashboard1 " + percentDashboard1);
-    System.out.println("PercentDashboard2 " + percentDashboard2);
-    LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(testingLauncher))).onFalse(testingLauncher.stopLauncherCommand());
+        double percentDerived1 = SmartDashboard.getNumber("bottom_launcher_motor",percentDashboard1);
+        double percentDerived2 = SmartDashboard.getNumber("top_launcher_motor",percentDashboard2);
+        //Try and print the values
+        System.out.println("PercentDashboard1 " + percentDashboard1);
+        System.out.println("PercentDashboard2 " + percentDashboard2);
+        LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(testingLauncher))).onFalse(testingLauncher.stopLauncherCommand());
   
-  }
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -153,4 +135,5 @@ public class RobotContainer {
             throw new UnsupportedOperationException("Can't set a default command that cancels incoming!");
         }
     }
+  
 }
