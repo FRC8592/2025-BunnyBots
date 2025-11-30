@@ -35,6 +35,10 @@ public final class Constants {
         public static final int PDH_CAN_ID = 1;
         public static final int BOTTOM_LAUNCHER_MOTOR = 2; 
         public static final int TOP_LAUNCHER_MOTOR = 21; 
+        public static final int INDEXER_MOTOR1_CAN_ID = 40;
+        public static final int INDEXER_MOTOR2_CAN_ID = 41;
+        public static final int INDEXER_MOTOR3_CAN_ID = 42;
+        public static final int INDEXER_MOTOR4_CAN_ID = 43;
     }
 
     public final class VISION {
@@ -128,4 +132,12 @@ public final class Constants {
         public static final String LOG_PATH = SHARED.LOG_FOLDER+"/Suppliers/";
     }
 
+    public final class INDEXER {
+        public static final String LOG_PATH = SHARED.LOG_FOLDER + "/Indexer/";
+        public static final int INDEXER_BEAM_BREAK_THRESHOLD_MM = 20; //subject to change
+
+        public static final int INDEXER_BEAM_BREAK_1_PORT = 0;
+        public static final int INDEXER_BEAM_BREAK_2_PORT = 0;
+        public static final int INDEXER_BEAM_BREAK_3_PORT = 0;
+    }
 }

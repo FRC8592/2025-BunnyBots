@@ -7,8 +7,6 @@ package frc.robot;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import frc.robot.commands.ExampleCommand;
-// import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -28,6 +26,7 @@ import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.Telemetry;
 import frc.robot.subsystems.swerve.TunerConstants;
+import frc.robot.subsystems.Indexer;
 
 
 /**
@@ -49,6 +48,7 @@ public class RobotContainer {
     private final Swerve swerve;
     private final OdometryUpdates odometryUpdates;
     private final Vision vision;
+    private final Indexer indexer;
 
     private final TestingLauncher testingLauncher;
     private double percentDashboard1;
@@ -57,6 +57,7 @@ public class RobotContainer {
     private final Trigger RESET_HEADING = driverController.back();
     private final Trigger SLOW_MODE = driverController.rightBumper();
     private final Trigger LAUNCH = driverController.rightTrigger();
+    private Trigger RUN = driverController.rightBumper();
     
 
     /**
@@ -68,6 +69,7 @@ public class RobotContainer {
         vision = new Vision(VISION.CAMERA_NAME, VISION.CAMERA_OFFSETS);
         odometryUpdates = new OdometryUpdates(vision, swerve);
         testingLauncher = new TestingLauncher();
+        indexer = new Indexer();
 
         configureBindings();
         configureDefaults();
@@ -105,6 +107,18 @@ public class RobotContainer {
         System.out.println("PercentDashboard1 " + percentDashboard1);
         System.out.println("PercentDashboard2 " + percentDashboard2);
         LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(testingLauncher))).onFalse(testingLauncher.stopLauncherCommand());
+
+        RUN.whileTrue(
+          new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
+        ).onFalse(indexer.stopMotorCommand());
+
+        //RUN.whileTrue(
+        //new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1, 1), Set.of(indexer))
+        //).onFalse(indexer.stopMotorCommand(1));
+
+        // RUN.onTrue(
+        //   new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
+        // ).onFalse(indexer.stopMotorCommand());
   
     }
 
