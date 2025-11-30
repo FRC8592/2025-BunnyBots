@@ -9,17 +9,17 @@ import frc.robot.Constants.CAN;
 import frc.robot.Constants.INDEXER;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
-import frc.robot.helpers.motor.spark.SparkBrushedMotor;
+import frc.robot.helpers.motor.spark.SparkFlexMotor;
 
 public class Indexer extends SubsystemBase {
     DigitalInput[] sensors = new DigitalInput[3];
     NewtonMotor[] motors = new NewtonMotor[4];
     
     public Indexer() {
-        motors[0] = new SparkBrushedMotor(CAN.INDEXER_MOTOR1_CAN_ID, false);
-        motors[1] = new SparkBrushedMotor(CAN.INDEXER_MOTOR2_CAN_ID, false);
-        motors[2] = new SparkBrushedMotor(CAN.INDEXER_MOTOR3_CAN_ID, false);
-        motors[3] = new SparkBrushedMotor(CAN.INDEXER_MOTOR4_CAN_ID, false);
+        motors[0] = new SparkFlexMotor(CAN.INDEXER_MOTOR1_CAN_ID, false);
+        motors[1] = new SparkFlexMotor(CAN.INDEXER_MOTOR2_CAN_ID, false);
+        motors[2] = new SparkFlexMotor(CAN.INDEXER_MOTOR3_CAN_ID, false);
+        motors[3] = new SparkFlexMotor(CAN.INDEXER_MOTOR4_CAN_ID, false);
 
         motors[0].setIdleMode(IdleMode.kBrake);
 

@@ -1,21 +1,11 @@
 package frc.robot.subsystems;
 
-
-
-
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkFlex;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
-//import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;   
 import frc.robot.Constants.*;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.spark.SparkFlexMotor;
-import frc.robot.helpers.motor.talonfx.KrakenX60Motor;
 import frc.robot.helpers.PIDProfile;
 
 
@@ -59,7 +49,7 @@ public class Intake extends SubsystemBase{
         PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
         IntakeMotorBottom.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
 
-       PivotIntakeMotor.withGains(PositionPID);
+    //    PivotIntakeMotor.withGains(PositionPID);
         //Does not work for
        //PivotIntakeMotor.configureMotionMagic(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY);
 
