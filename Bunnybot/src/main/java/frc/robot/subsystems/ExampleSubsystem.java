@@ -10,15 +10,15 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.TestingIntake1;
+import frc.robot.subsystems.Intake;
 import frc.robot.Constants.*;
 
 public class ExampleSubsystem extends SubsystemBase {
-  private TestingIntake1 testingIntake;
+  private Intake testingIntake;
   private boolean IndexerIntake;
   /** Creates a new ExampleSubsystem. */
   public ExampleSubsystem() {
-    testingIntake = new TestingIntake1();
+    testingIntake = new Intake();
     IndexerIntake = false;
   }
 
@@ -69,8 +69,7 @@ public class ExampleSubsystem extends SubsystemBase {
  public Command IntakeLunite(){
   //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
   return new DeferredCommand(() -> DeployIntake(), Set.of(testingIntake))
-  .andThen(testingIntake.setIntakeCommand(0.7))
-  .until(Indexer.hasBall());
+  .andThen(testingIntake.setIntakeCommand(0.7));
  }
 
  public Command StowIntake(){

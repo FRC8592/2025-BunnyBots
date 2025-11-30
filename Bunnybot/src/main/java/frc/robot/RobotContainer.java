@@ -8,7 +8,7 @@ import java.util.Set;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.TestingIntake1;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.Telemetry;
@@ -52,7 +52,7 @@ public class RobotContainer {
     private final Vision vision;
     private final Indexer indexer;
 
-    private final TestingLauncher testingLauncher;
+    private final Launcher testingLauncher;
     private double percentDashboard1;
     private double percentDashboard2;
     
@@ -63,7 +63,7 @@ public class RobotContainer {
 
     private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
     private final Trigger TESTINGPIVOTINTAKEBUTTON = driverController.leftTrigger();
-    private TestingIntake1 testingIntake;
+    private Intake testingIntake;
     
 
     /**
@@ -74,9 +74,9 @@ public class RobotContainer {
         swerve = new Swerve(drivetrain);
         vision = new Vision(VISION.CAMERA_NAME, VISION.CAMERA_OFFSETS);
         odometryUpdates = new OdometryUpdates(vision, swerve);
-        testingLauncher = new TestingLauncher();
+        testingLauncher = new Launcher();
         indexer = new Indexer();
-        testingIntake = new TestingIntake1();
+        testingIntake = new Intake();
 
         configureBindings();
         configureDefaults();

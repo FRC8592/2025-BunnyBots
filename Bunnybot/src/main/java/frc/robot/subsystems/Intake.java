@@ -21,7 +21,7 @@ import frc.robot.helpers.PIDProfile;
 
 
 
-public class TestingIntake1 extends SubsystemBase{
+public class Intake extends SubsystemBase{
    private SparkFlexMotor IntakeMotor;
    //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
    private SparkFlexMotor PivotIntakeMotor;
@@ -31,7 +31,7 @@ public class TestingIntake1 extends SubsystemBase{
    private boolean IndexerIntake;
 
 
-   public TestingIntake1(){
+   public Intake(){
         /*
             Does this approach work with any NewtonMotor or only with Krakens? 
             Since SparkFlex extends NewtonMotors and NewtonMotors utilizes PIDProfiles, I think it does?

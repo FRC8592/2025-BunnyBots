@@ -13,11 +13,11 @@ import frc.robot.helpers.motor.talonfx.Falcon500Motor;
 
 //TODO: Change the variables names based on the location of the motor. Top and Bottom motor based on the placement at the laucher. 
 
-public class TestingLauncher extends SubsystemBase {
+public class Launcher extends SubsystemBase {
     // Declaring motors used for launcher
     private NewtonMotor bottomLauncherMotor; 
     private NewtonMotor topLauncherMotor; 
-    public TestingLauncher() {
+    public Launcher() {
         //Top is Motor2
         //Bottom is Motor1
         bottomLauncherMotor = new Falcon500Motor(CAN.BOTTOM_LAUNCHER_MOTOR, true);

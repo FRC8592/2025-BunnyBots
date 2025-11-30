@@ -141,8 +141,8 @@ public final class INDEXER {
     public static final int INDEXER_BEAM_BREAK_THRESHOLD_MM = 20; //subject to change
 
     public static final int INDEXER_BEAM_BREAK_1_PORT = 0;
-    public static final int INDEXER_BEAM_BREAK_2_PORT = 0;
-    public static final int INDEXER_BEAM_BREAK_3_PORT = 0;
+    public static final int INDEXER_BEAM_BREAK_2_PORT = 1;
+    public static final int INDEXER_BEAM_BREAK_3_PORT = 2;
 }
 
 public static class INTAKE{

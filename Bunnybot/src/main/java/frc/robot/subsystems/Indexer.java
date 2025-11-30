@@ -175,6 +175,10 @@ public class Indexer extends SubsystemBase {
         Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount());
         Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
 
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerFrontHasBall", hasBall(1));
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerMiddleHasBall", hasBall(2));
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerBackHasBall", hasBall(3));
+
         int count = getBallCount();
 
         switch(count) {
