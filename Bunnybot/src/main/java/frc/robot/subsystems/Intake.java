@@ -15,10 +15,10 @@ import frc.robot.helpers.PIDProfile;
 
 
 public class Intake extends SubsystemBase{
-   private SparkFlexMotor IntakeMotorSide;
-   private SparkFlexMotor IntakeMotorBottom;
+   private NewtonMotor IntakeMotorSide;
+   private NewtonMotor IntakeMotorBottom;
    //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
-   private SparkFlexMotor PivotIntakeMotor;
+   private NewtonMotor PivotIntakeMotor;
    //If neos are used, this is necessary for PID Control
    //private SparkClosedLoopController PivotIntakeControl;
    //private SparkFlexConfig MotorConfig;

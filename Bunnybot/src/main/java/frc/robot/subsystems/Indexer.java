@@ -131,9 +131,9 @@ public class Indexer extends SubsystemBase {
      * @return command to run motors at specified percentage
      */
     public Command setMotorPercentOutputCommand(double percent) {
-        return this.run(()->{
-            runAll(percent);
-        });
+        return this.run(()->
+            runAll(percent)
+        );
         
     }
 
@@ -144,9 +144,9 @@ public class Indexer extends SubsystemBase {
      * @return Command to run given motor at given percentage
      */
     public Command setMotorPercentOutputCommand(int motorPos, double percent){
-        return this.run(()->{
-            run(motorPos, percent);
-        });
+        return this.run(()->
+            run(motorPos, percent)
+        );
     }
 
     /**
@@ -154,9 +154,9 @@ public class Indexer extends SubsystemBase {
      * @return the command to stop the motor
      */
     public Command stopMotorCommand() {
-        return this.runOnce(()-> {
-            stopAll();
-        });
+        return this.runOnce(()-> 
+            stopAll()
+        );
     }
 
     /**
@@ -165,9 +165,9 @@ public class Indexer extends SubsystemBase {
      * @return Command to stop specified motor
      */
     public Command stopMotorCommand(int motorPos){
-        return this.runOnce(()-> {
-            stop(motorPos);
-        });
+        return this.runOnce(()-> 
+            stop(motorPos)
+        );
     }
 
     @Override
