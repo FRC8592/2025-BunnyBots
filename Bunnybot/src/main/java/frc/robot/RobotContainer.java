@@ -116,29 +116,21 @@ public class RobotContainer {
         System.out.println("PercentDashboard2 " + percentDashboard2);
         LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(testingLauncher))).onFalse(testingLauncher.stopLauncherCommand());
 
-        RUN.whileTrue(
-          new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
+        RUN.onTrue(
+          new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(.5), Set.of(indexer))
         ).onFalse(indexer.stopMotorCommand());
 
-        driverController.a().whileTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(0, 1), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand());
+        driverController.a().onTrue(
+            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(0, .5), Set.of(indexer))
+        ).onFalse(indexer.stopMotorCommand(0));
 
-        driverController.b().whileTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(2, 1), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand());
+        driverController.b().onTrue(
+            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(2, .5), Set.of(indexer))
+        ).onFalse(indexer.stopMotorCommand(2));
 
-        driverController.y().whileTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(3, 1), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand());
-
-        //RUN.whileTrue(
-        //new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1, 1), Set.of(indexer))
-        //).onFalse(indexer.stopMotorCommand(1));
-
-        // RUN.onTrue(
-        //   new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
-        // ).onFalse(indexer.stopMotorCommand());
+        driverController.y().onTrue(
+            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(3, .5), Set.of(indexer))
+        ).onFalse(indexer.stopMotorCommand(3));
 
         TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeSideCommand(0.75), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeSideCommand());
         TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
