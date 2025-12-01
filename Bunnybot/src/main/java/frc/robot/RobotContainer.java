@@ -51,8 +51,10 @@ public class RobotContainer {
     private final OdometryUpdates odometryUpdates;
     private final Vision vision;
     private final Indexer indexer;
+    private final Intake intake;
+    private final Launcher launcher;
+    private final Scoring scoring;
 
-    private final Launcher testingLauncher;
     private double percentDashboard1;
     private double percentDashboard2;
     
@@ -64,7 +66,6 @@ public class RobotContainer {
 
     //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
     private final Trigger TESTINGINTAKESIDEBUTTON = driverController.leftTrigger();
-    private Intake testingIntake;
     
 
     /**
@@ -75,14 +76,15 @@ public class RobotContainer {
         swerve = new Swerve(drivetrain);
         vision = new Vision(VISION.CAMERA_NAME, VISION.CAMERA_OFFSETS);
         odometryUpdates = new OdometryUpdates(vision, swerve);
-        testingLauncher = new Launcher();
+        launcher = new Launcher();
         indexer = new Indexer();
-        testingIntake = new Intake();
+        intake = new Intake();
 
         configureBindings();
         configureDefaults();
         
         AutoManager.prepare();
+        scoring  = new Scoring(intake,indexer,launcher);
     }
 
     /**
@@ -114,7 +116,7 @@ public class RobotContainer {
         //Try and print the values
         System.out.println("PercentDashboard1 " + percentDashboard1);
         System.out.println("PercentDashboard2 " + percentDashboard2);
-        LAUNCH.whileTrue(new DeferredCommand(() -> testingLauncher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(testingLauncher))).onFalse(testingLauncher.stopLauncherCommand());
+        LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))).onFalse(launcher.stopLauncherCommand());
 
         RUN.onTrue(
           new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(.5), Set.of(indexer))
@@ -132,7 +134,7 @@ public class RobotContainer {
             new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(3, .5), Set.of(indexer))
         ).onFalse(indexer.stopMotorCommand(3));
 
-        TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeSideCommand(0.75), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeSideCommand());
+        TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
         //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
         //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
   
