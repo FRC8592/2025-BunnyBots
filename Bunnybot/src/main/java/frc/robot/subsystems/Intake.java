@@ -15,10 +15,10 @@ import frc.robot.helpers.PIDProfile;
 
 
 public class Intake extends SubsystemBase{
-   private NewtonMotor IntakeMotorSide;
-   private NewtonMotor IntakeMotorBottom;
+   private SparkFlexMotor IntakeMotorSide;
+   private SparkFlexMotor IntakeMotorBottom;
    //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
-   private NewtonMotor PivotIntakeMotor;
+   private SparkFlexMotor PivotIntakeMotor;
    //If neos are used, this is necessary for PID Control
    //private SparkClosedLoopController PivotIntakeControl;
    //private SparkFlexConfig MotorConfig;
@@ -54,9 +54,8 @@ public class Intake extends SubsystemBase{
 
         IntakeMotorBottom.setFollowerTo(IntakeMotorSide);
 
-         //PivotIntakeMotor.withGains(PositionPID);
-        //Does not work for
-       //PivotIntakeMotor.configureMotionMagic(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY);
+         PivotIntakeMotor.withGains(PositionPID);
+        PivotIntakeMotor.configureMAXMotion(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY, INTAKE.PIVOT_INTAKE_TOLERANCE, PositionPID);
 
 
    }
@@ -88,11 +87,11 @@ public class Intake extends SubsystemBase{
     return this.runOnce(() -> stop(IntakeMotorBottom));
    }
 
-   public double RotationstoDegrees(double motorRotations){
+   public double rotationstoDegrees(double motorRotations){
     return motorRotations * 1/(INTAKE.INTAKE_DEGREES_TO_MOTOR_ROTATIONS);
    }
 
-   public double DegreestoRotations(double degrees){
+   public double degreestoRotations(double degrees){
     return degrees * INTAKE.INTAKE_DEGREES_TO_MOTOR_ROTATIONS;
    }
 

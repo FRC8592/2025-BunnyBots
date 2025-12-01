@@ -34,6 +34,14 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
         this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+    public void configureMAXMotion(double maxAcceleration, double cruiseVelocity, double tolerance, PIDProfile gains){
+        gains.setMaxAcceleration(maxAcceleration);
+        gains.setMaxVelocity(cruiseVelocity);
+        gains.setTolerance(tolerance);
+        this.withGains(gains);
+        
+    }
+
     @Override
     public void withGains(PIDProfile gains) {
         super.motorPIDGains.add(gains.getSlot(), gains);
@@ -63,12 +71,6 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
             this.config.softLimit.reverseSoftLimit(gains.softLimitMax);
         }
 
-        this.config.closedLoop.maxMotion
-            .maxVelocity(gains.maxVelocity, slot)
-            .maxAcceleration(gains.maxAcceleration, slot)
-            .positionMode(com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode.kMAXMotionTrapezoidal, slot)
-            .allowedClosedLoopError(gains.tolerance, slot)
-        ;
 
         this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
@@ -122,8 +124,8 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
 
     @Override
     public void setFollowerTo(NewtonMotor master, boolean reversed) {
-        // this.config.follow(master.getAsSparkFlex().motor);
-        // this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        this.config.follow(master.getAsSparkFlex().motor);
+        this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
     
     @Override
@@ -132,6 +134,7 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
         this.config.secondaryCurrentLimit(currentAmps);
         this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
+
 
     @Override
     public void setIdleMode(IdleMode idleMode) {

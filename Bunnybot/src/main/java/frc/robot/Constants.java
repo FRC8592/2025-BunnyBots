@@ -162,8 +162,9 @@ public static class INTAKE{
     public static final int INTAKE_CURRENT_LIMIT = 80;
     public static final int PIVOT_INTAKE_CURRENT_LIMIT = 40;
     //Set max velocity and max acceleration of Intake motor of Intake for motion magic set up
-    public static final int PIVOT_INTAKE_MAX_VELOCITY = 0;
-    public static final int PIVOT_INTAKE_MAX_ACCELERATION = 0;
+    public static final double PIVOT_INTAKE_MAX_VELOCITY = 0;
+    public static final double PIVOT_INTAKE_MAX_ACCELERATION = 0;
+    public static final double PIVOT_INTAKE_TOLERANCE = 0;
     //This is the position of the intake when we want to eject additional lunites
     public static final double EJECT_LUNITE_POSITION = 0;
     //This is the position of the intake when it is touching the ground
