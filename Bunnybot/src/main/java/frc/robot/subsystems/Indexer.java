@@ -156,9 +156,9 @@ public class Indexer extends SubsystemBase {
      * @return the command to stop the motor
      */
     public Command stopMotorCommand() {
-        return this.runOnce(()-> {
-            stopAll();
-        });
+        return this.runOnce(()-> 
+            stopAll()
+        );
     }
 
     /**
@@ -167,9 +167,9 @@ public class Indexer extends SubsystemBase {
      * @return Command to stop specified motor
      */
     public Command stopMotorCommand(int motorPos){
-        return this.runOnce(()-> {
-            stop(motorPos);
-        });
+        return this.runOnce(()-> 
+            stop(motorPos)
+        );
     }
 
     @Override

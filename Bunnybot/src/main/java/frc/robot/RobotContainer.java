@@ -133,7 +133,7 @@ public class RobotContainer {
         ).onFalse(indexer.stopMotorCommand(3));
 
         TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeSideCommand(0.75), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeSideCommand());
-        TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
+        //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
         //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
   
     }
