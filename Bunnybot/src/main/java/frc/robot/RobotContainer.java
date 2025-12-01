@@ -61,8 +61,8 @@ public class RobotContainer {
     private final Trigger LAUNCH = driverController.rightTrigger();
     private Trigger RUN = driverController.rightBumper();
 
-    private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGPIVOTINTAKEBUTTON = driverController.leftTrigger();
+    //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
+    private final Trigger TESTINGINTAKEBUTTON = driverController.leftTrigger();
     private Intake testingIntake;
     
 
@@ -127,7 +127,7 @@ public class RobotContainer {
         //   new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
         // ).onFalse(indexer.stopMotorCommand());
 
-        TESTINGINTAKEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand());
+        TESTINGINTAKEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(1), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand());
         //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
   
     }

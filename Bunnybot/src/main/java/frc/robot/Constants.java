@@ -159,7 +159,7 @@ public static class INTAKE{
     //This is to make sure that it stays within position, will need to change later
     public static final double WITHIN_POSITION_LIMITS = 5;
     //Set current limits of the Kraken so they do not overheat, default value of 40 for current limits for now
-    public static final int INTAKE_CURRENT_LIMIT = 40;
+    public static final int INTAKE_CURRENT_LIMIT = 80;
     public static final int PIVOT_INTAKE_CURRENT_LIMIT = 40;
     //Set max velocity and max acceleration of Intake motor of Intake for motion magic set up
     public static final int PIVOT_INTAKE_MAX_VELOCITY = 0;

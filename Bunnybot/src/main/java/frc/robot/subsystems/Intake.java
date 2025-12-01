@@ -43,14 +43,16 @@ public class Intake extends SubsystemBase{
 
 
        //Setting the idle(normal/resting) state
-       IntakeMotorSide.setIdleMode(IdleMode.kBrake);
+       IntakeMotorSide.setIdleMode(IdleMode.kCoast);
        PivotIntakeMotor.setIdleMode(IdleMode.kCoast);
-       IntakeMotorBottom.setIdleMode(IdleMode.kBrake);
+       IntakeMotorBottom.setIdleMode(IdleMode.kCoast);
         //Setting current limits on the motors to prevent burn out and overheating
 
         IntakeMotorSide.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
         PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
         IntakeMotorBottom.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
+
+        //IntakeMotorBottom.setFollowerTo(IntakeMotorSide);
 
          //PivotIntakeMotor.withGains(PositionPID);
         //Does not work for
@@ -70,12 +72,12 @@ public class Intake extends SubsystemBase{
 
 
     public Command setIntakeCommand(double percent){
-        return new ParallelCommandGroup(this.run(() -> setPercentOut(IntakeMotorSide, percent)), this.run(() -> setPercentOut(IntakeMotorBottom, percent)));
+        return this.run(() -> setPercentOut(IntakeMotorSide, percent));
     } 
 
   
    public Command stopIntakeCommand(){
-    return new ParallelCommandGroup(this.runOnce(() -> stop(IntakeMotorSide)), this.runOnce(() -> stop(IntakeMotorBottom)));
+    return this.runOnce(() -> stop(IntakeMotorSide));
    }
 
    public double RotationstoDegrees(double motorRotations){
