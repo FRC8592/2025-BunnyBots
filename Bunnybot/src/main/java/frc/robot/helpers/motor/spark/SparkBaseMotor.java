@@ -70,7 +70,12 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
             this.config.softLimit.reverseSoftLimitEnabled(gains.softLimit);
             this.config.softLimit.reverseSoftLimit(gains.softLimitMax);
         }
-
+        this.config.closedLoop.maxMotion
+            .maxVelocity(gains.maxVelocity, slot)
+            .maxAcceleration(gains.maxAcceleration, slot)
+            .positionMode(com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode.kMAXMotionTrapezoidal, slot)
+            .allowedClosedLoopError(gains.tolerance, slot)
+        ;
 
         this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
