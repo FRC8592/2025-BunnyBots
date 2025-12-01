@@ -37,9 +37,9 @@ public class Intake extends SubsystemBase{
         PositionPID.setPID(INTAKE.INTAKE_POSITION_P, INTAKE.INTAKE_POSITION_I, INTAKE.INTAKE_POSITION_D);
        //Declaring both motors based on CAN ID from CanBus, and running them in the normal direction
        //These WILL be changed to Kraken motors later, but for prototyping purposes we are utilizing neo motors
-       IntakeMotorSide = new SparkFlexMotor(CAN.INTAKE_MOTOR_SIDE_CAN_ID,false);
+       IntakeMotorSide = new SparkFlexMotor(CAN.INTAKE_MOTOR_SIDE_CAN_ID,true);
        PivotIntakeMotor = new SparkFlexMotor(CAN.PIVOT_INTAKE_MOTOR_CAN_ID,false);
-       IntakeMotorBottom = new SparkFlexMotor(CAN.INTAKE_MOTOR_BOTTOM_CAN_ID,false);
+       IntakeMotorBottom = new SparkFlexMotor(CAN.INTAKE_MOTOR_BOTTOM_CAN_ID,true);
 
 
        //Setting the idle(normal/resting) state
@@ -52,7 +52,7 @@ public class Intake extends SubsystemBase{
         PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
         IntakeMotorBottom.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
 
-        //IntakeMotorBottom.setFollowerTo(IntakeMotorSide);
+        IntakeMotorBottom.setFollowerTo(IntakeMotorSide);
 
          //PivotIntakeMotor.withGains(PositionPID);
         //Does not work for
@@ -71,13 +71,21 @@ public class Intake extends SubsystemBase{
    }
 
 
-    public Command setIntakeCommand(double percent){
+    public Command setIntakeSideCommand(double percent){
         return this.run(() -> setPercentOut(IntakeMotorSide, percent));
-    } 
+    }
+    
+    public Command setIntakeBottomCommand(double percent){
+        return this.run(() -> setPercentOut(IntakeMotorBottom, percent));
+    }
 
   
-   public Command stopIntakeCommand(){
+   public Command stopIntakeSideCommand(){
     return this.runOnce(() -> stop(IntakeMotorSide));
+   }
+
+   public Command stopIntakeBottomCommand(){
+    return this.runOnce(() -> stop(IntakeMotorBottom));
    }
 
    public double RotationstoDegrees(double motorRotations){

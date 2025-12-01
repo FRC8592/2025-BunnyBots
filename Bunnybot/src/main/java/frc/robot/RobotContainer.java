@@ -57,12 +57,13 @@ public class RobotContainer {
     private double percentDashboard2;
     
     private final Trigger RESET_HEADING = driverController.back();
-    private final Trigger SLOW_MODE = driverController.rightBumper();
+    // private final Trigger SLOW_MODE = driverController.rightBumper();
     private final Trigger LAUNCH = driverController.rightTrigger();
     private Trigger RUN = driverController.rightBumper();
+    private final Trigger TESTINGINTAKEBOTTOMBUTTON = driverController.leftBumper();
 
     //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGINTAKEBUTTON = driverController.leftTrigger();
+    private final Trigger TESTINGINTAKESIDEBUTTON = driverController.leftTrigger();
     private Intake testingIntake;
     
 
@@ -103,8 +104,8 @@ public class RobotContainer {
      * Configure all button bindings
      */
     private void configureBindings() {
-        SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
-                 .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
+        // SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
+                //  .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
 
         RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
 
@@ -119,6 +120,18 @@ public class RobotContainer {
           new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
         ).onFalse(indexer.stopMotorCommand());
 
+        driverController.a().whileTrue(
+            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(0, 1), Set.of(indexer))
+        ).onFalse(indexer.stopMotorCommand());
+
+        driverController.b().whileTrue(
+            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(2, 1), Set.of(indexer))
+        ).onFalse(indexer.stopMotorCommand());
+
+        driverController.y().whileTrue(
+            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(3, 1), Set.of(indexer))
+        ).onFalse(indexer.stopMotorCommand());
+
         //RUN.whileTrue(
         //new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1, 1), Set.of(indexer))
         //).onFalse(indexer.stopMotorCommand(1));
@@ -127,7 +140,8 @@ public class RobotContainer {
         //   new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(1), Set.of(indexer))
         // ).onFalse(indexer.stopMotorCommand());
 
-        TESTINGINTAKEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeCommand(1), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand());
+        TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeSideCommand(0.75), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeSideCommand());
+        TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
         //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
   
     }

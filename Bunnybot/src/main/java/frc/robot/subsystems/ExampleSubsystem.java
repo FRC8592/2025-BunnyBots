@@ -69,7 +69,7 @@ public class ExampleSubsystem extends SubsystemBase {
  public Command IntakeLunite(){
   //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
   return new DeferredCommand(() -> DeployIntake(), Set.of(testingIntake))
-  .andThen(testingIntake.setIntakeCommand(0.7));
+  .andThen(testingIntake.setIntakeSideCommand(0.7));
  }
 
  public Command StowIntake(){
