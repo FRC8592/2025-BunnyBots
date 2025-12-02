@@ -10,6 +10,7 @@ import frc.robot.commands.largecommands.*;
 public class SixLumens extends AutoCommand {
    public SixLumens(String color){
       super(
+        
        new FollowPathCommand(getChoreoTrajectory("CollectFirst"), Suppliers.isRedAlliance, ""),
        /*
         * .andThen(Intake Command until Indexer detects 1 Lumen in its system))
