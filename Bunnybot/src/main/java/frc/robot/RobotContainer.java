@@ -118,21 +118,8 @@ public class RobotContainer {
         System.out.println("PercentDashboard2 " + percentDashboard2);
         LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))).onFalse(launcher.stopLauncherCommand());
 
-        RUN.onTrue(
-          new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(.5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand());
-
-        driverController.a().onTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(0, .5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand(0));
-
-        driverController.b().onTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(2, .5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand(2));
-
-        driverController.y().onTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(3, .5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand(3));
+        //to test indexer
+        RUN.whileTrue(indexer.setMotorPercentOutputCommand(0.8));
 
         TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
         //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
