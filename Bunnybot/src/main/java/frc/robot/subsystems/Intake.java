@@ -3,7 +3,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+
+import com.revrobotics.spark.SparkBase.ControlType;
+
 //import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;   
 import frc.robot.Constants.*;
 import frc.robot.helpers.motor.NewtonMotor;
@@ -19,6 +24,7 @@ public class Intake extends SubsystemBase{
    private SparkFlexMotor IntakeMotorBottom;
    //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
    private SparkFlexMotor PivotIntakeMotor;
+   private TrapezoidProfile motionProfile;
    //If neos are used, this is necessary for PID Control
    //private SparkClosedLoopController PivotIntakeControl;
    //private SparkFlexConfig MotorConfig;
@@ -40,6 +46,12 @@ public class Intake extends SubsystemBase{
        IntakeMotorSide = new SparkFlexMotor(CAN.INTAKE_MOTOR_SIDE_CAN_ID,true);
        PivotIntakeMotor = new SparkFlexMotor(CAN.PIVOT_INTAKE_MOTOR_CAN_ID,false);
        IntakeMotorBottom = new SparkFlexMotor(CAN.INTAKE_MOTOR_BOTTOM_CAN_ID,true);
+       motionProfile =  new TrapezoidProfile(new TrapezoidProfile.Constraints(INTAKE.PIVOT_INTAKE_MAX_VELOCITY,INTAKE.PIVOT_INTAKE_MAX_ACCELERATION));
+       State ExtendSetPoint = motionProfile.calculate(5.0, new TrapezoidProfile.State(0,0), new TrapezoidProfile.State(5,0));
+       PivotIntakeMotor.setReference(ExtendSetPoint.position, ControlType.kPosition);
+
+
+
 
 
        //Setting the idle(normal/resting) state
@@ -56,6 +68,7 @@ public class Intake extends SubsystemBase{
 
          PivotIntakeMotor.withGains(PositionPID);
         PivotIntakeMotor.configureMAXMotion(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY, INTAKE.PIVOT_INTAKE_TOLERANCE, PositionPID);
+
 
 
    }

@@ -7,6 +7,8 @@ import com.revrobotics.spark.SparkBase.*;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.helpers.PIDProfile;
 import frc.robot.helpers.Utils;
 import frc.robot.helpers.motor.MotorConstants;
@@ -39,7 +41,13 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
         gains.setMaxVelocity(cruiseVelocity);
         gains.setTolerance(tolerance);
         this.withGains(gains);
+    }
+
+    public void runMAXMotion(State setPosition, PIDProfile gains){
+        TrapezoidProfile motionProfile =  new TrapezoidProfile(new TrapezoidProfile.Constraints(gains.getMaxAcceleration(), gains.getMaxVelocity()));
+        State ExtendSetPoint = motionProfile.calculate(5.0, new TrapezoidProfile.State(0,0), new TrapezoidProfile.State(5,0));
         
+        this.motorCtrl.setReference(ExtendSetPoint.position, ControlType.kPosition);
     }
 
     @Override
