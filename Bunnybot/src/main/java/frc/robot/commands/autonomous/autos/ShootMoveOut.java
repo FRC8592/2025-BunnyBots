@@ -14,7 +14,7 @@ public class ShootMoveOut extends AutoCommand {
    public ShootMoveOut(String color, Launcher launcher, Indexer indexer){
       super(
         
-       new FollowPathCommand(getChoreoTrajectory("Shoot"), Suppliers.isRedAlliance, "")
+       new FollowPathCommand(getChoreoTrajectory("RA_RedShoot"), Suppliers.isRedAlliance, "")
        .andThen(launcher.setLauncherCommand(
         0.44, 0.30   // bottom %, top %
     ).withTimeout(2.0))  // spin up time (tune this)
@@ -33,7 +33,7 @@ public class ShootMoveOut extends AutoCommand {
     ).andThen(
     // 5) Drive out of the zone
 
-       new FollowPathCommand(getChoreoTrajectory("RA_MoveOut"), Suppliers.isRedAlliance, "")));
+       new FollowPathCommand(getChoreoTrajectory("RA_RedMoveOut"), Suppliers.isRedAlliance, "")));
 
 
    }

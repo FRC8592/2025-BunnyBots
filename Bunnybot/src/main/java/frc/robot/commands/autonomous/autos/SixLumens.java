@@ -10,7 +10,7 @@ import frc.robot.subsystems.Indexer;
 
 
 public class SixLumens extends AutoCommand {
-   public SixLumens(String color, Launcher launcher, Indexer indexer){
+  public SixLumens(String color, Launcher launcher, Indexer indexer){
       super(
         new FollowPathCommand(getChoreoTrajectory("Shoot"), Suppliers.isRedAlliance, "")
         .andThen(launcher.setLauncherCommand(
