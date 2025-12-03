@@ -1,12 +1,15 @@
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import frc.robot.subsystems.swerve.TunerConstants;
-import static edu.wpi.first.units.Units.*;
 
 
 public final class Constants {
@@ -144,6 +147,10 @@ public final class INDEXER {
     public static final int INDEXER_BEAM_BREAK_1_PORT = 0;
     public static final int INDEXER_BEAM_BREAK_2_PORT = 1;
     public static final int INDEXER_BEAM_BREAK_3_PORT = 2;
+}
+
+public final class LAUNCHER {
+    public static final String LOG_PATH = SHARED.LOG_FOLDER + "/Launcher/";
 }
 
 public static class INTAKE{

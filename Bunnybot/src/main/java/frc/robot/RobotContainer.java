@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.nio.file.OpenOption;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,6 +43,9 @@ public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
         CONTROLLERS.DRIVER_PORT
     );
+    private static final CommandXboxController operatorController = new CommandXboxController(
+        CONTROLLERS.OPERATOR_PORT
+    );
     
     private final Telemetry logger = new Telemetry(SWERVE.MAX_SPEED);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -54,18 +58,16 @@ public class RobotContainer {
     private final Intake intake;
     private final Launcher launcher;
     private final Scoring scoring;
-
-    private double percentDashboard1;
-    private double percentDashboard2;
+    
     
     private final Trigger RESET_HEADING = driverController.back();
     // private final Trigger SLOW_MODE = driverController.rightBumper();
-    private final Trigger LAUNCH = driverController.rightTrigger();
-    private Trigger RUN = driverController.rightBumper();
-    private final Trigger TESTINGINTAKEBOTTOMBUTTON = driverController.leftBumper();
+    private final Trigger LAUNCH = operatorController.rightTrigger();
+    private Trigger RUN = operatorController.rightBumper();
+    private final Trigger TESTINGINTAKEBOTTOMBUTTON = operatorController.leftBumper();
 
     //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGINTAKESIDEBUTTON = driverController.leftTrigger();
+    private final Trigger TESTINGINTAKESIDEBUTTON = operatorController.leftTrigger();
     
 
     /**
@@ -109,28 +111,26 @@ public class RobotContainer {
         // SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
                 //  .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
 
+        // Reset to (0,0) 
         RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
 
-        double percentDerived1 = SmartDashboard.getNumber("bottom_launcher_motor",percentDashboard1);
-        double percentDerived2 = SmartDashboard.getNumber("top_launcher_motor",percentDashboard2);
-        //Try and print the values
-        System.out.println("PercentDashboard1 " + percentDashboard1);
-        System.out.println("PercentDashboard2 " + percentDashboard2);
-        LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))).onFalse(launcher.stopLauncherCommand());
+
+        LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
 
         RUN.onTrue(
           new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(.5), Set.of(indexer))
         ).onFalse(indexer.stopMotorCommand());
 
-        driverController.a().onTrue(
+        operatorController.a().onTrue(
             new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(0, .5), Set.of(indexer))
         ).onFalse(indexer.stopMotorCommand(0));
 
-        driverController.b().onTrue(
+        operatorController.b().onTrue(
             new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(2, .5), Set.of(indexer))
         ).onFalse(indexer.stopMotorCommand(2));
 
-        driverController.y().onTrue(
+        operatorController.y().onTrue(
             new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(3, .5), Set.of(indexer))
         ).onFalse(indexer.stopMotorCommand(3));
 
