@@ -9,7 +9,6 @@ import frc.robot.Constants.CAN;
 import frc.robot.Constants.INDEXER;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
-import frc.robot.helpers.motor.spark.SparkFlexMotor;
 import frc.robot.helpers.motor.spark.SparkMaxMotor;
 
 public class Indexer extends SubsystemBase {
@@ -25,7 +24,7 @@ public class Indexer extends SubsystemBase {
         motors[0].setIdleMode(IdleMode.kBrake);
 
         motors[1].setIdleMode(IdleMode.kBrake);
-        // motors[1].setFollowerTo(motors[0]); //throws an error
+        motors[1].setFollowerTo(motors[0], false);
 
         motors[2].setIdleMode(IdleMode.kBrake);
         motors[3].setIdleMode(IdleMode.kBrake);
@@ -33,8 +32,6 @@ public class Indexer extends SubsystemBase {
         sensors[0] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_1_PORT);
         sensors[1] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_2_PORT);
         sensors[2] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_3_PORT);
-
-        periodic();
         
     }
 
@@ -132,7 +129,6 @@ public class Indexer extends SubsystemBase {
      * @return command to run motors at specified percentage
      */
     public Command setMotorPercentOutputCommand(double percent) {
-        System.out.println("command runs");
         return this.run(()->
             runAll(percent)
         ).finallyDo(() -> stopAll());
@@ -146,7 +142,6 @@ public class Indexer extends SubsystemBase {
      * @return Command to run given motor at given percentage
      */
     public Command setMotorPercentOutputCommand(int motorPos, double percent){
-        System.out.println("individual command runs");
         return this.run(()->
             run(motorPos, percent)
         ).finallyDo(() -> stop(motorPos));
@@ -173,41 +168,101 @@ public class Indexer extends SubsystemBase {
         );
     }
 
-    public Command autoIndexCommand() {
-        return this.run(() -> {
-            int c = getBallCount();
-            System.out.println("Running auto indexer command");
-            switch (c) {
-            case 0:
-                run(0, 1);
-                run(2, 1);
-                stop(3);
-                break;
+    // public void autoIndex() {
+    //     int c = getBallCount();
+    //     switch (c) {
+    //     case 0:
+    //         run(0, 1);
+    //         run(2, 1);
+    //         stop(3);
+    //         break;
+
+    //     case 1:
+    //         run(0, 1);
+    //         run(2, 1);
+    //         stop(3);
+    //         break;
+
+    //     case 2:
+    //         run(0, 1);
+    //         stop(2);
+    //         stop(3);
+    //         break;
+
+    //     case 3:
+    //         stop(0);
+    //         stop(2);
+    //         break;
+    //     }
+        
+    // }
+
+    public void autoIndex() {
+        boolean s1 = hasBall(1); //shooter
+        boolean s2 = hasBall(2); //middle
+        boolean s3 = hasBall(3); //intake/back
     
-            case 1:
-                run(0, 1);
-                run(2, 1);
-                stop(3);
-                break;
+        int n = (s1 ? 1 : 0) + (s2 ? 1 : 0) + (s3 ? 1 : 0);
     
-            case 2:
-                run(0, 1);
-                stop(2);
-                stop(3);
-                break;
+        //state based on ball count
+        boolean d1 = n >= 1;
+        boolean d2 = n >= 2;
+        boolean d3 = n == 3;
     
-            case 3:
-                stop(0);
-                stop(2);
-                break;
+        //if s1 should be filled but isn't
+        if (d1 && !s1) {
+            if (s2) {
+                // Move middle → shooter
+                run(2, 1.0);
+                run(3, 1.0); 
+                stop(0);      //don’t intake while shifting forward
+                return;
             }
-        });
+            if (!s2 && s3) {
+                //ball in s2 first
+                run(0, 1.0); 
+                run(2, 1.0); 
+                stop(3);      
+                return;
+            }
+        }
+    
+        //if s2 should be filled but isn't
+        if (d2 && !s2) {
+            if (s3) {
+                run(0, 1.0);
+                run(2, 1.0);
+                stop(3);
+                return;
+            }
+        }
+    
+        // if s3 should be filled but isn't
+        if (d3 && !s3) {
+            //need 3 balls but don't have s3 filled
+            run(0, 1.0);
+            stop(2);
+            stop(3);
+            return;
+        }
+    
+        // if we don't need all slots full (n < 3), safe to run intake only only if s3 is empty 
+        if (n < 3 && !s3) {
+            run(0, 1.0);
+            stop(2);
+            stop(3);
+            return;
+        }
+    
+        //all locations full
+        stopAll();
     }
+    
     
 
     @Override
     public void periodic() {
-        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount());
+        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount()); //these aren't logging properly
         Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
         Logger.recordOutput(INDEXER.LOG_PATH + "3 balls", full());
 

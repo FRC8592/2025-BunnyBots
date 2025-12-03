@@ -68,12 +68,12 @@ public class RobotContainer {
         launcher = new Launcher();
         indexer = new Indexer();
         intake = new Intake();
+        scoring  = new Scoring(intake,indexer,launcher);
 
         configureBindings();
         configureDefaults();
         
         AutoManager.prepare();
-        scoring  = new Scoring(intake,indexer,launcher);
     }
 
     /**
@@ -90,7 +90,10 @@ public class RobotContainer {
             ));
         }).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
-        setDefaultCommand(indexer, indexer.run(() -> indexer.autoIndexCommand()));
+        indexer.setDefaultCommand(
+            new RunCommand(() -> indexer.autoIndex(), indexer)
+        );
+
     }
 
     /**

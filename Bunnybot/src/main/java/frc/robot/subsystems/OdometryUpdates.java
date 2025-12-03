@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,10 +40,9 @@ public class OdometryUpdates extends SubsystemBase {
     public OdometryUpdates(Vision vision1, Swerve swerve) {
         this.swerve = swerve;
         this.vision1 = vision1;
-
-        periodic();
     }
 
+    @Override
     public void periodic() {
         runVision(vision1);
     }
@@ -80,13 +80,25 @@ public class OdometryUpdates extends SubsystemBase {
             averageY += rawYData[i];
             averageTheta += rawThetaData[i];
         }
-        //Divide by the length of the array in order to derive average value
-        averageX /= VISION.POSE_AVERAGER_VALUE;
-        averageY /= VISION.POSE_AVERAGER_VALUE;
-        averageTheta /= VISION.POSE_AVERAGER_VALUE;
-        //Pose2d requires a Rotation2d object, so we create one based on the averageTheta value
-        Rotation2d averageThetaRotation = new Rotation2d(averageTheta);
-        return new Pose2d(averageX, averageY, averageThetaRotation);
+
+        //logic is incorrect because angular space is circular, wraps at -180 to 0
+        // //Divide by the length of the array in order to derive average value
+        // averageX /= VISION.POSE_AVERAGER_VALUE;
+        // averageY /= VISION.POSE_AVERAGER_VALUE;
+        // averageTheta /= VISION.POSE_AVERAGER_VALUE;
+        // //Pose2d requires a Rotation2d object, so we create one based on the averageTheta value
+        // Rotation2d averageThetaRotation = new Rotation2d(averageTheta);
+
+        double sumSin = 0;
+        double sumCos = 0;
+        for (double a : rawThetaData) {
+            sumSin += Math.sin(a);
+            sumCos += Math.cos(a);
+        }
+        double avgTheta = Math.atan2(sumSin, sumCos);
+
+        return new Pose2d(averageX, averageY, new Rotation2d(avgTheta));
+        
     }
 
     public void runVision(Vision vision){
@@ -107,23 +119,21 @@ public class OdometryUpdates extends SubsystemBase {
                 if ((vision.getTargets().size() == 1)){
                     Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/DistanceMeters", vision.getTargets().get(0).bestCameraToTarget.getX());
                 }
-                }
 
                 if ((vision.getTargets().size() > 1) || 
-                   ((Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY) && 
+                    ((Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY) && 
                     (vision.getTargets().size() > 0) && 
                     (vision.getTargets().get(0).bestCameraToTarget.getX() < VISION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE))) 
-                        { 
-                            System.out.println("This is running");
-                            if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
-                                initialPose = robotPoseAverager(robotPose);
-                                swerve.setKnownOdometryPose(initialPose);
-                            } else {
-                                System.out.println("else is running");
-                                swerve.addVisionMeasurement(robotPosition, timeStamp);
-                            }
+                    { 
+                        if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
+                            initialPose = robotPoseAverager(robotPose);
+                            swerve.setKnownOdometryPose(initialPose);
+                        } else {
+                            swerve.addVisionMeasurement(robotPosition, timeStamp);
                         }
-    
+                    }
+                
+                }
             }
 
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/TagsInView1", vision1.getTargets().size());
