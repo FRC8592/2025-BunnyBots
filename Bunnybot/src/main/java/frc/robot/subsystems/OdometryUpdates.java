@@ -39,6 +39,8 @@ public class OdometryUpdates extends SubsystemBase {
     public OdometryUpdates(Vision vision1, Swerve swerve) {
         this.swerve = swerve;
         this.vision1 = vision1;
+
+        periodic();
     }
 
     public void periodic() {
