@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.nio.file.OpenOption;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +15,7 @@ import frc.robot.subsystems.swerve.TunerConstants;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.Constants.*;
@@ -31,6 +33,9 @@ public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
         CONTROLLERS.DRIVER_PORT
     );
+    private static final CommandGenericHID operatorController = new CommandXboxController(
+        CONTROLLERS.OPERATOR_PORT
+    );
     
     private final Telemetry logger = new Telemetry(SWERVE.MAX_SPEED);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -44,17 +49,15 @@ public class RobotContainer {
     private final Launcher launcher;
     private final Scoring scoring;
 
-    private double percentDashboard1;
-    private double percentDashboard2;
     
     private final Trigger RESET_HEADING = driverController.back();
     // private final Trigger SLOW_MODE = driverController.rightBumper();
-    private final Trigger LAUNCH = driverController.rightTrigger();
-    private Trigger RUN = driverController.rightBumper();
-    private final Trigger TESTINGINTAKEBOTTOMBUTTON = driverController.leftBumper();
+    private final Trigger LAUNCH = operatorController.button(1);
+    //private Trigger RUN = operatorController.rightBumper();
+    private final Trigger TESTINGINTAKEBOTTOMBUTTON = operatorController.button(2);
 
     //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGINTAKESIDEBUTTON = driverController.leftTrigger();
+    private final Trigger TESTINGINTAKESIDEBUTTON = operatorController.button(3);
     
 
     /**
@@ -103,14 +106,13 @@ public class RobotContainer {
         // SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
                 //  .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
 
+        // Reset to (0,0) 
         RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
 
-        double percentDerived1 = SmartDashboard.getNumber("bottom_launcher_motor",percentDashboard1);
-        double percentDerived2 = SmartDashboard.getNumber("top_launcher_motor",percentDashboard2);
-        //Try and print the values
-        System.out.println("PercentDashboard1 " + percentDashboard1);
-        System.out.println("PercentDashboard2 " + percentDashboard2);
-        LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))).onFalse(launcher.stopLauncherCommand());
+
+        LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
+
 
         TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
         //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
