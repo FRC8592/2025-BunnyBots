@@ -39,6 +39,8 @@ public class OdometryUpdates extends SubsystemBase {
     public OdometryUpdates(Vision vision1, Swerve swerve) {
         this.swerve = swerve;
         this.vision1 = vision1;
+
+        periodic();
     }
 
     public void periodic() {
@@ -126,7 +128,7 @@ public class OdometryUpdates extends SubsystemBase {
 
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/TagsInView1", vision1.getTargets().size());
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/VisionPose1", robotPosition);
-            // Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/OdometryPose", swerve.getCurrentPosition());
+            Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/OdometryPose", swerve.getCurrentOdometryPosition());
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/AmbiguityRatio1", ambiguity);
             Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/InitialPose", initialPose);
             

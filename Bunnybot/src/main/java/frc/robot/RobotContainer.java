@@ -8,8 +8,6 @@ import java.nio.file.OpenOption;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.Telemetry;
@@ -20,19 +18,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
-
-import frc.robot.Constants.CONTROLLERS;
 import frc.robot.Constants.*;
 import frc.robot.commands.autonomous.AutoManager;
 import frc.robot.subsystems.*;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -103,6 +92,8 @@ public class RobotContainer {
                 -driverController.getRightX()
             ));
         }).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        setDefaultCommand(indexer, indexer.run(() -> indexer.autoIndexCommand()));
     }
 
     /**

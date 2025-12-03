@@ -16,9 +16,6 @@ import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.spark.SparkFlexMotor;
 import frc.robot.helpers.PIDProfile;
 
-
-
-
 public class Intake extends SubsystemBase{
    private SparkFlexMotor IntakeMotorSide;
    private SparkFlexMotor IntakeMotorBottom;
@@ -48,7 +45,7 @@ public class Intake extends SubsystemBase{
        IntakeMotorBottom = new SparkFlexMotor(CAN.INTAKE_MOTOR_BOTTOM_CAN_ID,true);
        motionProfile =  new TrapezoidProfile(new TrapezoidProfile.Constraints(INTAKE.PIVOT_INTAKE_MAX_VELOCITY,INTAKE.PIVOT_INTAKE_MAX_ACCELERATION));
        State ExtendSetPoint = motionProfile.calculate(5.0, new TrapezoidProfile.State(0,0), new TrapezoidProfile.State(5,0));
-       PivotIntakeMotor.setReference(ExtendSetPoint.position, ControlType.kPosition);
+    //    PivotIntakeMotor.setReference(ExtendSetPoint.position, ControlType.kPosition);
 
 
 
@@ -66,7 +63,7 @@ public class Intake extends SubsystemBase{
 
         IntakeMotorBottom.setFollowerTo(IntakeMotorSide);
 
-         PivotIntakeMotor.withGains(PositionPID);
+        //  PivotIntakeMotor.withGains(PositionPID);
         PivotIntakeMotor.configureMAXMotion(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY, INTAKE.PIVOT_INTAKE_TOLERANCE, PositionPID);
 
 

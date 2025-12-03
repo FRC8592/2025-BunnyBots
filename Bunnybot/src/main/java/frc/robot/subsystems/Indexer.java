@@ -10,21 +10,22 @@ import frc.robot.Constants.INDEXER;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
 import frc.robot.helpers.motor.spark.SparkFlexMotor;
+import frc.robot.helpers.motor.spark.SparkMaxMotor;
 
 public class Indexer extends SubsystemBase {
     DigitalInput[] sensors = new DigitalInput[3];
     NewtonMotor[] motors = new NewtonMotor[4];
     
     public Indexer() {
-        motors[0] = new SparkFlexMotor(CAN.INDEXER_MOTOR1_CAN_ID, false);
-        motors[1] = new SparkFlexMotor(CAN.INDEXER_MOTOR2_CAN_ID, false);
-        motors[2] = new SparkFlexMotor(CAN.INDEXER_MOTOR3_CAN_ID, false);
-        motors[3] = new SparkFlexMotor(CAN.INDEXER_MOTOR4_CAN_ID, false);
+        motors[0] = new SparkMaxMotor(CAN.INDEXER_MOTOR1_CAN_ID, true);
+        motors[1] = new SparkMaxMotor(CAN.INDEXER_MOTOR2_CAN_ID, true);
+        motors[2] = new SparkMaxMotor(CAN.INDEXER_MOTOR3_CAN_ID, true);
+        motors[3] = new SparkMaxMotor(CAN.INDEXER_MOTOR4_CAN_ID, true);
 
         motors[0].setIdleMode(IdleMode.kBrake);
 
         motors[1].setIdleMode(IdleMode.kBrake);
-        motors[1].setFollowerTo(motors[0]);
+        // motors[1].setFollowerTo(motors[0]); //throws an error
 
         motors[2].setIdleMode(IdleMode.kBrake);
         motors[3].setIdleMode(IdleMode.kBrake);
@@ -134,7 +135,7 @@ public class Indexer extends SubsystemBase {
         System.out.println("command runs");
         return this.run(()->
             runAll(percent)
-        );
+        ).finallyDo(() -> stopAll());
         
     }
 
@@ -148,7 +149,7 @@ public class Indexer extends SubsystemBase {
         System.out.println("individual command runs");
         return this.run(()->
             run(motorPos, percent)
-        );
+        ).finallyDo(() -> stop(motorPos));
     }
 
     /**
@@ -172,42 +173,47 @@ public class Indexer extends SubsystemBase {
         );
     }
 
-    @Override
-    public void periodic() {
-        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount());
-        Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
-
-        Logger.recordOutput(INDEXER.LOG_PATH + "indexerFrontHasBall", hasBall(1));
-        Logger.recordOutput(INDEXER.LOG_PATH + "indexerMiddleHasBall", hasBall(2));
-        Logger.recordOutput(INDEXER.LOG_PATH + "indexerBackHasBall", hasBall(3));
-
-        int count = getBallCount();
-
-        switch(count) {
-
+    public Command autoIndexCommand() {
+        return this.run(() -> {
+            int c = getBallCount();
+            System.out.println("Running auto indexer command");
+            switch (c) {
             case 0:
-                run(0, 1);
-                run(2, 1); 
-                stop(3);
-                break;
-
-            case 1: //TODO: possibly split case
                 run(0, 1);
                 run(2, 1);
                 stop(3);
                 break;
-
+    
+            case 1:
+                run(0, 1);
+                run(2, 1);
+                stop(3);
+                break;
+    
             case 2:
                 run(0, 1);
                 stop(2);
-                stop(3);                
+                stop(3);
                 break;
-
+    
             case 3:
                 stop(0);
                 stop(2);
                 break;
-        }
+            }
+        });
+    }
+    
+
+    @Override
+    public void periodic() {
+        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount());
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
+        Logger.recordOutput(INDEXER.LOG_PATH + "3 balls", full());
+
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerFrontHasBall", hasBall(1));
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerMiddleHasBall", hasBall(2));
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerBackHasBall", hasBall(3));
     }
 
 }
