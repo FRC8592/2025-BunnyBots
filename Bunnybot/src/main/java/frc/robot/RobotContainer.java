@@ -17,6 +17,7 @@ import frc.robot.subsystems.swerve.TunerConstants;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
 
@@ -43,7 +44,7 @@ public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
         CONTROLLERS.DRIVER_PORT
     );
-    private static final CommandXboxController operatorController = new CommandXboxController(
+    private static final CommandGenericHID operatorController = new CommandXboxController(
         CONTROLLERS.OPERATOR_PORT
     );
     
@@ -58,16 +59,16 @@ public class RobotContainer {
     private final Intake intake;
     private final Launcher launcher;
     private final Scoring scoring;
-    
+
     
     private final Trigger RESET_HEADING = driverController.back();
     // private final Trigger SLOW_MODE = driverController.rightBumper();
-    private final Trigger LAUNCH = operatorController.rightTrigger();
-    private Trigger RUN = operatorController.rightBumper();
-    private final Trigger TESTINGINTAKEBOTTOMBUTTON = operatorController.leftBumper();
+    private final Trigger LAUNCH = operatorController.button(1);
+    //private Trigger RUN = operatorController.rightBumper();
+    private final Trigger TESTINGINTAKEBOTTOMBUTTON = operatorController.button(2);
 
     //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGINTAKESIDEBUTTON = operatorController.leftTrigger();
+    private final Trigger TESTINGINTAKESIDEBUTTON = operatorController.button(3);
     
 
     /**
@@ -118,21 +119,6 @@ public class RobotContainer {
         LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))
         ).onFalse(launcher.stopLauncherCommand());
 
-        RUN.onTrue(
-          new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(.5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand());
-
-        operatorController.a().onTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(0, .5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand(0));
-
-        operatorController.b().onTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(2, .5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand(2));
-
-        operatorController.y().onTrue(
-            new DeferredCommand(() -> indexer.setMotorPercentOutputCommand(3, .5), Set.of(indexer))
-        ).onFalse(indexer.stopMotorCommand(3));
 
         TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
         //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
