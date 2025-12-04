@@ -10,13 +10,13 @@ import frc.robot.subsystems.Indexer;
 
 
 
-public class ShootMoveOut extends AutoCommand {
-   public ShootMoveOut(String color, Launcher launcher, Indexer indexer){
+public class RedNFShootLowMove extends AutoCommand {
+   public RedNFShootLowMove(String color, Launcher launcher, Indexer indexer){
       super(
         
        new FollowPathCommand(getChoreoTrajectory("RA_RedShoot"), Suppliers.isRedAlliance, "")
        .andThen(launcher.setLauncherCommand(
-        0.44, 0.30   // bottom %, top %
+        0.23, 0.23   // bottom %, top % //CHANGE THIS FOR LOW GOAL
     ).withTimeout(2.0))  // spin up time (tune this)
     .andThen(
         launcher
