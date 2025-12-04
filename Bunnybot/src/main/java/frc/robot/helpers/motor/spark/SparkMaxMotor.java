@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import frc.robot.helpers.motor.MotorConstants;
 
-public class SparkMaxMotor extends SparkBaseMotor<SparkMax, SparkMaxConfig> {
+public class SparkMaxMotor extends ThisIsSparkBaseMotor<SparkMax, SparkMaxConfig> {
     public SparkMaxMotor(int motorID) {
         this(motorID, false);
     }

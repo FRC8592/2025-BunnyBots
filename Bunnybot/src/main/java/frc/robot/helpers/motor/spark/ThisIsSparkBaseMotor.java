@@ -12,13 +12,13 @@ import frc.robot.helpers.Utils;
 import frc.robot.helpers.motor.MotorConstants;
 import frc.robot.helpers.motor.NewtonMotor;
 
-public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseConfig> extends NewtonMotor {
+public abstract class ThisIsSparkBaseMotor<M extends SparkBase, C extends SparkBaseConfig> extends NewtonMotor {
     protected M motor;
     protected SparkClosedLoopController motorCtrl;
     protected RelativeEncoder encoder;
     protected C config;
 
-    protected SparkBaseMotor(M motor, C config, boolean inverted, MotorConstants constants) {
+    protected ThisIsSparkBaseMotor(M motor, C config, boolean inverted, MotorConstants constants) {
         super(motor.getDeviceId(), inverted, constants);
         this.motor = motor;
         this.motorCtrl = motor.getClosedLoopController();
@@ -117,7 +117,7 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
             );
         }
         
-        this.motorCtrl.setReference(desiredRotations, ControlType.kMAXMotionPositionControl, getSlot(pidSlot));
+        this.motorCtrl.setReference(desiredRotations, ControlType.kPosition, getSlot(pidSlot));
     }
 
     @Override

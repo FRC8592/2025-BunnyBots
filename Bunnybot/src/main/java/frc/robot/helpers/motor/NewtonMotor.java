@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import frc.robot.helpers.PIDProfile;
 import frc.robot.helpers.motor.talonfx.TalonFXMotor;
-import frc.robot.helpers.motor.spark.SparkFlexMotor;
+import frc.robot.helpers.motor.spark.ThisIsSparkFlexMotor;
 import frc.robot.helpers.motor.spark.SparkMaxMotor;
 
 public abstract class NewtonMotor {
@@ -129,8 +129,8 @@ public abstract class NewtonMotor {
         return (TalonFXMotor)this;
     }
 
-    public SparkFlexMotor getAsSparkFlex(){
-        return (SparkFlexMotor)this;
+    public ThisIsSparkFlexMotor getAsSparkFlex(){
+        return (ThisIsSparkFlexMotor)this;
     }
 
     public SparkMaxMotor getAsSparkMax(){

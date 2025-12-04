@@ -6,12 +6,12 @@ import com.revrobotics.spark.config.SparkFlexConfig;
 
 import frc.robot.helpers.motor.MotorConstants;
 
-public class SparkFlexMotor extends SparkBaseMotor<SparkFlex, SparkFlexConfig> {
-    public SparkFlexMotor(int motorID) {
+public class ThisIsSparkFlexMotor extends ThisIsSparkBaseMotor<SparkFlex, SparkFlexConfig> {
+    public ThisIsSparkFlexMotor(int motorID) {
         this(motorID, false);
     }
 
-    public SparkFlexMotor(int motorID, boolean inverted) {
+    public ThisIsSparkFlexMotor(int motorID, boolean inverted) {
         super(
             new SparkFlex(motorID, MotorType.kBrushless), 
             new SparkFlexConfig(),

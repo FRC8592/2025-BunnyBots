@@ -117,10 +117,10 @@ public class RobotContainer {
 
 
         //TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
-        TESTINGINTAKEDEPLOYPIVOTBUTTON.onTrue(new DeferredCommand(() -> intake.setToOutPositionCommand(10), Set.of(intake))).onFalse(intake.stopPivotCommand());
+        TESTINGINTAKEDEPLOYPIVOTBUTTON.onTrue(new DeferredCommand(() -> intake.setToPositionCommand(16), Set.of(intake))).onFalse(intake.stop());
         //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
         //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
-        TESTINGINTAKEDEPLOYPIVOTBUTTON.onTrue(new DeferredCommand(() -> intake.setToInPositionCommand(), Set.of(intake))).onFalse(intake.stopPivotCommand());
+        TESTINGINTAKEDEPLOYPIVOTBUTTON.onTrue(new DeferredCommand(() -> intake.setToPositionCommand(10), Set.of(intake))).onFalse(intake.stopPivotCommand());
     }
 
     /**

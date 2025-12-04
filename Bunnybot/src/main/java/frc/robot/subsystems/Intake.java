@@ -8,21 +8,32 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.SparkBase.*;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;   
 import frc.robot.Constants.*;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
-import frc.robot.helpers.motor.spark.SparkFlexMotor;
+import frc.robot.helpers.motor.spark.ThisIsSparkFlexMotor;
 import frc.robot.helpers.PIDProfile;
 
 public class Intake extends SubsystemBase{
-   private SparkFlexMotor IntakeMotorSide;
-   private SparkFlexMotor IntakeMotorBottom;
+   private SparkFlex IntakeMotorSide;
+   private SparkFlex IntakeMotorBottom;
    //This needs to be configured as a Kraken Motor in order to utilize MotionMagic, found in the TalonFX Class
-   private SparkFlexMotor PivotIntakeMotor;
+   private SparkFlex PivotIntakeMotor;
+   private SparkBase PivotMotor;
+   private SparkBaseConfig PivotIntakeMotorConfig;
    //If neos are used, this is necessary for PID Control
    //private SparkClosedLoopController PivotIntakeControl;
    //private SparkFlexConfig MotorConfig;
@@ -42,11 +53,10 @@ public class Intake extends SubsystemBase{
         PositionPID.setPID(INTAKE.INTAKE_POSITION_P, INTAKE.INTAKE_POSITION_I, INTAKE.INTAKE_POSITION_D);
        //Declaring both motors based on CAN ID from CanBus, and running them in the normal direction
        //These WILL be changed to Kraken motors later, but for prototyping purposes we are utilizing neo motors
-       IntakeMotorSide = new SparkFlexMotor(CAN.INTAKE_MOTOR_SIDE_CAN_ID,true);
-       PivotIntakeMotor = new SparkFlexMotor(CAN.PIVOT_INTAKE_MOTOR_CAN_ID,true);
-       IntakeMotorBottom = new SparkFlexMotor(CAN.INTAKE_MOTOR_BOTTOM_CAN_ID,true);
-
-
+       IntakeMotorSide = new SparkFlex(CAN.INTAKE_MOTOR_SIDE_CAN_ID,MotorType.kBrushless);
+       PivotMotor = new SparkFlex(CAN.PIVOT_INTAKE_MOTOR_CAN_ID, MotorType.kBrushless);
+       IntakeMotorBottom = new SparkFlex(CAN.INTAKE_MOTOR_BOTTOM_CAN_ID,MotorType.kBrushless);
+       //SparkFlexConfig config = new SparkFlexConfig().closedLoop.pid(INTAKE.INTAKE_POSITION_P, INTAKE.INTAKE_POSITION_I, INTAKE.INTAKE_POSITION_D); 
     //62.832 motor rotations, fully deployed
     //Biggest force fighting, highest constant, 41.284
     // Where we start fighting gravity, 14.205
@@ -56,19 +66,22 @@ public class Intake extends SubsystemBase{
 
 
        //Setting the idle(normal/resting) state
-       IntakeMotorSide.setIdleMode(IdleMode.kBrake);
-       PivotIntakeMotor.setIdleMode(IdleMode.kCoast);
-       IntakeMotorBottom.setIdleMode(IdleMode.kBrake);
+       //IntakeMotorSide.setIdleMode(IdleMode.kBrake);
+       ClosedLoopConfig config = new ClosedLoopConfig();
+        config = new SparkFlexConfig().closedLoop.pid(5,0,0.1);
+        PivotIntakeMotorConfig.apply(config);
+       PivotIntakeMotor.configure(PivotIntakeMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+       //IntakeMotorBottom.setIdleMode(IdleMode.kBrake);
         //Setting current limits on the motors to prevent burn out and overheating
 
-        IntakeMotorSide.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
-        PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
-        IntakeMotorBottom.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
+        // IntakeMotorSide.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
+        // PivotIntakeMotor.setCurrentLimit(INTAKE.PIVOT_INTAKE_CURRENT_LIMIT);
+        // IntakeMotorBottom.setCurrentLimit(INTAKE.INTAKE_CURRENT_LIMIT);
 
-        IntakeMotorBottom.setFollowerTo(IntakeMotorSide);
+        // IntakeMotorBottom.setFollowerTo(IntakeMotorSide);
 
-        //  PivotIntakeMotor.withGains(PositionPID);
-        PivotIntakeMotor.configureMAXMotion(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY, INTAKE.PIVOT_INTAKE_TOLERANCE, PositionPID);
+        // PivotIntakeMotor.withGains(PositionPID);
+        //PivotIntakeMotor.configureMAXMotion(INTAKE.PIVOT_INTAKE_MAX_ACCELERATION, INTAKE.PIVOT_INTAKE_MAX_VELOCITY, INTAKE.PIVOT_INTAKE_TOLERANCE, PositionPID);
    }
 
 
@@ -81,31 +94,31 @@ public class Intake extends SubsystemBase{
        motor.setPercentOutput(0);
    }
 
-   public SparkFlexMotor getPivotMotor(){
-    return PivotIntakeMotor;
-   }
+//    public ThisIsSparkFlexMotor getPivotMotor(){
+//     return PivotIntakeMotor;
+//    }
 
 
-    public Command setIntakeSideCommand(double percent){
-        return this.run(() -> setPercentOut(IntakeMotorSide, percent));
-    }
+    // public Command setIntakeSideCommand(double percent){
+    //     return this.run(() -> setPercentOut(IntakeMotorSide, percent));
+    // }
     
-    public Command setIntakeBottomCommand(double percent){
-        return this.run(() -> setPercentOut(IntakeMotorBottom, percent));
-    }
+    // public Command setIntakeBottomCommand(double percent){
+    //     return this.run(() -> setPercentOut(IntakeMotorBottom, percent));
+    // }
 
   
-   public Command stopIntakeSideCommand(){
-    return this.runOnce(() -> stop(IntakeMotorSide));
-   }
+//    public Command stopIntakeSideCommand(){
+//     return this.runOnce(() -> stop(IntakeMotorSide));
+//    }
 
-   public Command stopIntakeBottomCommand(){
-    return this.runOnce(() -> stop(IntakeMotorBottom));
-   }
+//    public Command stopIntakeBottomCommand(){
+//     return this.runOnce(() -> stop(IntakeMotorBottom));
+//    }
 
-   public Command stopPivotCommand(){
-    return this.runOnce(() -> stop(PivotIntakeMotor));
-   }
+//    public Command stopPivotCommand(){
+//     return this.runOnce(() -> stop(PivotIntakeMotor));
+//    }
 
    public double rotationstoDegrees(double motorRotations){
     return motorRotations * 1/(INTAKE.INTAKE_DEGREES_TO_MOTOR_ROTATIONS);
@@ -117,11 +130,18 @@ public class Intake extends SubsystemBase{
 
    //This is for the intake motor, runs the intake motor to a certain number of motor rotations
    public void runIntakeToPosition(double desiredPosition){
-    double currentPosition =  IntakeMotorSide.getRotations();
-    while(Math.abs(currentPosition - IntakeMotorSide.getRotations()) < 0.1){
-        setPercentOut(IntakeMotorSide,-0.7);
+    double speed = 0;
+    double currentPosition =  PivotIntakeMotor.getEncoder().getPosition();
+    if(currentPosition < desiredPosition){
+        speed = 0.2;
     }
-    stop(IntakeMotorSide);
+    else if(desiredPosition < currentPosition){
+        speed = -0.2;
+    }
+    while(Math.abs(currentPosition - PivotIntakeMotor.getEncoder().getPosition()) > 0.1){
+        PivotIntakeMotor.set(speed);
+    }
+    PivotIntakeMotor.set(0);
    }
    //Command version of the runIntakeToPosition method
    public Command runIntakeToPositionCommand(){
@@ -129,31 +149,28 @@ public class Intake extends SubsystemBase{
    }
 
 
-   public Command setToOutPositionCommand(double position){
-    return this.run(()-> PivotIntakeMotor.deploy(position, PositionPID));
-   }
-   public Command setToInPositionCommand(){
-    return this.run(() -> PivotIntakeMotor.stow());
+   public Command setToPositionCommand(double position){
+    return this.run(()-> runIntakeToPosition(position));
    }
 
-   public Command runIntakeOnVoltageCommand(){
-    return this.run(()-> PivotIntakeMotor.setVoltage(SmartDashboard.getNumber("Pivot_Motor_Intake_Voltage", 0),0));
-   }
+//    public Command runIntakeOnVoltageCommand(){
+//     return this.run(()-> PivotIntakeMotor.setVoltage(SmartDashboard.getNumber("Pivot_Motor_Intake_Voltage", 0),0));
+//    }
 
-    public void deploy(double setPosition, PIDProfile gains){
-            // ArmFeedforward feedforward = new ArmFeedforward(gains.kS, gains.kG, gains.kV, gains.kA);
-            // this.motor.setVoltage(feedforward.calculate(10,5, 10));
-        // TrapezoidProfile motionProfile =  new TrapezoidProfile(new TrapezoidProfile.Constraints(gains.getMaxAcceleration(), gains.getMaxVelocity()));
-        // State ExtendSetPoint = motionProfile.calculate(5.0, new TrapezoidProfile.State(0,0), new TrapezoidProfile.State(10,0));
-        PivotIntakeMotor.setReference(13, ControlType.kPosition);
-    }
-    public void stow(){
-        PivotIntakeMotor.setReference(10, ControlType.kPosition);
-    }
+    // public void deploy(double setPosition, PIDProfile gains){
+    //         // ArmFeedforward feedforward = new ArmFeedforward(gains.kS, gains.kG, gains.kV, gains.kA);
+    //         // this.motor.setVoltage(feedforward.calculate(10,5, 10));
+    //     // TrapezoidProfile motionProfile =  new TrapezoidProfile(new TrapezoidProfile.Constraints(gains.getMaxAcceleration(), gains.getMaxVelocity()));
+    //     // State ExtendSetPoint = motionProfile.calculate(5.0, new TrapezoidProfile.State(0,0), new TrapezoidProfile.State(10,0));
+    //     PivotIntakeMotor.setReference(13, ControlType.kPosition);
+    // }
+    // public void stow(){
+    //     PivotIntakeMotor.setReference(10, ControlType.kPosition);
+    // }
  
    @Override
    public void periodic(){
-    Logger.recordOutput(INTAKE.LOG_PATH + "Pivot Motor Rotations", PivotIntakeMotor.getRotations());
+    Logger.recordOutput(INTAKE.LOG_PATH + "Pivot Motor Rotations", PivotIntakeMotor.getEncoder().getPosition());
    }
 
 
