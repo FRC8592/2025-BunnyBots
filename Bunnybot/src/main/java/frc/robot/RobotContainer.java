@@ -56,6 +56,7 @@ public class RobotContainer {
     //robot button triggers
     private final Trigger RESET_HEADING = driverController.back();
     private final Trigger SLOW_MODE = driverController.leftBumper();
+    //TODO: map these to the operator controller
     private final Trigger LAUNCH_NORMAL = driverController.y();
     private final Trigger LAUNCH_CLOSE = driverController.a();
     private final Trigger LAUNCH_HIGH = driverController.b();
