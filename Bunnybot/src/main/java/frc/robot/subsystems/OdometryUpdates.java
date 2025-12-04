@@ -100,6 +100,19 @@ public class OdometryUpdates extends SubsystemBase {
         return new Pose2d(averageX, averageY, new Rotation2d(avgTheta));
         
     }
+    //TODO: Customize the AUTO AIM Code. 
+
+    // public void updateDriveWithLimelight(double axial, double lateral, double tx, boolean isFastMode) {
+    //  double yaw = KP_AIM * tx;
+    //  assignWheelPowers(computeWheelPower(axial, lateral, yaw, isFastMode));
+    // }
+    // }
+
+    // public void setLauncherVelocity (double ta){
+    //     double sqrt_ta = Math.sqrt (ta);
+    //     // (run the launcher)
+    //     //desiredLauncherVelocity = (needs to put the bot on the field and test different lengths and positions)
+    // }
 
     public void runVision(Vision vision){
         if (RobotBase.isReal()){
