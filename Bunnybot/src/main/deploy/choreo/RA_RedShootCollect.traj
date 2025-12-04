@@ -1,5 +1,5 @@
 {
- "name":"RA_RedNFShoot",
+ "name":"RA_RedShootCollect",
  "version":1,
  "snapshot":{
   "waypoints":[],
@@ -7,8 +7,7 @@
   "targetDt":0.05
  },
  "params":{
-  "waypoints":[
-    {"x":{"exp":"15.038687705993652 m", "val":15.038687705993652}, "y":{"exp":"1.9614982604980469 m", "val":1.9614982604980469}, "heading":{"exp":"-0.9167137657909411 rad", "val":-0.9167137657909412}, "intervals":30, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
+  "waypoints":[],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
     {"from":"last", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
