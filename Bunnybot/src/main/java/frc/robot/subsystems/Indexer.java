@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
@@ -15,10 +14,6 @@ import frc.robot.helpers.motor.spark.SparkMaxMotor;
 public class Indexer extends SubsystemBase {
     DigitalInput[] sensors = new DigitalInput[3];
     NewtonMotor[] motors = new NewtonMotor[4];
-
-    Timer timer;
-
-    boolean timerHasBeenReset = false;
     
     public Indexer() {
         motors[0] = new SparkMaxMotor(CAN.INDEXER_MOTOR1_CAN_ID, true);
@@ -37,8 +32,6 @@ public class Indexer extends SubsystemBase {
         sensors[0] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_1_PORT);
         sensors[1] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_2_PORT);
         sensors[2] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_3_PORT);
-
-        timer = new Timer();
         
     }
 
@@ -84,17 +77,6 @@ public class Indexer extends SubsystemBase {
         }
 
         return count;
-    }
-
-    /**
-     * Checks if there are three balls in the indexer
-     * @return if there are three balls in the indexer
-     */
-    public boolean full(){
-        if(getBallCount() == 3)
-            return true;
-        else
-            return false;
     }
 
     /**
@@ -184,41 +166,33 @@ public class Indexer extends SubsystemBase {
     public void autoIndex() {
         boolean s1 = hasBall(1); //shooter
         boolean s2 = hasBall(2); //middle
-        boolean s3 = hasBall(3); //intake
+        boolean s3 = hasBall(3);
+
+        stop(3);
 
         if(!s1){
             runBeforeShoot(1);
 
-        } else if (!s2 || !s3) {
+        } else if (!s2) {
             stop(2);
             run(1, 1);
             run(0, 1);
 
-        } else if (!timerHasBeenReset) {      
-            timer.reset();      
-            timerHasBeenReset = true;  
-
         } else {
-            System.out.println("else statement");
-            timer.start();
-            if(timer.hasElapsed(1.0)){
-                stopAll();
-                timerHasBeenReset = false;
-                
-            }
+            stopAll();
         }
 
     } 
 
     @Override
     public void periodic() {
-        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount()); //these aren't logging properly
+        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount()); 
         Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
-        Logger.recordOutput(INDEXER.LOG_PATH + "3 balls", full());
+        Logger.recordOutput(INDEXER.LOG_PATH + "3 balls", getBallCount() == 3);
 
-        Logger.recordOutput(INDEXER.LOG_PATH + "indexerFrontHasBall", hasBall(1));
-        Logger.recordOutput(INDEXER.LOG_PATH + "indexerMiddleHasBall", hasBall(2));
-        Logger.recordOutput(INDEXER.LOG_PATH + "indexerBackHasBall", hasBall(3));
+        // Logger.recordOutput(INDEXER.LOG_PATH + "indexerFrontHasBall", hasBall(1));
+        // Logger.recordOutput(INDEXER.LOG_PATH + "indexerMiddleHasBall", hasBall(2));
+        // Logger.recordOutput(INDEXER.LOG_PATH + "indexerBackHasBall", hasBall(3));
     }
 
 }

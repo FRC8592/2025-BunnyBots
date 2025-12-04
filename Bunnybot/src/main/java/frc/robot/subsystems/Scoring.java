@@ -33,7 +33,7 @@ public class Scoring extends SubsystemBase{
     public Command intakeLunite(){
     //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
     return new DeferredCommand(() -> deployIntake(), Set.of(intake))
-    .andThen(intake.setIntakeSideCommand(0.7));
+        .andThen(intake.setIntakeSideCommand(0.7));
     }
 
     public Command stowIntake(){

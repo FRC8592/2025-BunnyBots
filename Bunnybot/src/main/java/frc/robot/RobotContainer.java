@@ -33,14 +33,16 @@ public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
         CONTROLLERS.DRIVER_PORT
     );
-    private static final CommandGenericHID operatorController = new CommandXboxController(
-        CONTROLLERS.OPERATOR_PORT
-    );
+
+    //TODO: implement the operator controller
+    // private static final CommandGenericHID operatorController = new CommandXboxController(
+    //     CONTROLLERS.OPERATOR_PORT
+    // );
     
     private final Telemetry logger = new Telemetry(SWERVE.MAX_SPEED);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    // The robot's subsystems
+    //robot subsystems
     private final Swerve swerve;
     private final OdometryUpdates odometryUpdates;
     private final Vision vision;
@@ -49,15 +51,16 @@ public class RobotContainer {
     private final Launcher launcher;
     private final Scoring scoring;
 
-    
+    //robot button triggers
     private final Trigger RESET_HEADING = driverController.back();
-    // private final Trigger SLOW_MODE = driverController.rightBumper();
-    private final Trigger LAUNCH = operatorController.button(1);
-    //private Trigger RUN = operatorController.rightBumper();
-    private final Trigger TESTINGINTAKEBOTTOMBUTTON = operatorController.button(2);
-
-    //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGINTAKESIDEBUTTON = operatorController.button(3);
+    private final Trigger SLOW_MODE = driverController.leftBumper();
+    private final Trigger LAUNCH_NORMAL = driverController.y();
+    private final Trigger LAUNCH_CLOSE = driverController.a();
+    private final Trigger LAUNCH_HIGH = driverController.b();
+    private final Trigger LAUNCH_LOW = driverController.x();
+    
+    private final Trigger RUN_INDEXER = driverController.leftTrigger();
+    private final Trigger INTAKE_TO_INDEXER = driverController.leftBumper();
     
 
     /**
@@ -97,27 +100,38 @@ public class RobotContainer {
             new RunCommand(() -> indexer.autoIndex(), indexer)
         );
 
+        launcher.setDefaultCommand(
+            new RunCommand(() -> launcher.setLauncherPercentOutput(0.4, 0.4), launcher)
+        );
+
     }
 
     /**
      * Configure all button bindings
      */
     private void configureBindings() {
-        // SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
-                //  .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
-
-        // Reset to (0,0) 
+        SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
+                 .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
+        
         RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
 
-
-        LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))
+        LAUNCH_NORMAL.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.4, 0.4), Set.of(launcher))
         ).onFalse(launcher.stopLauncherCommand());
 
+        LAUNCH_CLOSE.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.44, 0.3), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
 
-        TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
-        //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
-        //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
-  
+        LAUNCH_LOW.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.23, 0.23), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
+
+        LAUNCH_HIGH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.4, 0.4), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
+
+        RUN_INDEXER.whileTrue(new RunCommand(() -> indexer.run(3, 1)).alongWith(new RunCommand(() -> indexer.run(2, 1)))
+        ).onFalse(indexer.stopMotorCommand(3));
+
+        // INTAKE_TO_INDEXER.whileTrue(new DeferredCommand(() -> scoring.intakeLunite(), Set.of(scoring))
+        // ).onFalse(scoring.stowIntake()); 
     }
 
     /**
