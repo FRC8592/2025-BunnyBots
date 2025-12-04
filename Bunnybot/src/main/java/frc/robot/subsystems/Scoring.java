@@ -27,8 +27,14 @@ public class Scoring extends SubsystemBase{
     public Command ejectLunite(){
     return new DeferredCommand(() -> ejectLuniteIntake(), Set.of(intake))
     .andThen(defaultRunIntake())
-    .andThen(stowIntake());
+    .andThen(stowPivotIntake());
     }
+
+    public Command stowIntake(){
+        return new DeferredCommand(() -> intake.setIntakeSideCommand(0), Set.of(intake))
+        .andThen(stowPivotIntake());
+    }
+    
 
     public Command intakeLunite(){
     //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
@@ -36,7 +42,7 @@ public class Scoring extends SubsystemBase{
     .andThen(intake.setIntakeSideCommand(0.7));
     }
 
-    public Command stowIntake(){
+    public Command stowPivotIntake(){
         intakePos = INTAKE.STOW_PIVOT_INTAKE;
     return this.runOnce(() -> intake.setToPositionCommand(INTAKE.STOW_PIVOT_INTAKE));
     }
