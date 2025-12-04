@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN;
@@ -14,6 +15,10 @@ import frc.robot.helpers.motor.spark.SparkMaxMotor;
 public class Indexer extends SubsystemBase {
     DigitalInput[] sensors = new DigitalInput[3];
     NewtonMotor[] motors = new NewtonMotor[4];
+
+    Timer timer;
+
+    boolean timerHasBeenReset = false;
     
     public Indexer() {
         motors[0] = new SparkMaxMotor(CAN.INDEXER_MOTOR1_CAN_ID, true);
@@ -24,7 +29,7 @@ public class Indexer extends SubsystemBase {
         motors[0].setIdleMode(IdleMode.kBrake);
 
         motors[1].setIdleMode(IdleMode.kBrake);
-        motors[1].setFollowerTo(motors[0], false);
+        // motors[1].setFollowerTo(motors[0], false); //doesn't work
 
         motors[2].setIdleMode(IdleMode.kBrake);
         motors[3].setIdleMode(IdleMode.kBrake);
@@ -32,6 +37,8 @@ public class Indexer extends SubsystemBase {
         sensors[0] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_1_PORT);
         sensors[1] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_2_PORT);
         sensors[2] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_3_PORT);
+
+        timer = new Timer();
         
     }
 
@@ -41,7 +48,7 @@ public class Indexer extends SubsystemBase {
      * @return whewther a football is detected at given storage point as a boolean
      */
     public boolean hasBall(int storagePoint){
-        boolean bool = !sensors[storagePoint - 1].get();
+        boolean bool = !sensors[storagePoint - 1].get(); 
         Logger.recordOutput(INDEXER.LOG_PATH + "Sensor " + storagePoint, bool);
 
         if(bool){
@@ -98,6 +105,12 @@ public class Indexer extends SubsystemBase {
     public void run(int motorPos, double percent){
         motors[motorPos].setPercentOutput(percent);
         
+    }
+
+    public void runBeforeShoot(double percent){
+        motors[0].setPercentOutput(percent);
+        motors[1].setPercentOutput(percent);
+        motors[2].setPercentOutput(percent);
     }
 
     /**
@@ -168,97 +181,34 @@ public class Indexer extends SubsystemBase {
         );
     }
 
-    // public void autoIndex() {
-    //     int c = getBallCount();
-    //     switch (c) {
-    //     case 0:
-    //         run(0, 1);
-    //         run(2, 1);
-    //         stop(3);
-    //         break;
-
-    //     case 1:
-    //         run(0, 1);
-    //         run(2, 1);
-    //         stop(3);
-    //         break;
-
-    //     case 2:
-    //         run(0, 1);
-    //         stop(2);
-    //         stop(3);
-    //         break;
-
-    //     case 3:
-    //         stop(0);
-    //         stop(2);
-    //         break;
-    //     }
-        
-    // }
-
     public void autoIndex() {
         boolean s1 = hasBall(1); //shooter
         boolean s2 = hasBall(2); //middle
-        boolean s3 = hasBall(3); //intake/back
-    
-        int n = (s1 ? 1 : 0) + (s2 ? 1 : 0) + (s3 ? 1 : 0);
-    
-        //state based on ball count
-        boolean d1 = n >= 1;
-        boolean d2 = n >= 2;
-        boolean d3 = n == 3;
-    
-        //if s1 should be filled but isn't
-        if (d1 && !s1) {
-            if (s2) {
-                // Move middle → shooter
-                run(2, 1.0);
-                run(3, 1.0); 
-                stop(0);      //don’t intake while shifting forward
-                return;
-            }
-            if (!s2 && s3) {
-                //ball in s2 first
-                run(0, 1.0); 
-                run(2, 1.0); 
-                stop(3);      
-                return;
-            }
-        }
-    
-        //if s2 should be filled but isn't
-        if (d2 && !s2) {
-            if (s3) {
-                run(0, 1.0);
-                run(2, 1.0);
-                stop(3);
-                return;
-            }
-        }
-    
-        // if s3 should be filled but isn't
-        if (d3 && !s3) {
-            //need 3 balls but don't have s3 filled
-            run(0, 1.0);
+        boolean s3 = hasBall(3); //intake
+
+        if(!s1){
+            runBeforeShoot(1);
+
+        } else if (!s2 || !s3) {
             stop(2);
-            stop(3);
-            return;
+            run(1, 1);
+            run(0, 1);
+
+        } else if (!timerHasBeenReset) {      
+            timer.reset();      
+            timerHasBeenReset = true;  
+
+        } else {
+            System.out.println("else statement");
+            timer.start();
+            if(timer.hasElapsed(1.0)){
+                stopAll();
+                timerHasBeenReset = false;
+                
+            }
         }
-    
-        // if we don't need all slots full (n < 3), safe to run intake only only if s3 is empty 
-        if (n < 3 && !s3) {
-            run(0, 1.0);
-            stop(2);
-            stop(3);
-            return;
-        }
-    
-        //all locations full
-        stopAll();
-    }
-    
-    
+
+    } 
 
     @Override
     public void periodic() {
