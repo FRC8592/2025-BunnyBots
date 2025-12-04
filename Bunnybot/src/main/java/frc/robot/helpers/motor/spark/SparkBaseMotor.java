@@ -7,8 +7,6 @@ import com.revrobotics.spark.SparkBase.*;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import frc.robot.helpers.PIDProfile;
 import frc.robot.helpers.Utils;
 import frc.robot.helpers.motor.MotorConstants;
@@ -34,20 +32,6 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
     public void setInverted(boolean inverted) {
         this.config.inverted(inverted);
         this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    }
-
-    public void configureMAXMotion(double maxAcceleration, double cruiseVelocity, double tolerance, PIDProfile gains){
-        gains.setMaxAcceleration(maxAcceleration);
-        gains.setMaxVelocity(cruiseVelocity);
-        gains.setTolerance(tolerance);
-        this.withGains(gains);
-    }
-
-    public void runMAXMotion(State setPosition, PIDProfile gains){
-        TrapezoidProfile motionProfile =  new TrapezoidProfile(new TrapezoidProfile.Constraints(gains.getMaxAcceleration(), gains.getMaxVelocity()));
-        State ExtendSetPoint = motionProfile.calculate(5.0, new TrapezoidProfile.State(0,0), new TrapezoidProfile.State(5,0));
-        
-        this.motorCtrl.setReference(ExtendSetPoint.position, ControlType.kPosition);
     }
 
     @Override
@@ -78,6 +62,7 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
             this.config.softLimit.reverseSoftLimitEnabled(gains.softLimit);
             this.config.softLimit.reverseSoftLimit(gains.softLimitMax);
         }
+
         this.config.closedLoop.maxMotion
             .maxVelocity(gains.maxVelocity, slot)
             .maxAcceleration(gains.maxAcceleration, slot)
@@ -137,8 +122,8 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
 
     @Override
     public void setFollowerTo(NewtonMotor master, boolean reversed) {
-        this.config.follow(master.getAsSparkFlex().motor);
-        this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // this.config.follow(master.getAsSparkFlex().motor);
+        // this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
     
     @Override
@@ -147,7 +132,6 @@ public abstract class SparkBaseMotor<M extends SparkBase, C extends SparkBaseCon
         this.config.secondaryCurrentLimit(currentAmps);
         this.motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
-
 
     @Override
     public void setIdleMode(IdleMode idleMode) {

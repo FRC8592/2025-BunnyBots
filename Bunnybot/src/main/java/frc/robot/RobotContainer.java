@@ -7,6 +7,8 @@ package frc.robot;
 import java.nio.file.OpenOption;
 import java.util.Set;
 
+import javax.sound.sampled.SourceDataLine;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
@@ -51,13 +53,13 @@ public class RobotContainer {
 
     
     private final Trigger RESET_HEADING = driverController.back();
-    // private final Trigger SLOW_MODE = driverController.rightBumper();
+    private final Trigger TESTINGINTAKESTOWPIVOTBUTTON = driverController.rightBumper();
     private final Trigger LAUNCH = operatorController.button(1);
     //private Trigger RUN = operatorController.rightBumper();
     private final Trigger TESTINGINTAKEBOTTOMBUTTON = operatorController.button(2);
 
     //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGINTAKESIDEBUTTON = operatorController.button(3);
+    private final Trigger TESTINGINTAKEDEPLOYPIVOTBUTTON = driverController.leftBumper();
     
 
     /**
@@ -114,10 +116,11 @@ public class RobotContainer {
         ).onFalse(launcher.stopLauncherCommand());
 
 
-        TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
+        //TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
+        TESTINGINTAKEDEPLOYPIVOTBUTTON.onTrue(new DeferredCommand(() -> intake.setToOutPositionCommand(10), Set.of(intake))).onFalse(intake.stopPivotCommand());
         //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
         //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
-  
+        TESTINGINTAKEDEPLOYPIVOTBUTTON.onTrue(new DeferredCommand(() -> intake.setToInPositionCommand(), Set.of(intake))).onFalse(intake.stopPivotCommand());
     }
 
     /**

@@ -60,32 +60,32 @@ public class ExampleSubsystem extends SubsystemBase {
   public void TestingMethod(){
 
   }
- public Command EjectLunite(){
-  return new DeferredCommand(() -> EjectLuniteIntake(), Set.of(testingIntake))
-  .andThen(DefaultRunIntake())
-  .andThen(StowIntake());
- }
+//  public Command EjectLunite(){
+//   return new DeferredCommand(() -> EjectLuniteIntake(), Set.of(testingIntake))
+//   .andThen(DefaultRunIntake())
+//   .andThen(StowIntake());
+//  }
 
- public Command IntakeLunite(){
-  //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
-  return new DeferredCommand(() -> DeployIntake(), Set.of(testingIntake))
-  .andThen(testingIntake.setIntakeSideCommand(0.7));
- }
+//  public Command IntakeLunite(){
+//   //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
+//   return new DeferredCommand(() -> DeployIntake(), Set.of(testingIntake))
+//   .andThen(testingIntake.setIntakeSideCommand(0.7));
+//  }
 
- public Command StowIntake(){
-  return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.STOW_PIVOT_INTAKE));
- }
+//  public Command StowIntake(){
+//   return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.STOW_PIVOT_INTAKE));
+//  }
 
- public Command DeployIntake(){
-  return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.SET_PIVOT_INTAKE));
- }
+//  public Command DeployIntake(){
+//   return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.SET_PIVOT_INTAKE));
+//  }
 
- public Command EjectLuniteIntake(){
-  return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.EJECT_LUNITE_POSITION));
- }
+//  public Command EjectLuniteIntake(){
+//   return this.runOnce(() -> testingIntake.setToPositionCommand(INTAKE.EJECT_LUNITE_POSITION));
+//  }
 
- public Command DefaultRunIntake(){
-  return this.runOnce(() -> testingIntake.runIntakeToPositionCommand());
- }
+//  public Command DefaultRunIntake(){
+//   return this.runOnce(() -> testingIntake.runIntakeToPositionCommand());
+//  }
 
 }

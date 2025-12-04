@@ -38,17 +38,17 @@ public class Scoring extends SubsystemBase{
 
     public Command stowIntake(){
         intakePos = INTAKE.STOW_PIVOT_INTAKE;
-    return this.runOnce(() -> intake.setToPositionCommand(INTAKE.STOW_PIVOT_INTAKE));
+    return this.runOnce(() -> intake.setToInPositionCommand());
     }
 
     public Command deployIntake(){
         intakePos = INTAKE.SET_PIVOT_INTAKE;
-    return this.runOnce(() -> intake.setToPositionCommand(INTAKE.SET_PIVOT_INTAKE));
+    return this.runOnce(() -> intake.setToOutPositionCommand(INTAKE.SET_PIVOT_INTAKE));
     }
 
     public Command ejectLuniteIntake(){
         intakePos = INTAKE.EJECT_LUNITE_POSITION;
-    return this.runOnce(() -> intake.setToPositionCommand(INTAKE.EJECT_LUNITE_POSITION));
+    return this.runOnce(() -> intake.setToOutPositionCommand(INTAKE.EJECT_LUNITE_POSITION));
     }
 
     public Command defaultRunIntake(){
