@@ -50,11 +50,21 @@ public class Intake extends SubsystemBase{
    }
 
     public void deployIntake() {
-        intakeMotorPivot.setVoltage(-3);
+        if (intakeMotorPivot.getEncoder().getPosition() > -35) {
+            intakeMotorPivot.setVoltage(-5);
+    }
+        else {
+            intakeMotorPivot.setVoltage(0);
+        }
    }
 
     public void stowIntake() {
-        intakeMotorPivot.setVoltage(3);
+        if (intakeMotorPivot.getEncoder().getPosition() < -25) {
+            intakeMotorPivot.setVoltage(5);
+    }
+        else {
+            intakeMotorPivot.setVoltage(0);
+        }
    }
 
     public void stopIntakePivot() {
