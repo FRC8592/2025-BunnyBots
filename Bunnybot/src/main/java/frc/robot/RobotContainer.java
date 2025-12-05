@@ -36,6 +36,9 @@ public class RobotContainer {
         CONTROLLERS.DRIVER_PORT
     );
 
+    private static final CommandXboxController operatorController = new CommandXboxController(
+            CONTROLLERS.OPERATOR_PORT);
+
     //TODO: implement the operator controller
     // private static final CommandGenericHID operatorController = new CommandXboxController(
     //     CONTROLLERS.OPERATOR_PORT
@@ -55,15 +58,21 @@ public class RobotContainer {
 
     //robot button triggers
     private final Trigger RESET_HEADING = driverController.back();
-    private final Trigger SLOW_MODE = driverController.leftBumper();
+    // private final Trigger SLOW_MODE = driverController.leftBumper();
     //TODO: map these to the operator controller
-    private final Trigger LAUNCH_NORMAL = driverController.y();
-    private final Trigger LAUNCH_CLOSE = driverController.a();
-    private final Trigger LAUNCH_HIGH = driverController.b();
-    private final Trigger LAUNCH_LOW = driverController.x();
+    private final Trigger LAUNCH_NORMAL = operatorController.b();
+    private final Trigger LAUNCH_CLOSE = operatorController.x();
+    private final Trigger LAUNCH_HIGH = operatorController.y();
+    private final Trigger LAUNCH_LOW = operatorController.a();
     
     private final Trigger RUN_INDEXER = driverController.leftTrigger();
-    private final Trigger INTAKE_TO_INDEXER = driverController.leftBumper();
+    // private final Trigger INTAKE_TO_INDEXER = driverController.leftBumper();
+
+    private final Trigger INTAKE_DEPLOY = driverController.pov(90);
+    private final Trigger INTAKE_STOW = driverController.pov(270);
+
+    private final Trigger INTAKE = driverController.leftBumper();
+    private final Trigger OUTTAKE = driverController.rightBumper();
     
 
     /**
@@ -113,8 +122,8 @@ public class RobotContainer {
      * Configure all button bindings
      */
     private void configureBindings() {
-        SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
-                 .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
+        // SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
+        //          .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
         
         RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
 
@@ -132,6 +141,14 @@ public class RobotContainer {
 
         RUN_INDEXER.whileTrue(new RunCommand(() -> indexer.run(3, 1)).alongWith(new RunCommand(() -> indexer.run(2, 1)))
         ).onFalse(indexer.stopMotorCommand(3));
+
+        INTAKE_DEPLOY.whileTrue(intake.deployIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
+
+        INTAKE_STOW.whileTrue(intake.stowIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
+ 
+        INTAKE.whileTrue(intake.runIntakeCommand()).onFalse(intake.stopIntakeCommand());
+
+        OUTTAKE.whileTrue(intake.reverseIntakeCommand()).onFalse(intake.stopIntakeCommand());
 
         // INTAKE_TO_INDEXER.whileTrue(new DeferredCommand(() -> scoring.intakeLunite(), Set.of(scoring))
         // ).onFalse(scoring.stowIntake()); 

@@ -122,7 +122,7 @@ public class Swerve extends SubsystemBase {
                     MEASUREMENTS.FIELD_LENGTH_METERS-pose.getX(),
                     pose.getY()
                 ),
-                pose.getRotation() //Rotation2d.fromDegrees(180).minus(pose.getRotation())
+                Rotation2d.fromDegrees(180).minus(pose.getRotation())
             );
             setKnownOdometryPose(flipped);
             return;

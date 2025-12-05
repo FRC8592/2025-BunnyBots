@@ -120,10 +120,15 @@ public class OdometryUpdates extends SubsystemBase {
                     Logger.recordOutput(SHARED.LOG_FOLDER+"/Navigation/DistanceMeters", vision.getTargets().get(0).bestCameraToTarget.getX());
                 }
 
-                if ((vision.getTargets().size() > 1) || 
-                    ((Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY) && 
-                    (vision.getTargets().size() > 0) && 
-                    (vision.getTargets().get(0).bestCameraToTarget.getX() < VISION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE))) 
+                if (
+                    // (vision.getTargets().size() > 1) || 
+                    // ((Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY) && 
+                    // (vision.getTargets().size() > 0) && 
+                    // (vision.getTargets().get(0).bestCameraToTarget.getX() < VISION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE))
+                        vision.getTargets().size() > 1 || (
+                        Math.abs(ambiguity) < VISION.MAX_ACCEPTABLE_AMBIGUITY
+                        && vision.getTargets().get(0).bestCameraToTarget.getX() < VISION.REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE)
+                    ) 
                     { 
                         if (DriverStation.isDisabled() && !robotPosition.equals(new Pose2d())){
                             initialPose = robotPoseAverager(robotPose);
