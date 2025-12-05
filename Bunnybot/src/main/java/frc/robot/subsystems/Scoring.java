@@ -24,37 +24,26 @@ public class Scoring extends SubsystemBase{
         this.launcher = launcher;
     }
 
-    public Command ejectLunite(){
-    return new DeferredCommand(() -> ejectLuniteIntake(), Set.of(intake))
-    .andThen(defaultRunIntake())
-    .andThen(stowIntake());
+    public Command deployIntake() {
+        return this.runOnce(() -> intake.deployIntakeCommand());
     }
-
-    // public Command intakeLunite(){
-    // //This needs to be changed, methodology behind it is to rotate the indexer down, and run the intake until Indexer knows it has the ball
-    // return new DeferredCommand(() -> deployIntake(), Set.of(intake))
-    // .andThen(intake.setIntakeSideCommand(0.7));
-    // }
 
     public Command stowIntake(){
-        intakePos = INTAKE.STOW_PIVOT_INTAKE;
-    return this.runOnce(() -> intake.setToPositionCommand(0));
+        return this.runOnce(() -> intake.stowIntakeCommand());
     }
 
-    public Command deployIntake(){
-        intakePos = INTAKE.SET_PIVOT_INTAKE;
-    return this.runOnce(() -> intake.setToPositionCommand(INTAKE.SET_PIVOT_INTAKE));
+    public Command stopIntakePivot() {
+        return this.runOnce(() -> intake.stopIntakePivotCommand());
     }
 
-    public Command ejectLuniteIntake(){
-        intakePos = INTAKE.EJECT_LUNITE_POSITION;
-    return this.runOnce(() -> intake.setToPositionCommand(INTAKE.EJECT_LUNITE_POSITION));
-    }
-
-    public Command defaultRunIntake(){
-    return this.runOnce(() -> intake.runIntakeToPositionCommand());
+    public Command runIntake() {
+        return this.runOnce(() -> intake.runIntakeCommand());
     }
     
+    public Command stopIntake() {
+        return this.runOnce(() -> intake.stopIntakeCommand());
+    }
+ 
     public void periodic(){
         Logger.recordOutput(SCORING.LOG_PATH+ "Intake Position", intakePos);
     }
