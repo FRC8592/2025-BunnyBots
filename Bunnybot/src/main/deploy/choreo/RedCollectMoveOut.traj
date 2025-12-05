@@ -1,5 +1,5 @@
 {
- "name":"RA_RedCollectMoveOut",
+ "name":"RedCollectMoveOut",
  "version":1,
  "snapshot":{
   "waypoints":[

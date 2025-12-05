@@ -11,9 +11,10 @@ import frc.robot.subsystems.Indexer;
 
 
 public class RedNFMoveOut extends AutoCommand {
-   public RedNFMoveOut(String color){
-        super(
-       new FollowPathCommand(getChoreoTrajectory("RA_RedNFMoveOut"), Suppliers.isRedAlliance, ""));
+   public RedNFMoveOut(){
+         super(
+            new FollowPathCommand(getChoreoTrajectory("RA_RedNFMoveOut"), Suppliers.isRedAlliance, "")
+         );
 
 
    }
