@@ -152,10 +152,10 @@ public class FollowPathCommand extends LargeCommand{
         timer.start();
         if(!Robot.isReal()){
             if(flip.getAsBoolean()){
-                swerve.setKnownOdometryPose(flip(trajectory.sample(0)).poseMeters);
+                swerve.resetPose(flip(trajectory.sample(0)).poseMeters);
             }
             else{
-                swerve.setKnownOdometryPose(trajectory.sample(0).poseMeters);
+                swerve.resetPose(trajectory.sample(0).poseMeters);
             }
         }
     }
@@ -236,7 +236,7 @@ public class FollowPathCommand extends LargeCommand{
             state.velocityMetersPerSecond,
             state.accelerationMetersPerSecondSq,
             new Pose2d(
-                MEASUREMENTS.FIELD_LENGTH_METERS - state.poseMeters.getX(),
+                state.poseMeters.getX(),
                 state.poseMeters.getY(),
                 Rotation2d.fromRadians(Math.PI).minus(state.poseMeters.getRotation())
             ),

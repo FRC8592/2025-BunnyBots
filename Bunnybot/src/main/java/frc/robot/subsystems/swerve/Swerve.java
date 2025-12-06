@@ -42,6 +42,7 @@ public class Swerve extends SubsystemBase {
 
         // TODO: Any initialization code needed for the new swerve stuff
         swerve = drivetrain;
+
     }
 
     @Override
@@ -76,8 +77,8 @@ public class Swerve extends SubsystemBase {
         Logger.recordOutput(SWERVE.LOG_PATH+"TargetSpeeds", speeds); 
 
         swerve.setControl(
-            fieldCentric.withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-            .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
+            fieldCentric.withVelocityX(speeds.vxMetersPerSecond) 
+            .withVelocityY(speeds.vyMetersPerSecond)
             .withRotationalRate(speeds.omegaRadiansPerSecond));
     }
 
@@ -86,7 +87,6 @@ public class Swerve extends SubsystemBase {
      * Define whatever direction the robot is facing as forward
      */
     public void resetHeading(){
-        System.out.println("Running reset heading");
         // TODO: implement something that allows the commented code to work
         swerve.seedFieldCentric();
     }
@@ -99,36 +99,36 @@ public class Swerve extends SubsystemBase {
         return swerve.getState().Pose;
     }
 
-    public void setKnownOdometryPose(Pose2d currentPose) {        
+    public void resetPose(Pose2d currentPose) {        
         swerve.resetPose(currentPose);
-        Logger.recordOutput(
-            SWERVE.LOG_PATH+"Console", (
-                "Current pose reset to X: "+
-                currentPose.getX()+
-                "; Y: "+
-                currentPose.getY()+
-                "; Rotation: "+
-                -currentPose.getRotation().getDegrees()+
-                "°."
-            )
-        );
+        // Logger.recordOutput(
+        //     SWERVE.LOG_PATH+"Console", (
+        //         "Current pose reset to X: "+
+        //         -currentPose.getX()+
+        //         "; Y: "+
+        //         -currentPose.getY()+
+        //         "; Rotation: "+
+        //         -currentPose.getRotation().getDegrees()+
+        //         "°."
+        //     )
+        // );
     }
     
-    public void resetPose(Pose2d pose, boolean flip) {
-        // TODO: implement something that allows the commented code to work
-        if(flip){
-            Pose2d flipped = new Pose2d(
-                new Translation2d(
-                    MEASUREMENTS.FIELD_LENGTH_METERS-pose.getX(),
-                    pose.getY()
-                ),
-                Rotation2d.fromDegrees(180).minus(pose.getRotation())
-            );
-            setKnownOdometryPose(flipped);
-            return;
-        }
-        setKnownOdometryPose(pose);
-    }
+    // public void resetPose(Pose2d pose, boolean flip) {
+    //     // TODO: implement something that allows the commented code to work
+    //     if(flip){
+    //         Pose2d flipped = new Pose2d(
+    //             new Translation2d(
+    //                 MEASUREMENTS.FIELD_LENGTH_METERS-pose.getX(),
+    //                 pose.getY()
+    //             ),
+    //             Rotation2d.fromDegrees(180).minus(pose.getRotation())
+    //         );
+    //         resetPose(flipped);
+    //         return;
+    //     }
+    //     resetPose(pose);
+    // }
 
     /**
      * Sets whether or not the input joystick is slowed
@@ -199,9 +199,9 @@ public class Swerve extends SubsystemBase {
 
         if (isSlowMode) {
             currentSpeeds = smoothingFilter.smooth(new ChassisSpeeds(
-                driveTranslateY * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND * 0.5,
-                driveTranslateX * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND * 0.5,
-                driveRotate * SWERVE.ROTATE_POWER_SLOW * SWERVE.MAX_ROTATIONAL_VELOCITY_RADIANS_PER_SECOND * 0.5
+                driveTranslateY * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND,
+                driveTranslateX * SWERVE.TRANSLATE_POWER_SLOW * SWERVE.MAX_TRANSLATIONAL_VELOCITY_METERS_PER_SECOND,
+                driveRotate * SWERVE.ROTATE_POWER_SLOW * SWERVE.MAX_ROTATIONAL_VELOCITY_RADIANS_PER_SECOND
             ));
         }
         else {

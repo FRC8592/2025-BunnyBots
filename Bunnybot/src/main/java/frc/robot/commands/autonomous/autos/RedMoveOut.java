@@ -13,7 +13,7 @@ import frc.robot.subsystems.Indexer;
 public class RedMoveOut extends AutoCommand {
    public RedMoveOut(){
          super(
-            new FollowPathCommand(getChoreoTrajectory("RA_RedMoveOut"), Suppliers.isRedAlliance, "")
+            new FollowPathCommand(getChoreoTrajectory("RedMoveOut"), Suppliers.isRedAlliance, "")
          );
 
 

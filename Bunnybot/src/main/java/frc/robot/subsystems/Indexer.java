@@ -9,7 +9,6 @@ import frc.robot.Constants.CAN;
 import frc.robot.Constants.INDEXER;
 import frc.robot.helpers.motor.NewtonMotor;
 import frc.robot.helpers.motor.NewtonMotor.IdleMode;
-import frc.robot.helpers.motor.spark.SparkFlexMotor;
 import frc.robot.helpers.motor.spark.SparkMaxMotor;
 
 public class Indexer extends SubsystemBase {
@@ -25,16 +24,14 @@ public class Indexer extends SubsystemBase {
         motors[0].setIdleMode(IdleMode.kBrake);
 
         motors[1].setIdleMode(IdleMode.kBrake);
-        // motors[1].setFollowerTo(motors[0]);
+        // motors[1].setFollowerTo(motors[0], false); //doesn't work
 
         motors[2].setIdleMode(IdleMode.kBrake);
         motors[3].setIdleMode(IdleMode.kBrake);
 
-        // sensors[0] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_1_PORT);
-        // sensors[1] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_2_PORT);
-        // sensors[2] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_3_PORT);
-
-        periodic();
+        sensors[0] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_1_PORT);
+        sensors[1] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_2_PORT);
+        sensors[2] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_3_PORT);
         
     }
 
@@ -43,55 +40,44 @@ public class Indexer extends SubsystemBase {
      * @param storagePoint given launcher is the front, the front storage point is 1, the middle is 2, and the back is 3 
      * @return whewther a football is detected at given storage point as a boolean
      */
-    // public boolean hasBall(int storagePoint){
-    //     boolean bool = !sensors[storagePoint - 1].get();
-    //     Logger.recordOutput(INDEXER.LOG_PATH + "Sensor " + storagePoint, bool);
+    public boolean hasBall(int storagePoint){
+        boolean bool = !sensors[storagePoint - 1].get(); 
+        Logger.recordOutput(INDEXER.LOG_PATH + "Sensor " + storagePoint, bool);
 
-    //     if(bool){
-    //         return true;
-    //     } 
-    //     return false;
-    // }
+        if(bool){
+            return true;
+        } 
+        return false;
+    }
 
     /**
      * Checks to see if there is a football anywhere within the indexer
      * @return if there is no football detected anywhere in the indexer
      */
-    // public boolean hasBall(){
-    //     for(int i = 1; i <= sensors.length; i++){
-    //         if(hasBall(i)){
-    //             return true;
-    //         }
+    public boolean hasBall(){
+        for(int i = 1; i <= sensors.length; i++){
+            if(hasBall(i)){
+                return true;
+            }
                 
-    //     }
-    //     return false;    
+        }
+        return false;    
         
-    // }
+    }
 
     /**
      * Finds the number of balls in the indexer
      * @return number of balls in the indexer
      */
-    // public int getBallCount(){
-    //     int count = 0;
-    //     for(int i = 1; i <= sensors.length; i++){
-    //         if(hasBall(i))
-    //             count++;
-    //     }
+    public int getBallCount(){
+        int count = 0;
+        for(int i = 1; i <= sensors.length; i++){
+            if(hasBall(i))
+                count++;
+        }
 
-    //     return count;
-    // }
-
-    /**
-     * Checks if there are three balls in the indexer
-     * @return if there are three balls in the indexer
-     */
-    // public boolean full(){
-    //     if(getBallCount() == 3)
-    //         return true;
-    //     else
-    //         return false;
-    // }
+        return count;
+    }
 
     /**
      * Runs given motor at given percentage
@@ -101,6 +87,12 @@ public class Indexer extends SubsystemBase {
     public void run(int motorPos, double percent){
         motors[motorPos].setPercentOutput(percent);
         
+    }
+
+    public void runBeforeShoot(double percent){
+        motors[0].setPercentOutput(percent);
+        motors[1].setPercentOutput(percent);
+        motors[2].setPercentOutput(percent);
     }
 
     /**
@@ -132,7 +124,6 @@ public class Indexer extends SubsystemBase {
      * @return command to run motors at specified percentage
      */
     public Command setMotorPercentOutputCommand(double percent) {
-        System.out.println("command runs");
         return this.run(()->
             runAll(percent)
         ).finallyDo(() -> stopAll());
@@ -146,7 +137,6 @@ public class Indexer extends SubsystemBase {
      * @return Command to run given motor at given percentage
      */
     public Command setMotorPercentOutputCommand(int motorPos, double percent){
-        System.out.println("individual command runs");
         return this.run(()->
             run(motorPos, percent)
         ).finallyDo(() -> stop(motorPos));
@@ -173,41 +163,32 @@ public class Indexer extends SubsystemBase {
         );
     }
 
-    // public Command autoIndexCommand() {
-    //     return run(() -> {
-    //         int c = getBallCount();
-    //         switch (c) {
-    //         case 0:
-    //             run(0, 1);
-    //             run(2, 1);
-    //             stop(3);
-    //             break;
-    
-    //         case 1:
-    //             run(0, 1);
-    //             run(2, 1);
-    //             stop(3);
-    //             break;
-    
-    //         case 2:
-    //             run(0, 1);
-    //             stop(2);
-    //             stop(3);
-    //             break;
-    
-    //         case 3:
-    //             stop(0);
-    //             stop(2);
-    //             break;
-    //         }
-    //     });
-    // }
-    
+    public void autoIndex() {
+        boolean s1 = hasBall(1); //shooter
+        boolean s2 = hasBall(2); //middle
+        boolean s3 = hasBall(3);
+
+        stop(3);
+
+        if(!s1){
+            runBeforeShoot(1);
+
+        } else if (!s2) {
+            stop(2);
+            run(1, 1);
+            run(0, 1);
+
+        } else {
+            stopAll();
+        }
+
+    } 
 
     @Override
     public void periodic() {
-        // Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount());
-        // Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
+        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount()); 
+        Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
+        Logger.recordOutput(INDEXER.LOG_PATH + "3 balls", getBallCount() == 3);
 
         // Logger.recordOutput(INDEXER.LOG_PATH + "indexerFrontHasBall", hasBall(1));
         // Logger.recordOutput(INDEXER.LOG_PATH + "indexerMiddleHasBall", hasBall(2));

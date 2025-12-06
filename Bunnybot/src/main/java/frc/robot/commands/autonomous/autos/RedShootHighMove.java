@@ -10,8 +10,6 @@ import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
-
-
 // public class RedShootHighMove extends AutoCommand {
 //    public RedShootHighMove(String color, Launcher launcher, Indexer indexer){
 //       super(

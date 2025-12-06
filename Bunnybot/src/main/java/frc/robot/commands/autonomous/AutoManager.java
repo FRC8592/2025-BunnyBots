@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
+import frc.robot.commands.autonomous.autos.RedMoveOut;
+import frc.robot.commands.autonomous.autos.RedNFMoveOut;
 import frc.robot.commands.proxies.*;
 import frc.robot.subsystems.swerve.Swerve;
 
@@ -38,6 +40,8 @@ public final class AutoManager {
     public static void prepare(){
         SmartDashboard.putNumber("Auto Delay", 0);
         autoCommands = new ArrayList<>();
+        autoCommands.add(new RedMoveOut());
+        autoCommands.add(new RedNFMoveOut());
 
         autoChooser = new SendableChooser<>();
         

@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+import java.nio.file.OpenOption;
 import java.util.Set;
 
+import javax.sound.sampled.SourceDataLine;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.Telemetry;
@@ -16,21 +17,14 @@ import frc.robot.subsystems.swerve.TunerConstants;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
-
-import frc.robot.Constants.CONTROLLERS;
 import frc.robot.Constants.*;
 import frc.robot.commands.autonomous.AutoManager;
+import frc.robot.commands.largecommands.LargeCommand;
 import frc.robot.subsystems.*;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-
-import edu.wpi.first.units.measure.Current;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -42,11 +36,14 @@ public class RobotContainer {
     private static final CommandXboxController driverController = new CommandXboxController(
         CONTROLLERS.DRIVER_PORT
     );
+
+    private static final CommandXboxController operatorController = new CommandXboxController(
+            CONTROLLERS.OPERATOR_PORT);
     
     private final Telemetry logger = new Telemetry(SWERVE.MAX_SPEED);
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
-    // The robot's subsystems
+    //robot subsystems
     private final Swerve swerve;
     private final OdometryUpdates odometryUpdates;
     private final Vision vision;
@@ -55,17 +52,22 @@ public class RobotContainer {
     private final Launcher launcher;
     private final Scoring scoring;
 
-    private double percentDashboard1;
-    private double percentDashboard2;
-    
+    //robot button triggers
     private final Trigger RESET_HEADING = driverController.back();
-    // private final Trigger SLOW_MODE = driverController.rightBumper();
-    private final Trigger LAUNCH = driverController.rightTrigger();
-    private Trigger RUN = driverController.rightBumper();
-    private final Trigger TESTINGINTAKEBOTTOMBUTTON = driverController.leftBumper();
+    // private final Trigger SLOW_MODE = driverController.leftBumper();
+    private final Trigger LAUNCH_NORMAL = operatorController.b();
+    private final Trigger LAUNCH_CLOSE = operatorController.x();
+    private final Trigger LAUNCH_HIGH = operatorController.y();
+    private final Trigger LAUNCH_LOW = operatorController.a();
+    
+    private final Trigger RUN_INDEXER = driverController.leftTrigger();
+    // private final Trigger INTAKE_TO_INDEXER = driverController.leftBumper();
 
-    //private final Trigger TESTINGINTAKEBUTTON = driverController.rightTrigger();
-    private final Trigger TESTINGINTAKESIDEBUTTON = driverController.leftTrigger();
+    private final Trigger INTAKE_DEPLOY = driverController.pov(90);
+    private final Trigger INTAKE_STOW = driverController.pov(270);
+
+    private final Trigger INTAKE = driverController.leftBumper();
+    private final Trigger OUTTAKE = driverController.rightBumper();
     
 
     /**
@@ -79,12 +81,18 @@ public class RobotContainer {
         launcher = new Launcher();
         indexer = new Indexer();
         intake = new Intake();
+        scoring  = new Scoring(intake,indexer,launcher);
 
         configureBindings();
         configureDefaults();
+        passSubsystems();
         
         AutoManager.prepare();
-        scoring  = new Scoring(intake,indexer,launcher);
+
+    }
+
+    public void passSubsystems(){
+        LargeCommand.addSubsystems(swerve);
     }
 
     /**
@@ -100,6 +108,15 @@ public class RobotContainer {
                 -driverController.getRightX()
             ));
         }).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        indexer.setDefaultCommand(
+            new RunCommand(() -> indexer.autoIndex(), indexer)
+        );
+
+        launcher.setDefaultCommand(
+            new RunCommand(() -> launcher.setLauncherPercentOutput(0.4, 0.4), launcher)
+        );
+
     }
 
     /**
@@ -107,24 +124,35 @@ public class RobotContainer {
      */
     private void configureBindings() {
         // SLOW_MODE.onTrue(Commands.runOnce(() -> swerve.setSlowMode(true)).ignoringDisable(true))
-                //  .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
-
+        //          .onFalse(Commands.runOnce(() -> swerve.setSlowMode(false)).ignoringDisable(true));
+        
         RESET_HEADING.onTrue(swerve.runOnce(() -> swerve.resetHeading()));
 
-        double percentDerived1 = SmartDashboard.getNumber("bottom_launcher_motor",percentDashboard1);
-        double percentDerived2 = SmartDashboard.getNumber("top_launcher_motor",percentDashboard2);
-        //Try and print the values
-        System.out.println("PercentDashboard1 " + percentDashboard1);
-        System.out.println("PercentDashboard2 " + percentDashboard2);
-        LAUNCH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(SmartDashboard.getNumber("bottom_launcher_motor", 0.4), SmartDashboard.getNumber("top_launcher_motor", 0.4)), Set.of(launcher))).onFalse(launcher.stopLauncherCommand());
+        LAUNCH_NORMAL.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.4, 0.4), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
 
-        //to test indexer
-        RUN.whileTrue(indexer.setMotorPercentOutputCommand(0.8));
+        LAUNCH_CLOSE.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.44, 0.3), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
 
-        TESTINGINTAKESIDEBUTTON.onTrue(new DeferredCommand(() -> intake.setIntakeSideCommand(0.75), Set.of(intake))).onFalse(intake.stopIntakeSideCommand());
-        //TESTINGINTAKEBOTTOMBUTTON.onTrue(new DeferredCommand(() -> testingIntake.setIntakeBottomCommand(0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeBottomCommand());
-        //TESTINGPIVOTINTAKEBUTTON.onTrue(new DeferredCommand(() ->testingIntake.setIntakeCommand(testingIntake.accessPivotIntakeMotor(),0.5), Set.of(testingIntake))).onFalse(testingIntake.stopIntakeCommand(testingIntake.accessPivotIntakeMotor()));
-  
+        LAUNCH_LOW.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.23, 0.23), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
+
+        LAUNCH_HIGH.whileTrue(new DeferredCommand(() -> launcher.setLauncherCommand(0.4, 0.4), Set.of(launcher))
+        ).onFalse(launcher.stopLauncherCommand());
+
+        RUN_INDEXER.whileTrue(new RunCommand(() -> indexer.run(3, 1)).alongWith(new RunCommand(() -> indexer.run(2, 1)))
+        ).onFalse(indexer.stopMotorCommand(3));
+
+        INTAKE_DEPLOY.whileTrue(intake.deployIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
+
+        INTAKE_STOW.whileTrue(intake.stowIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
+ 
+        INTAKE.whileTrue(intake.runIntakeCommand()).onFalse(intake.stopIntakeCommand());
+
+        OUTTAKE.whileTrue(intake.reverseIntakeCommand()).onFalse(intake.stopIntakeCommand());
+
+        // INTAKE_TO_INDEXER.whileTrue(new DeferredCommand(() -> scoring.intakeLunite(), Set.of(scoring))
+        // ).onFalse(scoring.stowIntake()); 
     }
 
     /**
