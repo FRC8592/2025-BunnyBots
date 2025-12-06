@@ -56,23 +56,26 @@ public class Intake extends SubsystemBase{
 
    public void deployIntake() {
     if (intakeMotorPivot.getEncoder().getPosition() > -35) {
-        // intakeMotorPivot.setVoltage(-2);
+        intakeMotorPivot.setVoltage(-5);
+        //stopIntake();
         Logger.recordOutput(INTAKE.LOG_PATH + "Deploy ", true);
     }
         else {
-            // intakeMotorPivot.setVoltage(0);
+            intakeMotorPivot.setVoltage(0);
+            //runIntake();
             Logger.recordOutput(INTAKE.LOG_PATH + "Deploy ", false);
         }
     }
 
     public void stowIntake() {
         if (intakeMotorPivot.getEncoder().getPosition() < -25) {
-            // intakeMotorPivot.setVoltage(2);
-
+            intakeMotorPivot.setVoltage(5);
+            //runIntake();
             Logger.recordOutput(INTAKE.LOG_PATH + "Stow ", true);
     }
         else {
-            // intakeMotorPivot.setVoltage(0);
+            //stopIntake();
+            intakeMotorPivot.setVoltage(0);
             Logger.recordOutput(INTAKE.LOG_PATH + "Stow ", false);
         }
     }
@@ -94,11 +97,11 @@ public class Intake extends SubsystemBase{
    }
 
    public Command deployIntakeCommand(){
-    return this.runOnce(() -> deployIntake());
+    return this.run(() -> deployIntake());
    }
 
    public Command stowIntakeCommand(){
-    return this.runOnce(() -> stowIntake());
+    return this.run(() -> stowIntake());
    }
 
    public Command stopIntakePivotCommand(){

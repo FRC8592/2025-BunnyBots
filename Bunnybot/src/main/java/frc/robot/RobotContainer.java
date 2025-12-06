@@ -142,9 +142,9 @@ public class RobotContainer {
         RUN_INDEXER.whileTrue(new RunCommand(() -> indexer.run(3, 1)).alongWith(new RunCommand(() -> indexer.run(2, 1)))
         ).onFalse(indexer.stopMotorCommand(3));
 
-        INTAKE_DEPLOY.whileTrue(intake.deployIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
+        // INTAKE_DEPLOY.whileTrue(intake.deployIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
 
-        INTAKE_STOW.whileTrue(intake.stowIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
+        // INTAKE_STOW.whileTrue(intake.stowIntakeCommand()).onFalse(intake.stopIntakePivotCommand());
  
         INTAKE.whileTrue(intake.runIntakeCommand()).onFalse(intake.stopIntakeCommand());
 
