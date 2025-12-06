@@ -41,7 +41,7 @@ import frc.robot.subsystems.Intake;
 // }
 
 public class RedNFShootHighMove extends AutoCommand {
-    public RedNFShootHighMove(Launcher launcher, Indexer indexer, Intake intake){
+    public RedNFShootHighMove(){
         super(
             launcher.setLauncherCommand(0.44, 0.30) //USE "CLOSE"
             .andThen(new WaitUntilCommand(0.5))

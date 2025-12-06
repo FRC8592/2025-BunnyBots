@@ -62,7 +62,7 @@ public class Launcher extends SubsystemBase {
      * @return Returns a command to set motor power to given percentage.
      */
     public Command setLauncherCommand(double percent1, double percent2){
-        return this.run(()->{setLauncherPercentOutput(percent1, percent2);
+        return this.runOnce(()->{setLauncherPercentOutput(percent1, percent2);
         });
     }
 

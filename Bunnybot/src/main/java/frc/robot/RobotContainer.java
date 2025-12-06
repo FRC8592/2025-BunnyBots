@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.Constants.*;
+import frc.robot.commands.autonomous.AutoCommand;
 import frc.robot.commands.autonomous.AutoManager;
 import frc.robot.commands.largecommands.LargeCommand;
 import frc.robot.subsystems.*;
@@ -102,6 +103,7 @@ public class RobotContainer {
 
     private void passSubsystems(){
         LargeCommand.addSubsystems(swerve);
+        AutoCommand.addSubsystems(swerve, launcher, indexer, intake);
     }
 
     /**

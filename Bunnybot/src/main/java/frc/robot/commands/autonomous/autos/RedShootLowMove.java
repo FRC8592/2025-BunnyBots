@@ -2,6 +2,7 @@ package frc.robot.commands.autonomous.autos;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Suppliers;
 import frc.robot.commands.autonomous.AutoCommand;
@@ -42,16 +43,16 @@ import frc.robot.subsystems.Intake;
 
 //This autonomous starts right in front of the AprilTag on the Cosmic Converter
 public class RedShootLowMove extends AutoCommand {
-    public RedShootLowMove(Launcher launcher, Indexer indexer, Intake intake){
+    public RedShootLowMove(){
         super(
             //start by shooting two low lunites
             launcher.setLauncherCommand(0.23, 0.23) //use LOW
             .andThen(new WaitUntilCommand(0.5))
-            .andThen(indexer.setMotorPercentOutputCommand(4, 1)).withTimeout(1.2)
+            .andThen(new RunCommand(() -> indexer.shoot(1))).withTimeout(2)
 
             .andThen(new FollowPathCommand(getChoreoTrajectory("RedMoveOut"), Suppliers.isRedAlliance, ""))
                 .alongWith(launcher.stopLauncherCommand())
-                .alongWith(indexer.stopMotorCommand(4))
+                .alongWith(new RunCommand(() -> indexer.stopShoot()))
                 // .alongWith(intake.setToPositionCommand()) //if we need to raise the intake while driving 
         );
     }

@@ -18,6 +18,7 @@ import frc.robot.Robot;
 import frc.robot.commands.autonomous.autos.MoveOut;
 import frc.robot.commands.autonomous.autos.RedMoveOut;
 import frc.robot.commands.autonomous.autos.RedNFMoveOut;
+import frc.robot.commands.autonomous.autos.ShootThree;
 import frc.robot.commands.proxies.*;
 import frc.robot.subsystems.swerve.Swerve;
 
@@ -43,7 +44,7 @@ public final class AutoManager {
         autoCommands = new ArrayList<>();
         autoCommands.add(new RedMoveOut());
         autoCommands.add(new RedNFMoveOut());
-        // autoCommands.add(new ShootThree());
+        autoCommands.add(new ShootThree());
 
         autoChooser = new SendableChooser<>();
         

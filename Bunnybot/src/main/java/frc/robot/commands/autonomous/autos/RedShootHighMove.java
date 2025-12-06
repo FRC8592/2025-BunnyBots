@@ -37,7 +37,7 @@ import frc.robot.subsystems.Intake;
 
 
 public class RedShootHighMove extends AutoCommand {
-    public RedShootHighMove(Launcher launcher, Indexer indexer, Intake intake){
+    public RedShootHighMove(){
         super(
             launcher.setLauncherCommand(0.44, 0.30) //USE "CLOSE"
             .andThen(new WaitUntilCommand(0.5))
