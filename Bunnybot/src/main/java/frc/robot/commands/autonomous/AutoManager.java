@@ -43,6 +43,7 @@ public final class AutoManager {
         autoCommands = new ArrayList<>();
         autoCommands.add(new RedMoveOut());
         autoCommands.add(new RedNFMoveOut());
+        // autoCommands.add(new ShootThree());
 
         autoChooser = new SendableChooser<>();
         

@@ -68,7 +68,7 @@ public class Intake extends SubsystemBase{
     }
 
     public void stowIntake() {
-        if (intakeMotorPivot.getEncoder().getPosition() < -25) {
+        if (intakeMotorPivot.getEncoder().getPosition() < -10) {
             intakeMotorPivot.setVoltage(5);
             //runIntake();
             Logger.recordOutput(INTAKE.LOG_PATH + "Stow ", true);

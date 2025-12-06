@@ -101,6 +101,16 @@ public class Indexer extends SubsystemBase {
         motors[2].setPercentOutput(percent);
     }
 
+    public void shoot(double percent){
+        motors[3].setPercentOutput(percent);
+        motors[2].setPercentOutput(percent);
+    }
+
+    public void stopShoot(){
+        motors[3].setPercentOutput(0);
+        motors[2].setPercentOutput(0);
+    }
+
     /**
      * Runs all motors at given percentage
      * 
