@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.Constants.*;
 import frc.robot.commands.autonomous.AutoManager;
+import frc.robot.commands.largecommands.LargeCommand;
 import frc.robot.subsystems.*;
 
 /**
@@ -94,8 +95,13 @@ public class RobotContainer {
 
         configureBindings();
         configureDefaults();
+        passSubsystems();
 
         AutoManager.prepare();
+    }
+
+    private void passSubsystems(){
+        LargeCommand.addSubsystems(swerve);
     }
 
     /**

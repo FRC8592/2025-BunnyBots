@@ -114,22 +114,23 @@ public class Swerve extends SubsystemBase {
         );
     }
     
-    public void resetPose(Pose2d pose, boolean flip) {
-        // // TODO: implement something that allows the commented code to work
-        if(flip){
-            Pose2d flipped = new Pose2d(
-                new Translation2d(
-                    MEASUREMENTS.FIELD_LENGTH_METERS-pose.getX(),
-                    pose.getY()
-                ),
-                Rotation2d.fromDegrees(180).minus(pose.getRotation())
-            );
-            setKnownOdometryPose(flipped);
-            return;
-        }
-        setKnownOdometryPose(pose);
+    //never used in the code
+    // public void resetPose(Pose2d pose, boolean flip) {
+    //     // // TODO: implement something that allows the commented code to work
+    //     if(flip){
+    //         Pose2d flipped = new Pose2d(
+    //             new Translation2d(
+    //                 MEASUREMENTS.FIELD_LENGTH_METERS-pose.getX(),
+    //                 pose.getY()
+    //             ),
+    //             Rotation2d.fromDegrees(180).minus(pose.getRotation())
+    //         );
+    //         setKnownOdometryPose(flipped);
+    //         return;
+    //     }
+    //     setKnownOdometryPose(pose);
 
-    }
+    // }
 
     /**
      * Sets whether or not the input joystick is slowed
