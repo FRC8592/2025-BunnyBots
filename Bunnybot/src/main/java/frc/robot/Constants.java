@@ -72,7 +72,7 @@ public final class VISION {
     );
     public static final double MAX_ACCEPTABLE_AMBIGUITY = 0.1;
     public static final double REJECT_SINGLE_TAG_POSE_ESTIMATE_RANGE = 1.4d;
-    public static final int POSE_AVERAGER_VALUE = 10;
+    public static final int POSE_AVERAGER_VALUE = 50;
 }
     
 public final class SWERVE {
