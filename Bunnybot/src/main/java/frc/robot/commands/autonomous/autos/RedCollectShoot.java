@@ -2,66 +2,30 @@ package frc.robot.commands.autonomous.autos;
 
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Suppliers;
 import frc.robot.commands.autonomous.AutoCommand;
 import frc.robot.commands.largecommands.*;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 
 public class RedCollectShoot extends AutoCommand {
-  public RedCollectShoot(String color, Launcher launcher, Indexer indexer){
+  public RedCollectShoot(String color, Launcher launcher, Indexer indexer, Intake intake) {
       super(
-        new FollowPathCommand(getChoreoTrajectory("Shoot"), Suppliers.isRedAlliance, "")
-        .andThen(launcher.setLauncherCommand(
-         0.44, 0.30   // bottom %, top %
-     ).withTimeout(2.0))  // spin up time (tune this)
-     .andThen(
-         launcher
-             .setLauncherCommand(0.44, 0.30)   // keep launcher running
-             .alongWith(
-                 // feed with indexer 
-                 indexer.setMotorPercentOutputCommand(1)
-             )
-             .withTimeout(2.0)                 // feed time (tune this)
-     )
-     // 4) Stop launcher after feeding
-     .andThen(
-         launcher.stopLauncherCommand()
-     ).andThen(
-       new FollowPathCommand(getChoreoTrajectory("CollectFirst"), Suppliers.isRedAlliance, "")),
-       /*
-        * .andThen(Intake Command until Indexer detects 1 Lumen in its system))
-        * .andThen(Indexer Command until their conditional is satisfied)
-       */
+           //start by shooting two low lunites
+           launcher.setLauncherCommand(0.44, 0.30) //USE "CLOSE"
+           .andThen(new WaitUntilCommand(0.5))
+           .andThen(indexer.setMotorPercentOutputCommand(4, 1)).withTimeout(1.2)
 
-       new FollowPathCommand(getChoreoTrajectory("RotateFirst"), Suppliers.isRedAlliance, ""),
-         /*
-         * No need to do anything here
-         */
-
-       new FollowPathCommand(getChoreoTrajectory("CollectSecond"), Suppliers.isRedAlliance, ""),
-       /*
-        * .andThen(Intake Command until Indeder detects another Lumen in its system)
-        * .andThen(Indexer Command until their conditional is satisfied)
-        *
-        */
-       
-       new FollowPathCommand(getChoreoTrajectory("CollectThird"), Suppliers.isRedAlliance, ""),
-               /*
-        * .andThen(Intake Command until Indeder detects another Lumen in its system)
-        * .andThen(Indexer Command until their conditional is satisfied)
-        *
-        */
-
-
-       new FollowPathCommand(getChoreoTrajectory("ShootRest"), Suppliers.isRedAlliance, ""),
-               /*
-        * .andThen(Intake Stow)
-        * .andThen(Launcher Shoot 3, Steep Angle Shot)
-        *
-        */
-        new FollowPathCommand(getChoreoTrajectory("MoveOutAfterLine"), Suppliers.isRedAlliance, ""));
+            .andThen(new FollowPathCommand(getChoreoTrajectory("RedCollectFirst"), Suppliers.isRedAlliance, ""))
+            .alongWith(intake.setIntakeSideCommand(0.8))
+            .alongWith(intake.setIntakeBottomCommand(0.8)) 
+          .alongWith(launcher.stopLauncherCommand())
+                .alongWith(indexer.stopMotorCommand(4))
+                // .alongWith(intake.setToPositionCommand()) //if we need to raise the intake while driving 
+      );
         /*
  * Nothing really needed here
  *
