@@ -14,7 +14,8 @@ import frc.robot.helpers.motor.spark.SparkMaxMotor;
 public class Indexer extends SubsystemBase {
     DigitalInput[] sensors = new DigitalInput[3];
     NewtonMotor[] motors = new NewtonMotor[4];
-    
+    private boolean reverseIntake = false;
+
     public Indexer() {
         motors[0] = new SparkMaxMotor(CAN.INDEXER_MOTOR1_CAN_ID, true);
         motors[1] = new SparkMaxMotor(CAN.INDEXER_MOTOR2_CAN_ID, true);
@@ -32,47 +33,51 @@ public class Indexer extends SubsystemBase {
         sensors[0] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_1_PORT);
         sensors[1] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_2_PORT);
         sensors[2] = new DigitalInput(INDEXER.INDEXER_BEAM_BREAK_3_PORT);
-        
+
     }
 
     /**
      * Checks to see if the beambreak detects a football at the given storage point
-     * @param storagePoint given launcher is the front, the front storage point is 1, the middle is 2, and the back is 3 
+     * 
+     * @param storagePoint given launcher is the front, the front storage point is
+     *                     1, the middle is 2, and the back is 3
      * @return whewther a football is detected at given storage point as a boolean
      */
-    public boolean hasBall(int storagePoint){
-        boolean bool = !sensors[storagePoint - 1].get(); 
+    public boolean hasBall(int storagePoint) {
+        boolean bool = !sensors[storagePoint - 1].get();
         Logger.recordOutput(INDEXER.LOG_PATH + "Sensor " + storagePoint, bool);
 
-        if(bool){
+        if (bool) {
             return true;
-        } 
+        }
         return false;
     }
 
     /**
      * Checks to see if there is a football anywhere within the indexer
+     * 
      * @return if there is no football detected anywhere in the indexer
      */
-    public boolean hasBall(){
-        for(int i = 1; i <= sensors.length; i++){
-            if(hasBall(i)){
+    public boolean hasBall() {
+        for (int i = 1; i <= sensors.length; i++) {
+            if (hasBall(i)) {
                 return true;
             }
-                
+
         }
-        return false;    
-        
+        return false;
+
     }
 
     /**
      * Finds the number of balls in the indexer
+     * 
      * @return number of balls in the indexer
      */
-    public int getBallCount(){
+    public int getBallCount() {
         int count = 0;
-        for(int i = 1; i <= sensors.length; i++){
-            if(hasBall(i))
+        for (int i = 1; i <= sensors.length; i++) {
+            if (hasBall(i))
                 count++;
         }
 
@@ -81,15 +86,16 @@ public class Indexer extends SubsystemBase {
 
     /**
      * Runs given motor at given percentage
+     * 
      * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
-     * @param percent scaled from -1 to 1
+     * @param percent  scaled from -1 to 1
      */
-    public void run(int motorPos, double percent){
+    public void run(int motorPos, double percent) {
         motors[motorPos].setPercentOutput(percent);
-        
+
     }
 
-    public void runBeforeShoot(double percent){
+    public void runBeforeShoot(double percent) {
         motors[0].setPercentOutput(percent);
         motors[1].setPercentOutput(percent);
         motors[2].setPercentOutput(percent);
@@ -97,80 +103,82 @@ public class Indexer extends SubsystemBase {
 
     /**
      * Runs all motors at given percentage
+     * 
      * @param percent scaled from -1 to 1
      */
-    public void runAll(double percent){
-        for(NewtonMotor m : motors)
+    public void runAll(double percent) {
+        for (NewtonMotor m : motors)
             m.setPercentOutput(percent);
     }
 
     /**
      * Stops specified motor
+     * 
      * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
      */
-    public void stop(int motorPos){
+    public void stop(int motorPos) {
         motors[motorPos].setPercentOutput(0);
     }
 
-    //Stops all motors from running
-    public void stopAll(){
-        for(NewtonMotor m : motors)
+    // Stops all motors from running
+    public void stopAll() {
+        for (NewtonMotor m : motors)
             m.setPercentOutput(0);
     }
 
     /**
      * Runs all motors at specified percentage
+     * 
      * @param percent scaled -1 to 1
      * @return command to run motors at specified percentage
      */
     public Command setMotorPercentOutputCommand(double percent) {
-        return this.run(()->
-            runAll(percent)
-        ).finallyDo(() -> stopAll());
-        
+        return this.run(() -> runAll(percent)).finallyDo(() -> stopAll());
+
     }
 
     /**
      * Runs specified motor at given percentage
+     * 
      * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
-     * @param percent scaled from -1 to 1
+     * @param percent  scaled from -1 to 1
      * @return Command to run given motor at given percentage
      */
-    public Command setMotorPercentOutputCommand(int motorPos, double percent){
-        return this.run(()->
-            run(motorPos, percent)
-        ).finallyDo(() -> stop(motorPos));
+    public Command setMotorPercentOutputCommand(int motorPos, double percent) {
+        return this.run(() -> run(motorPos, percent)).finallyDo(() -> stop(motorPos));
     }
 
     /**
      * Stops all motors from running
+     * 
      * @return the command to stop the motor
      */
     public Command stopMotorCommand() {
-        return this.runOnce(()-> 
-            stopAll()
-        );
+        return this.runOnce(() -> stopAll());
     }
 
     /**
      * Stops specified motor from running
+     * 
      * @param motorPos position of motor starting from 0 - 3 (intake -> launcher)
      * @return Command to stop specified motor
      */
-    public Command stopMotorCommand(int motorPos){
-        return this.runOnce(()-> 
-            stop(motorPos)
-        );
+    public Command stopMotorCommand(int motorPos) {
+        return this.runOnce(() -> stop(motorPos));
     }
 
     public void autoIndex() {
-        boolean s1 = hasBall(1); //shooter
-        boolean s2 = hasBall(2); //middle
+        boolean s1 = hasBall(1); // shooter
+        boolean s2 = hasBall(2); // middle
         boolean s3 = hasBall(3);
 
         stop(3);
 
-        if(!s1){
+        if (reverseIntake) {
+            run(0, -1);
+            run(1, -1);
+            run(2, -1);
+        } else if (!s1) {
             runBeforeShoot(1);
 
         } else if (!s2) {
@@ -181,12 +189,23 @@ public class Indexer extends SubsystemBase {
         } else {
             stopAll();
         }
+    }
 
-    } 
+    public void setReverse(boolean reverse) {
+        reverseIntake = reverse;
+    }
+
+    public Command setIndexerReverseCommand() {
+        return this.runOnce(() -> this.setReverse(true));
+    }
+
+    public Command setIndexerNormalCommand() {
+        return this.runOnce(() -> this.setReverse(false));
+    }
 
     @Override
     public void periodic() {
-        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount()); 
+        Logger.recordOutput(INDEXER.LOG_PATH + "ballCount", getBallCount());
         Logger.recordOutput(INDEXER.LOG_PATH + "indexerHasBall", hasBall());
         Logger.recordOutput(INDEXER.LOG_PATH + "3 balls", getBallCount() == 3);
 
